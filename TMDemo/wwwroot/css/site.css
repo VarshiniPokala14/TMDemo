@@ -1,0 +1,251 @@
+body {
+    overflow-x: hidden;
+}
+
+.header {
+    background: #F5F5F5;
+    padding: 0.5rem 2rem;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+}
+
+.logo-img {
+    height: 40px;
+    width: auto;
+    margin-right: 0.5rem;
+}
+
+.logo-text {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.logo-tagline {
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+    .nav-links li {
+        position: relative;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+    }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+    .dropdown-content a {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #333;
+        text-decoration: none;
+    }
+
+        .dropdown-content a:hover {
+            background-color: #f0f0f0;
+        }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.right-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+}
+
+.search-form {
+    position: relative;
+}
+
+.search-input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    outline: none;
+}
+.fixed-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Fixed footer */
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Main content padding */
+.main-content {
+    padding-top: 70px; /* adjust based on header height */
+    padding-bottom: 50px; /* adjust based on footer height */
+}
+/*-----------------------------------------------------------------*/
+/* Footer Container */
+.footer {
+    background-color: #f5f5f5;
+    padding: 2rem 1rem;
+    color: #333;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.footer-logo {
+    height: 50px;
+    width: 100px;
+    margin-bottom: 0.5rem;
+}
+
+.footer h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.footer-title {
+    
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 2%;
+}
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.category {
+    flex: 1;
+    min-width: 150px;
+    border: 1px solid #e0e0e0;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+    .category h3 {
+        font-size: 16px;
+        margin-bottom: 1rem;
+    }
+
+    .category ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .category ul li {
+            margin: 0.5rem 0;
+        }
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+    .footer-links > div {
+        flex: 1;
+        min-width: 150px;
+        margin-bottom: 1rem;
+    }
+
+    .footer-links h3 {
+        font-size: 16px;
+        margin-bottom: 1rem;
+    }
+
+    .footer-links ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .footer-links ul li {
+            margin: 0.5rem 0;
+        }
+
+    .footer-links a {
+        text-decoration: none;
+        color: #2563eb;
+    }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+.social-links {
+    display: flex;
+    gap: 0.5rem;
+}
+
+    .social-links li {
+        display: inline-block;
+    }

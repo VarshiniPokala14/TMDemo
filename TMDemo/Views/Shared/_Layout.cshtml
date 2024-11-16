@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - TrekMasters</title>
+    <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/css/register.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <a href="/" class="logo-link">
+
+                    @* <span class="logo-text">TrekMasters</span> *@
+                    <img style="width:140px;" src="~/images/Logo.jpg" />
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/Treks">All Treks</a></li>
+                <li><a href="/Upcoming">Upcoming Treks</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">Categories</a>
+                    <div class="dropdown-content">
+                        <a href="/Category/Season">Season</a>
+                        <a href="/Category/Duration">Duration</a>
+                        <a href="/Category/Month">Month</a>
+                        <a href="/Category/Difficulty">Difficulty</a>
+                        <a href="/Category/Region">Region</a>
+                    </div>
+                </li>
+                <li><a href="/About">About Us</a></li>
+            </ul>
+            <div class="right-section">
+                <a href="/Profile" class="profile-link">
+                    <span class="profile-icon">👤</span> My Profile
+                </a>
+                <form class="search-form">
+                    <input type="text" placeholder="Search ..." class="search-input">
+                </form>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="@ViewData["BodyClass"]">
+        @RenderBody()
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-header">
+                <img src="~/images/Logo.jpg" style="width:178px;" />
+            </div>
+
+            <h2 class="footer-title">Trek By Category</h2>
+            <div class="categories">
+                <div class="category">
+                    <h3>Trek by Season</h3>
+                    <ul>
+                        <li>Spring</li>
+                        <li>Summer</li>
+                        <li>Monsoon</li>
+                        <li>Autumn</li>
+                        <li>Winter</li>
+                    </ul>
+                </div>
+                <div class="category">
+                    <h3>Trek by Duration</h3>
+                    <ul>
+                        <li>2 days</li>
+                        <li>3 days</li>
+                        <li>4 days</li>
+                        <li>5 days</li>
+                        <li>6+ days</li>
+                    </ul>
+                </div>
+                <div class="category">
+                    <h3>Trek by Month</h3>
+                    <ul class="grid-2">
+                        <li>Jan</li>
+                        <li>Jul</li>
+                        <li>Feb</li>
+                        <li>Aug</li>
+                        <li>Mar</li>
+                        <li>Sep</li>
+                        <li>Apr</li>
+                        <li>Oct</li>
+                        <li>May</li>
+                        <li>Nov</li>
+                        <li>Jun</li>
+                        <li>Dec</li>
+                    </ul>
+                </div>
+                <div class="category">
+                    <h3>Trek by Difficulty</h3>
+                    <ul>
+                        <li>Easy</li>
+                        <li>Moderate</li>
+                        <li>Difficulty</li>
+                    </ul>
+                </div>
+                <div class="category">
+                    <h3>Trek by Region</h3>
+                    <ul>
+                        <li>Uttarakhand</li>
+                        <li>Nagaland</li>
+                        <li>Manipur</li>
+                        <li>Sikkim</li>
+                        <li>Ladakh</li>
+                        <li>Karnataka</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div>
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Upcoming Treks</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Cancellation Policy</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Follow us on</h3>
+                    <ul class="social-links">
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">WhatsApp</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Contact us</h3>
+                    <ul>
+                        <li><span>📞</span> 987654321</li>
+                        <li><span>📞</span> 987654321</li>
+                        <li><span>⏰</span> Mon-Sun 9:30 - 19:00</li>
+                        <li><span>✉️</span> TrekMastersIndia@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
