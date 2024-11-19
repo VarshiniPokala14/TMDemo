@@ -57,13 +57,18 @@ body {
         color: #333;
         font-weight: 500;
     }
-
+.dropdown {
+    position: absolute; /* Ensure dropdown is properly positioned */
+    z-index: 1050; /* Higher z-index to bring it above other elements */
+   
+}
 .dropdown-content {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
-    background: #fff;
+   /* background: #fff;*/
+    background-color: #f9f9f9;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 10;
 }
@@ -82,7 +87,21 @@ body {
 .dropdown:hover .dropdown-content {
     display: block;
 }
+/*-------------------*/
 
+
+
+.profile-link {
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+}
+
+    .profile-link:hover {
+        color: #0056b3;
+    }
+
+/*-------------------*/
 .right-section {
     display: flex;
     align-items: center;
@@ -119,7 +138,7 @@ body {
     z-index: 1000;
 }
 
-/* Fixed footer */
+ Fixed footer 
 .fixed-footer {
     position: fixed;
     bottom: 0;
@@ -163,7 +182,7 @@ body {
 
 .footer-title {
     
-    font-size: 30px;
+    font-size: 36px;
     font-weight: bold;
     margin-bottom: 2%;
 }

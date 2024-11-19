@@ -190,6 +190,13 @@ namespace TMDemo.Controllers
             }
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();  // Logs the user out
+            return RedirectToAction("Index", "Home"); // Redirect to Home page or Login page
+        }
         // Confirmation views
         public IActionResult ForgotPasswordConfirmation()
         {

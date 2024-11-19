@@ -1,0 +1,52 @@
+﻿@model UserDetail
+<style>
+    .form-control {
+        border: 1px solid #444444; /* Dark gray border */
+        border-radius: 5px; /* Optional: Rounded corners */
+    }      
+</style>
+
+<h1 class="mb-4">
+    Hi @Model.FirstName @Model.LastName!
+    <a href="/Profile/Edit" class="text-primary text-decoration-none" style="font-size: 0.8rem;padding-left:10px;">
+        <i class="fas fa-edit"></i> Edit
+    </a>
+</h1>
+<div class="row g-3">
+    <div class="col-md-6">
+        <label class="form-label fw-bold">First Name:</label>
+        <input type="text" class="form-control bg-light" value="@Model.FirstName" readonly>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label fw-bold">Last Name:</label>
+        <input type="text" class="form-control bg-light" value="@Model.LastName" readonly>
+    </div>
+    <div class="col-md-12">
+        <label class="form-label fw-bold">Email:</label>
+        <input type="text" class="form-control bg-light" value="@Model.Email" readonly>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label fw-bold">Phone Number:</label>
+        <input type="text" class="form-control bg-light" value="@Model.PhoneNumber" readonly>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label fw-bold">Date of Birth:</label>
+        <input type="text" class="form-control bg-light" value="@Model.DOB.ToShortDateString()" readonly>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label fw-bold">Gender:</label>
+        <input type="text" class="form-control bg-light" value="@Model.Gender" readonly>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label fw-bold">Country:</label>
+        <input type="text" class="form-control bg-light" value="@Model.Country" readonly>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label fw-bold">State:</label>
+        <input type="text" class="form-control bg-light" value="@Model.State" readonly>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label fw-bold">City:</label>
+        <input type="text" class="form-control bg-light" value="@Model.City" readonly>
+    </div>
+</div>

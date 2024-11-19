@@ -56,75 +56,96 @@ h2 {
 /* Apply full-page styling */
 
 
-/* Ensure the main container spans the full viewport height */
-.forgot-password-page {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('/images/SignInBg.jpg'); /* Update image path */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    margin: 0; /* Override any default margins */
-    padding: 0;
-}
-
-/* Form container styles */
+/* Container for the form */
 .form-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 20px 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    max-width: 400px;
-    width: 100%;
+    width: 100vw;
+    height: 100vh; /* Ensure full-page height */
+    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('/images/SignInBg.jpg');
+    background-size: cover; /* Ensure the image covers the container */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent tiling */
 }
 
-    .form-container h2 {
+
+
+
+/* Wrapper for the form content */
+.form-wrapper {
+    background-color: rgba(255, 255, 255, 0.7); /* Slight transparency */
+    padding: 30px;
+    margin-top: 80px;
+    border-radius: 10px;
+    width: 800px;
+    
+    heigth:300px;
+    padding-top: 80px; /* Space below the navbar */
+    padding-bottom: 50px; /* Space above the footer */
+
+}
+
+    /* Heading */
+    .form-wrapper h2 {
+        
+        text-align: center;
         margin-bottom: 20px;
         font-size: 24px;
         color: #333;
     }
 
-/* Input group */
-.form-group {
-    margin-bottom: 15px;
+/* Form fields styling */
+.form-row {
+    display: flex;
+    gap: 15px; /* Adds spacing between fields */
+    flex-wrap: wrap; /* Ensure responsiveness */
+
 }
 
+.form-group {
+    margin-bottom: 5px;
+}
     .form-group label {
         display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
+        font-size: 14px;
         color: #555;
+        margin-bottom: 5px;
     }
 
-    .form-group input {
-        width: 100%;
+    .form-group input,
+    .form-group select {
+        width: 90%;
         padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #333;
     }
 
-/* Button styles */
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+        }
+
+/* Button styling */
 button {
-    width: 100%;
+    width: 50%;
     padding: 10px;
     border: none;
-    background-color: #2563eb;
+    background-color: #1A3A6E;
+    margin-top: 15px;
+    margin-left: 140px;
     color: white;
     font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
     button:hover {
-        background-color: #1e4bb8;
+        background-color: #0056b3;
     }
 
 
@@ -139,9 +160,27 @@ button {
     .login-link a {
         color: #1A3A6E;
         text-decoration: none;
+        align-content:center;
     }
 
         .login-link a:hover {
             text-decoration: underline;
         }
 
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+        

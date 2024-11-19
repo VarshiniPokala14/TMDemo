@@ -1,12 +1,15 @@
 ﻿@model VerifyOtpViewModel
 
-<h2>Verify OTP</h2>
 
-<form asp-action="VerifyOtp" method="post">
-    <div>
-        <label for="Otp">OTP</label>
-        <input type="text" id="Otp" asp-for="Otp" required />
-        <span asp-validation-for="Otp"></span>
-    </div>
-    <button type="submit">Submit</button>
-</form>
+<div class="form-container">
+	<div class="form-wrapper ">
+		<h2>Verify OTP</h2>
+		<form asp-action="VerifyOtp" method="post">
+			<div class="form-group">
+				<label for="Otp">OTP</label>
+				<input type="text" id="Otp" name="Otp" placeholder="Enter you Otp" required>
+			</div>
+			<button type="submit">Submit</button>
+		</form>
+	</div>
+</div>

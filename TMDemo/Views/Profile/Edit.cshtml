@@ -1,0 +1,101 @@
+﻿@model ProfileViewModel
+
+<style>
+    .form-control {
+        border: 1px solid #444444; /* Dark gray border */
+        border-radius: 5px; /* Optional: Rounded corners */
+    }
+    .section-title{
+        font-size:30px;
+        color: #b0c4de;
+        
+    }
+
+    .dark-line {
+        border-top: 2px solid #2f2f2f; /* Darker shade of black/gray */
+        margin: 20px 0; /* Optional: Adds space around the line */
+    }
+</style>
+<div stule="overflow:auto">
+
+    <h1 class="mb-1">
+        Hi @Model.UserDetail.FirstName @Model.UserDetail.LastName!
+    </h1>
+    <div class="section-title fw-normal mb-1">Essential Information</div>
+    <div class="dark-line"></div>
+    <form asp-action="Edit" method="post">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">First Name:</label>
+                <input type="text" name="UserDetail.FirstName" class="form-control" value="@Model.UserDetail.FirstName" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Last Name:</label>
+                <input type="text" name="UserDetail.LastName" class="form-control" value="@Model.UserDetail.LastName" required>
+            </div>
+            <div class="col-md-12">
+                <label class="form-label fw-bold">Email:</label>
+                <input type="email" name="UserDetail.Email" class="form-control" value="@Model.UserDetail.Email" readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Phone Number:</label>
+                <input type="text" name="UserDetail.PhoneNumber" class="form-control" value="@Model.UserDetail.PhoneNumber" readonly>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Date of Birth:</label>
+                <input type="date" name="UserDetail.DOB" class="form-control" value="@Model.UserDetail.DOB.ToString("yyyy-MM-dd")" required>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="UserDetail.Gender" class="form-label fw-bold">Gender</label>
+                <select asp-for="UserDetail.Gender" class="form-control">
+                    <option selected>@Model.UserDetail.Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Country:</label>
+                <input type="text" name="UserDetail.Country" class="form-control" value="@Model.UserDetail.Country" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">State:</label>
+                <input type="text" name="UserDetail.State" class="form-control" value="@Model.UserDetail.State" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">City:</label>
+                <input type="text" name="UserDetail.City" class="form-control" value="@Model.UserDetail.City" required>
+            </div>
+        </div>
+        <div class="section-title mt-3 mb-0">Emergency Contact</div>
+        <div class="dark-line"></div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Contact Name:</label>
+                <input type="text" name="EmergencyContact.ContactName" class="form-control" value="@Model.EmergencyContact.ContactName" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Contact Number:</label>
+                <input type="text" name="EmergencyContact.ContactNumber" class="form-control" value="@Model.EmergencyContact.ContactNumber" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Email:</label>
+                <input type="text" name="EmergencyContact.Email" class="form-control" value="@Model.EmergencyContact.Email" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Relation:</label>
+                <input type="text" name="EmergencyContact.Relation" class="form-control" value="@Model.EmergencyContact.Relation" required>
+            </div>
+            <div>
+                <input type="hidden" asp-for="UserDetail.Id" name="EmergencyContact.UserId" />
+            </div>
+        </div>
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="@Url.Action("Index", "Profile")" class="btn btn-secondary ms-2">Cancel</a>
+        </div>
+        <div></div>
+    </form>
+
+</div>

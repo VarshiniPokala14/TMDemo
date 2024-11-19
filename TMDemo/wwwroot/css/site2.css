@@ -1,0 +1,149 @@
+﻿body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.header {
+    background-color: #e0e0e0;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+    .header img {
+        height: 50px;
+        margin-right: 10px;
+    }
+
+.navbar {
+    background-color: #e0e0e0;
+    margin-top:2px;
+    margin-bottom:0px;
+}
+
+.content-wrapper {
+    
+    overflow:auto;
+}
+
+
+
+/*.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow: auto;
+}*/
+
+.faq {
+    position: absolute;
+    bottom: 40px;
+    left: 20px;
+    background-color: #b0c4de;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 200px;
+    heigth: 1px;
+    font-size:7px;
+    margin-left:20px;
+    position:fixed;
+}
+
+faq :hover {
+    background-color: #b0c4d2;
+}
+
+.faq a {
+    color: #000;
+    text-decoration: none;
+}
+
+
+    .faq a:hover {
+        text-decoration: underline;
+    }
+
+/* Flexbox Layout for Sidebar and Main Content */
+.content-wrapper {
+    display: flex;
+    height: calc(100vh - 60px); /* Adjust for the header height */
+}
+
+    .content-wrapper .sidebar {
+        flex-shrink: 0; /* Prevent sidebar from shrinking */
+    }
+
+    .content-wrapper .main-content {
+        flex-grow: 1;
+    }
+
+.container-fluid {
+    background-color: #e0e0e0;
+}
+
+.content-wrapper .navbar {
+    flex-grow: 0px;
+}
+
+.sidebar {
+    height: calc(100vh - 60px);   
+    width: 300px;
+    background-color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 0;
+    border-right: 1px solid #ccc;
+    position:fixed;
+    margin-top:96px;
+}
+
+    .sidebar h2 {
+       display:block;
+        width:300px;
+        margin-bottom: 10px;
+        padding: 15px;
+        background-color: #b0c4de;
+        text-align: center;
+        font-size: 20px;
+        border-radius: 0px;
+    }
+
+    .sidebar a,
+    .sidebar button {
+        text-decoration: none;
+        color: #000;
+        padding: 10px 20px; 
+        border-radius: 0px;
+        font-size: 20px;
+        text-align: center;
+        display: block;
+        background: none;
+    }
+
+        .sidebar a:hover {
+            background-color: #d3d3d3;
+      
+            width:300px;
+        }
+        .sidebar button:is(:hover) {
+            background-color: #d3d3d3;
+            
+        }
+
+
+
+/* Main content styles */
+.main-content {
+    flex-grow: 1; /* Takes the remaining horizontal space */
+    padding: 20px;
+    overflow-y: auto; /* Enable scrolling for main content */
+    height: 120vh; /* Ensure full height for scrolling */
+    background-color: #f8f9fa; /* Light background color */
+    margin-left:300px;
+    margin-top:96px;
+    position:absolute;
+}
