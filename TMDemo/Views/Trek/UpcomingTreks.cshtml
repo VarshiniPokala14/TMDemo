@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Trek>
+
+<div class="container">
+    <h2>Upcoming Treks</h2>
+
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var trek in Model)
+            {
+                @await Html.PartialAsync("_UpTrekcard",trek)
+            }
+        </div>
+    }
+    else
+    {
+        <p>No upcoming treks available in the next three months.</p>
+    }
+</div>
+
+<style>
+    .month-group {
+        margin-bottom: 40px;
+    }
+
+    .month-title {
+        font-size: 1.5rem;
+        color: #28a745;
+        margin-bottom: 20px;
+    }
+</style>

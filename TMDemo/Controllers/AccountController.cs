@@ -49,6 +49,7 @@ namespace TMDemo.Controllers
 
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user,"User");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
@@ -77,8 +78,24 @@ namespace TMDemo.Controllers
                     var result = await _signInManager.PasswordSignInAsync(user, model.Password,model.RememberMe, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
-                        
-                        return RedirectToAction("Index", "Home");
+
+                        var roles = await _userManager.GetRolesAsync(user);
+                        if (roles.Contains("Admin"))
+                        {
+                            // Redirect to Admin-specific page
+                            return RedirectToAction("AddTrek", "Admin");
+                        }
+                        else if (roles.Contains("User"))
+                        {
+                            // Redirect to User-specific page
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            // Handle if the user has no defined role
+                            ModelState.AddModelError(string.Empty, "User role not assigned.");
+                            return View(model);
+                        }
                     }
                     if (result.IsLockedOut)
                     {
@@ -102,7 +119,7 @@ namespace TMDemo.Controllers
         {
             return View();
         }
-        // Forgot Password Submit
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
@@ -112,23 +129,23 @@ namespace TMDemo.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    // Do not reveal that the email doesn't exist or is not confirmed
+                    
                     return RedirectToAction("ForgotPasswordConfirmation");
                 }
-                // Generate OTP
+                
                 var otp = GenerateOtp();
-                var otpExpiry = DateTime.UtcNow.AddMinutes(10); // OTP expiry time
-                // Save OTP in a temp store, here it's in a simple session for demonstration purposes
+                var otpExpiry = DateTime.UtcNow.AddMinutes(10); 
+                
                 HttpContext.Session.SetString("OTP", otp);
                 HttpContext.Session.SetString("OTPExpiry", otpExpiry.ToString());
                 HttpContext.Session.SetString("UserEmail", user.Email);
-                // Send OTP to email
+                
                 await _emailSender.SendEmailAsync(model.Email, "Your OTP for Password Reset", $"Your OTP is {otp}. It will expire in 10 minutes.");
                 return RedirectToAction("VerifyOtp");
             }
             return View(model);
         }
-        // Verify OTP
+        
         [HttpGet]
         public IActionResult VerifyOtp()
         {
@@ -140,13 +157,13 @@ namespace TMDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Retrieve the OTP and expiry time from session
+                
                 var storedOtp = HttpContext.Session.GetString("OTP");
                 var otpExpiry = DateTime.Parse(HttpContext.Session.GetString("OTPExpiry"));
                 var userEmail = HttpContext.Session.GetString("UserEmail");
                 var user = await _userManager.FindByEmailAsync(userEmail);
                 var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                // Validate OTP
+               
                 if (storedOtp == model.Otp && DateTime.UtcNow <= otpExpiry)
                 {
                     return RedirectToAction("ResetPassword", new { email = userEmail,Otp=resetToken });
@@ -158,13 +175,13 @@ namespace TMDemo.Controllers
             }
             return View(model);
         }
-        // Reset Password View
+       
         [HttpGet]
         public IActionResult ResetPassword(string email,string Otp)
         {
             return View(new ResetPasswordViewModel { Email = email ,Otp=Otp});
         }
-        // Reset Password Submit
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
@@ -179,7 +196,7 @@ namespace TMDemo.Controllers
                 var result = await _userManager.ResetPasswordAsync(user, model.Otp, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    // After successful password reset, sign in the user
+                    
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Login");
                 }
@@ -194,10 +211,10 @@ namespace TMDemo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();  // Logs the user out
-            return RedirectToAction("Index", "Home"); // Redirect to Home page or Login page
+            await _signInManager.SignOutAsync(); 
+            return RedirectToAction("Index", "Home"); 
         }
-        // Confirmation views
+        
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -206,7 +223,7 @@ namespace TMDemo.Controllers
         {
             return View();
         }
-        // Helper method to generate OTP (can be enhanced)
+        
         private string GenerateOtp()
         {
             var random = new Random();

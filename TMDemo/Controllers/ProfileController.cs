@@ -8,7 +8,7 @@ using static System.Net.WebRequestMethods;
 
 namespace TMDemo.Controllers
 {
-    [Authorize] // Ensures only logged-in users can access this
+    [Authorize] 
     public class ProfileController : Controller
     {
         private readonly UserManager<UserDetail> _userManager;
@@ -19,7 +19,7 @@ namespace TMDemo.Controllers
             _context = context;
         }
 
-        // GET: Profile
+        
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User); // Fetch the current user
@@ -33,7 +33,7 @@ namespace TMDemo.Controllers
             return View(user);
         }
 
-        // (Optional) Add Edit functionality
+        
         public async Task<IActionResult> Edit()
         {
             var user = await _userManager.GetUserAsync(User);

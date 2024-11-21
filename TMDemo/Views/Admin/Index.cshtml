@@ -1,0 +1,37 @@
+﻿@model IEnumerable<TMDemo.Models.Availability>
+@{
+    ViewData["Title"] = "Manage Availability";
+}
+
+<h2>Manage Availability</h2>
+
+<a asp-action="AddAvailability" class="btn btn-success">Add New Availability</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Trek</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Month</th>
+            <th>Max Group Size</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var availability in Model)
+        {
+            <tr>
+                <td>@availability.Trek?.Name</td>
+                <td>@availability.StartDate.ToString("yyyy-MM-dd")</td>
+                <td>@availability.EndDate.ToString("yyyy-MM-dd")</td>
+                <td>@availability.Month</td>
+                <td>@availability.MaxGroupSize</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@availability.AvailabilityId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@availability.AvailabilityId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

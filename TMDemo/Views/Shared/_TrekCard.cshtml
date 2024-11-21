@@ -1,0 +1,48 @@
+﻿@model Trek
+
+<style>
+    .btn-primary {
+        background-color: #ffc107;
+        border: none;
+        color: #fff;
+    }
+
+        .btn-primary:hover {
+            background-color: #e0a800;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        color: #fff;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+</style>
+
+<div class="col-md-4 mb-4">
+    <div class="trek-card">
+        <!-- Trek Image -->
+        <img src="@Url.Action("GetImage", "Trek", new { trekId = Model.TrekId })" alt="@Model.Name">
+
+        <div class="trek-card-body">
+            <!-- Duration and Difficulty -->
+            <p class="trek-card-subtitle">
+                @Model.DurationDays Days &nbsp; ● &nbsp; @Model.DifficultyLevel
+            </p>
+
+            <!-- Trek Title -->
+            <h5 class="trek-card-title">@Model.Name</h5>
+            <h4 class="trek-card-info">Location: @Model.Region</h4>
+            
+
+            <!-- Action Buttons -->
+            <div class="trek-card-actions">
+                <a href="@Url.Action("Details", "Trek", new { id = Model.TrekId })" class="btn btn-success">Get Trek Info</a>
+                <a href="@Url.Action("ViewDates", "Trek", new { trekId = Model.TrekId })" class="btn btn-primary">View Dates</a>
+            </div>
+        </div>
+    </div>
+</div>

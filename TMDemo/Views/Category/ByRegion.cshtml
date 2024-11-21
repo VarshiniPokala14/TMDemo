@@ -1,0 +1,38 @@
+﻿@model IEnumerable<TMDemo.Models.GroupedTreksByCategory>
+
+<div class="container">
+    <h2>Treks Categorized by Region</h2>
+
+    @if (Model.Any())
+    {
+        foreach (var group in Model)
+        {
+            <div class="region-group">
+                <h3 class="region-title">@group.Category</h3>
+
+                <div class="row">
+                    @foreach (var trek in group.Treks)
+                    {
+                        @await Html.PartialAsync("_TrekCard", trek)
+                    }
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No treks available for any Region.</p>
+    }
+</div>
+
+<style>
+    .region-group {
+        margin-bottom: 40px;
+    }
+
+    .region-title {
+        font-size: 1.5rem;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+</style>

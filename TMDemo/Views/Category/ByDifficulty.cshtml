@@ -1,0 +1,38 @@
+﻿@model IEnumerable<TMDemo.Models.GroupedTreksByCategory>
+
+<div class="container">
+    <h2>Treks Categorized by Difficulty Level</h2>
+
+    @if (Model.Any())
+    {
+        foreach (var group in Model)
+        {
+            <div class="difficulty-group">
+                <h3 class="difficulty-title">@group.Category</h3>
+
+                <div class="row">
+                    @foreach (var trek in group.Treks)
+                    {
+                        @await Html.PartialAsync("_TrekCard", trek)
+                    }
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No treks available for any difficulty level.</p>
+    }
+</div>
+
+<style>
+    .difficulty-group {
+        margin-bottom: 40px;
+    }
+
+    .difficulty-title {
+        font-size: 1.5rem;
+        color: #28a745;
+        margin-bottom: 20px;
+    }
+</style>

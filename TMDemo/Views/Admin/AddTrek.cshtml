@@ -1,0 +1,95 @@
+﻿@model AddTrekViewModel
+
+@{
+    ViewData["Title"] = "Add Trek";
+}
+
+<div class="form-container">
+    <div class="form-wrapper">
+        <h2>Add New Trek</h2>
+        <form asp-page="/Admin/AddTrek" method="post" enctype="multipart/form-data">
+
+            <div class="row g-3">
+                <!-- Name -->
+                <div class="col-md-6">
+                    <label asp-for="Name">Name *</label>
+                    <input asp-for="Name" class="form-control" >
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Region">Region *</label>
+                    <input asp-for="Region" class="form-control" />
+                    <span asp-validation-for="Region" class="text-danger"></span>
+                </div>
+                <div class="col-md-12">
+                    <label asp-for="Description">Description *</label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="DifficultyLevel">Difficulty Level *</label>
+                    <select asp-for="DifficultyLevel" class="form-control">
+                        <option value="Difficulty">Difficulty</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Difficult">Difficult</option>
+                    </select>
+                    <span asp-validation-for="DifficultyLevel" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="DurationDays">Duration Days *</label>
+                    <input asp-for="DurationDays" class="form-control" type="number" />
+                    <span asp-validation-for="DurationDays" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="HighAltitude">High Altitude (m/ft) *</label>
+                    <input asp-for="HighAltitude" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="HighAltitude" class="text-danger"></span>
+                </div>
+                <!-- Price -->
+                <div class="col-md-6">
+                    <label asp-for="Price">Price *</label>
+                    <input asp-for="Price" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label>Select Seasons *</label>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedSeasons" value="Spring" id="Spring" />
+                                <label class="form-check-label" for="Spring">Spring</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedSeasons" value="Summer" id="Summer" />
+                                <label class="form-check-label" for="Summer">Summer</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedSeasons" value="Autumn" id="Autumn" />
+                                <label class="form-check-label" for="Autumn">Autumn</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedSeasons" value="Winter" id="Winter" />
+                                <label class="form-check-label" for="Winter">Winter</label>
+                            </div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="SelectedSeasons" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="TrekImgFile">Upload Trek Image</label>
+                    <input asp-for="TrekImgFile" class="form-control" type="file" />
+                    <span asp-validation-for="TrekImgFile" class="text-danger"></span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Trek</button>
+        </form>
+    </div>
+</div>

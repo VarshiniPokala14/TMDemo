@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TMDemo.Data;
 
@@ -11,9 +12,11 @@ using TMDemo.Data;
 namespace TMDemo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120053518_AddTrekAndAvailabilityTables")]
+    partial class AddTrekAndAvailabilityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,18 +166,15 @@ namespace TMDemo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AvailabilityId"));
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime>("AvailableDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("MaxGroupSize")
                         .HasColumnType("int");
 
-                    b.Property<string>("Month")
+                    b.Property<string>("SuitableSeason")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("TrekId")
                         .HasColumnType("int");
@@ -250,8 +250,8 @@ namespace TMDemo.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -259,14 +259,6 @@ namespace TMDemo.Migrations
                     b.Property<string>("Region")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.PrimitiveCollection<string>("Season")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("TrekImg")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("TrekId");
 

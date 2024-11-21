@@ -1,0 +1,25 @@
+﻿@model IEnumerable<TMDemo.Models.GroupedTreksByCategory>
+
+<div class="container">
+    <h2>Treks by Month</h2>
+
+    @if (Model.Any())
+    {
+        foreach (var group in Model)
+        {
+            <div class="month-group">
+                <h3>@group.Category</h3>
+                <div class="row">
+                    @foreach (var trek in group.Treks)
+                    {
+                        @Html.Partial("_TrekCard", trek) <!-- Pass Trek to partial view -->
+                    }
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No treks available.</p>
+    }
+</div>

@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Trek>
+
+<div class="container">
+    <h2 class="Heading">All Treks</h2>
+    <div class="row">
+        @foreach (var trek in Model)
+        {
+            @await Html.PartialAsync("_TrekCard", trek)
+        }
+    </div>
+</div>

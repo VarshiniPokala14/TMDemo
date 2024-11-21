@@ -1,0 +1,63 @@
+﻿@model Trek
+
+<style>
+    .btn-primary {
+        background-color: #ffc107;
+        border: none;
+        color: #fff;
+    }
+
+        .btn-primary:hover {
+            background-color: #e0a800;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        color: #fff;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+    .trek-card-actions{
+        justify-content:center;
+    }
+
+    .trek-card-actions a{
+        justify-content: center;
+            padding-left: 20px;
+            padding-rigth: 20px;
+    }
+</style>
+
+<div class="col-md-4 mb-4">
+    <div class="trek-card">
+        
+        <img src="@Url.Action("GetImage", "Trek", new { trekId = Model.TrekId })" alt="@Model.Name">
+
+        <div class="trek-card-body">
+           
+            <p class="trek-card-subtitle">
+                @Model.DurationDays Days &nbsp; ● &nbsp; @Model.DifficultyLevel
+            </p>
+
+            
+            <h5 class="trek-card-title">@Model.Name</h5>
+            <h4 class="trek-card-info">Location: @Model.Region</h4>
+
+            @if (Model.Availabilities != null && Model.Availabilities.Any())
+            {
+                <p class="trek-card-info">
+                    <strong>Date:</strong> @Model.Availabilities.Min(a => a.StartDate).ToString("dd MMM yyyy") - @Model.Availabilities.Min(a=>a.EndDate).ToString("dd MMM yyyy")
+                </p>
+            }
+            <!-- Action Buttons -->
+            <div class="trek-card-actions">
+                <a href="@Url.Action("Details", "Trek", new { id = Model.TrekId })" class="btn btn-success">Get Trek Info</a>
+                
+            </div>
+        </div>
+    </div>
+</div>
