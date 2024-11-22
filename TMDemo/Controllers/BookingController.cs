@@ -184,11 +184,11 @@ namespace TMDemo.Controllers
             }
 
             // Retrieve the booking from the database
-            var booking = await _context.Bookings
+            var book = await _context.Bookings
                 .Include(b => b.Trek) // Ensure the Trek is loaded
                 .FirstOrDefaultAsync(b => b.BookingId == model.BookingId);
 
-            if (booking == null)
+            if (book == null)
             {
                 return NotFound("Booking not found.");
             }
@@ -211,7 +211,7 @@ namespace TMDemo.Controllers
             _context.Cancellations.Add(cancellation);
 
             // Remove the booking from the Bookings table
-            _context.Bookings.Remove(booking);
+            _context.Bookings.Remove(book);
 
             await _context.SaveChangesAsync();
 
