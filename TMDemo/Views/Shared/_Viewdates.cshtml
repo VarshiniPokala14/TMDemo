@@ -1,93 +1,20 @@
-﻿@model Trek
+﻿@model TrekDetailsViewModel
 
-<style>
-    .year-container {
-        margin-bottom: 20px;
-    }
-
-    .year-header {
-        padding: 10px;
-        font-weight: bold;
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        cursor: pointer;
-    }
-
-    .month-container {
-        margin: 10px 0;
-    }
-
-    .month-header {
-        cursor: pointer;
-        padding: 8px;
-        font-weight: bold;
-        background-color: #f8f8f8;
-        border: 1px solid #ccc;
-    }
-
-    .month-dropdown {
-        display: none;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-top: none;
-    }
-
-    .month-container input:checked + .month-dropdown {
-        display: block;
-    }
-
-    .month-dropdown ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-        .month-dropdown ul li {
-            padding: 5px 0;
-        }
-
-            .month-dropdown ul li:hover {
-                background-color: #f0f0f0;
+<div class="mt-4 pb-4">
+    <div class="available-dates">
+        <label class="block text-black font-bold mt-3 fs-5 fst-normal" for="dates">Available Dates</label>
+        <select class="w-full mt-2 p-2 border border-gray-300 rounded d-block" id="dates">
+            @foreach (var monthGroup in Model.AvailabilityDates)
+            {
+                <optgroup label="@monthGroup.Month">
+                    @foreach (var date in monthGroup.Dates)
+                    {
+                        <option class="font-bold text-black">
+                            @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM")
+                        </option>
+                    }
+                </optgroup>
             }
-
-    /* For month button alignment */
-    .month-header, .month-dropdown {
-        display: inline-block;
-        width: 100%;
-    }
-</style>
-
-<h3>Available Dates for @Model.Name</h3>
-
-<!-- Loop through each year group -->
-@foreach (var yearGroup in Model.Availabilities.GroupBy(a => a.StartDate.Year))
-{
-    <div class="year-container">
-        <!-- Display Year Header -->
-        <div class="year-header">@yearGroup.Key</div>
-
-        <!-- Loop through months for that year -->
-        @foreach (var monthGroup in yearGroup.GroupBy(a => a.StartDate.ToString("MMMM yyyy")))
-        {
-            <div class="month-container">
-                <!-- Checkbox to toggle month dropdown -->
-                <input type="checkbox" id="month-@monthGroup.Key" style="display:none;" />
-                <label class="month-header" for="month-@monthGroup.Key">
-                    @monthGroup.Key
-                </label>
-
-                <!-- Month Dropdown for Dates -->
-                <div class="month-dropdown">
-                    <ul>
-                        @foreach (var date in monthGroup.OrderBy(a => a.StartDate))
-                        {
-                            <li>
-                                @date.StartDate.ToString("dd MMM") to @date.EndDate.ToString("dd MMM") - <strong>Available</strong>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        }
+        </select>
     </div>
-}
+</div>

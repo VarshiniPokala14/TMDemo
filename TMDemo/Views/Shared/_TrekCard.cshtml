@@ -40,9 +40,13 @@
 
             <!-- Action Buttons -->
             <div class="trek-card-actions">
-                <a href="@Url.Action("Details", "Trek", new { id = Model.TrekId })" class="btn btn-success">Get Trek Info</a>
-                <a href="@Url.Action("ViewDates", "Trek", new { trekId = Model.TrekId })" class="btn btn-primary">View Dates</a>
+                <a href="@Url.Action("Details", "Trek", new { trekid = Model.TrekId })" class="btn btn-success">Get Trek Info</a>
+                @* <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ViewdatesModal">
+                    View Dates
+                </button> *@
+                <a href="@Url.Action("ViewDates","Trek",new {trekid=Model.TrekId})" class="btn btn-primary">View Dates</a>
             </div>
         </div>
     </div>
+    @* @await Html.PartialAsync("_Viewdates") *@
 </div>

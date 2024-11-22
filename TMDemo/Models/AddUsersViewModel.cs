@@ -1,0 +1,17 @@
+﻿namespace TMDemo.Models
+{
+    public class AddUsersViewModel
+    {
+        public int TrekId { get; set; }
+        public string TrekName { get; set; }
+        public DateTime StartDate { get; set; }
+        public List<AddedUser> AddedUsers { get; set; }
+    }
+
+    public class AddedUser
+    {
+        public string FirstName { get; set; }
+        public string Email { get; set; }
+    }
+
+}

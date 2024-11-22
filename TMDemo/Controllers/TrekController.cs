@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TMDemo.Data;
 using TMDemo.Models;
+
 
 namespace TMDemo.Controllers
 {
     public class TrekController : Controller
     {
+        private readonly UserManager<UserDetail> _userManager;
         private readonly AppDbContext _context;
-        public TrekController(AppDbContext context)
+        public TrekController(AppDbContext context, UserManager<UserDetail> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public IActionResult AllTreks()
         {
@@ -100,48 +104,79 @@ namespace TMDemo.Controllers
         {
             // Retrieve the trek and its availabilities
             var trek = _context.Treks
-                               .Where(t => t.TrekId == trekId)
-                               .Include(t => t.Availabilities)
-                               .FirstOrDefault(); // Use FirstOrDefault instead of ToList to get a single trek
-
-            // If no trek is found, return a NotFound result
+                            .Include(t => t.Availabilities)
+                            .FirstOrDefault(t => t.TrekId == trekId);
+            
             if (trek == null)
             {
                 return NotFound();
             }
 
-            // Create a new variable to store the availability dates and months
+            // Group availability dates by month and map to MonthAvailability model
             var availabilityDates = trek.Availabilities
-                .GroupBy(a => a.StartDate.ToString("MMMM yyyy")) // Group by month and year (e.g., "July 2025")
-                .Select(group => new AvailabilityDate
+                .GroupBy(a => a.StartDate.ToString("MMMM yyyy")) // Group by Month and Year
+                .Select(group => new MonthAvailability
                 {
-                    Month = group.Key, // Group key is the "Month Year" format
-                    Dates = group.OrderBy(a => a.StartDate) // Order dates in ascending order
-                                 .Select(date => new DateRange
-                                 {
-                                     StartDate = date.StartDate,
-                                     EndDate = date.EndDate,
-                                     
-                                 }).ToList()
-                }).ToList();
+                    Month = group.Key, // e.g., "March 2025"
+                    Dates = group.Select(a => new DateRange
+                    {
+                        StartDate = a.StartDate,
+                        EndDate = a.EndDate
+                    }).ToList()
+                })
+                .ToList();
 
-            // Pass both the trek and the availabilityDates to the view
-            var model = new TrekViewModel
+            // Populate the view model
+            var viewModel = new TrekDetailsViewModel
             {
                 Trek = trek,
                 AvailabilityDates = availabilityDates
             };
 
-            return View(model);
+            // Pass the view model to the view
+            return View(viewModel);
         }
         public IActionResult Details(int trekId)
         {
+            // Fetch the trek details including availability
             var trek = _context.Treks
-                               .Where(t => t.TrekId == trekId)
-                               .Include(t => t.Availabilities)
-                               .FirstOrDefault();
-            return View(trek);
+                .Include(t => t.Availabilities)
+                .FirstOrDefault(t => t.TrekId == trekId);
+
+            if (trek == null)
+            {
+                return NotFound();
+            }
+            
+            // Group availability dates by month and map to MonthAvailability model
+            var availabilityDates = trek.Availabilities
+                .GroupBy(a => a.StartDate.ToString("MMMM yyyy")) // Group by Month and Year
+                .Select(group => new MonthAvailability
+                {
+                    Month = group.Key, // e.g., "March 2025"
+                    Dates = group.Select(a => new DateRange
+                    {
+                        StartDate = a.StartDate,
+                        EndDate = a.EndDate
+                    }).ToList()
+                })
+                .ToList();
+
+            // Populate the view model
+            var viewModel = new TrekDetailsViewModel
+            {
+                Trek = trek,
+                
+
+                AvailabilityDates = availabilityDates
+            };
+
+            // Pass the view model to the view
+            return View(viewModel);
         }
+
+
+
 
 
     }

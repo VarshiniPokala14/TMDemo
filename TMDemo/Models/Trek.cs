@@ -31,6 +31,7 @@ namespace TMDemo.Models
 
         // Navigation Property: Links to Availability table
         public ICollection<Availability>? Availabilities { get; set; }
-       
+        public ICollection<TrekReview>? TrekReviews { get; set; }
+       public ICollection<Booking>? Bookings { get; set; }
     }
 }

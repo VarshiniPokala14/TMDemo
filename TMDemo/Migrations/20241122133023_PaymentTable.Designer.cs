@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TMDemo.Data;
 
@@ -11,9 +12,11 @@ using TMDemo.Data;
 namespace TMDemo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241122133023_PaymentTable")]
+    partial class PaymentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,41 +235,6 @@ namespace TMDemo.Migrations
                     b.ToTable("Bookings", (string)null);
                 });
 
-            modelBuilder.Entity("TMDemo.Models.Cancellation", b =>
-                {
-                    b.Property<int>("CancellationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CancellationId"));
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BookingId1")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CancellationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("RefundAmount")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.HasKey("CancellationId");
-
-                    b.HasIndex("BookingId");
-
-                    b.HasIndex("BookingId1")
-                        .IsUnique()
-                        .HasFilter("[BookingId1] IS NOT NULL");
-
-                    b.ToTable("Cancellations");
-                });
-
             modelBuilder.Entity("TMDemo.Models.EmergencyContact", b =>
                 {
                     b.Property<int>("Id")
@@ -305,47 +273,6 @@ namespace TMDemo.Migrations
                         .IsUnique();
 
                     b.ToTable("EmergencyContacts", (string)null);
-                });
-
-            modelBuilder.Entity("TMDemo.Models.Reschedule", b =>
-                {
-                    b.Property<int>("RescheduleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RescheduleId"));
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BookingId1")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("ExtraAmount")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<DateTime>("NewAvailableDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("OldAvailableDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("RescheduleDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("RescheduleId");
-
-                    b.HasIndex("BookingId");
-
-                    b.HasIndex("BookingId1")
-                        .IsUnique()
-                        .HasFilter("[BookingId1] IS NOT NULL");
-
-                    b.ToTable("Reschedules");
                 });
 
             modelBuilder.Entity("TMDemo.Models.TMDemo.Models.Payment", b =>
@@ -636,21 +563,6 @@ namespace TMDemo.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TMDemo.Models.Cancellation", b =>
-                {
-                    b.HasOne("TMDemo.Models.Booking", "Booking")
-                        .WithMany()
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TMDemo.Models.Booking", null)
-                        .WithOne("Cancellation")
-                        .HasForeignKey("TMDemo.Models.Cancellation", "BookingId1");
-
-                    b.Navigation("Booking");
-                });
-
             modelBuilder.Entity("TMDemo.Models.EmergencyContact", b =>
                 {
                     b.HasOne("TMDemo.Models.UserDetail", "UserDetail")
@@ -660,21 +572,6 @@ namespace TMDemo.Migrations
                         .IsRequired();
 
                     b.Navigation("UserDetail");
-                });
-
-            modelBuilder.Entity("TMDemo.Models.Reschedule", b =>
-                {
-                    b.HasOne("TMDemo.Models.Booking", "Booking")
-                        .WithMany()
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TMDemo.Models.Booking", null)
-                        .WithOne("Reschedule")
-                        .HasForeignKey("TMDemo.Models.Reschedule", "BookingId1");
-
-                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("TMDemo.Models.TMDemo.Models.Payment", b =>
@@ -709,11 +606,7 @@ namespace TMDemo.Migrations
 
             modelBuilder.Entity("TMDemo.Models.Booking", b =>
                 {
-                    b.Navigation("Cancellation");
-
                     b.Navigation("Payment");
-
-                    b.Navigation("Reschedule");
                 });
 
             modelBuilder.Entity("TMDemo.Models.Trek", b =>

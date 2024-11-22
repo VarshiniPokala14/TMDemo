@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -114,6 +115,17 @@ namespace TMDemo.Controllers
 
             return RedirectToAction("Index");
         }
+        public IActionResult MyBookings()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Retrieve logged-in user ID
+            var bookings = _context.Bookings
+                .Include(b => b.Trek)
+                .Where(b => b.UserId == userId)
+                .ToList();
+
+            return View(bookings);
+        }
+
     }
 }
 

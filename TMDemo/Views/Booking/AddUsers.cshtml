@@ -1,0 +1,26 @@
+﻿@model TMDemo.Models.AddUsersViewModel
+
+<h1>Add Participants for @Model.TrekName</h1>
+<h3>Start Date: @Model.StartDate.ToString("dd MMM yyyy")</h3>
+
+<form asp-action="FinalBooking" asp-controller="Booking" asp-route-trekId="@Model.TrekId" asp-route-startDate="@Model.StartDate" asp-route-trekName="@Model.TrekName" method="post">
+    <div id="users-container">
+        <div>
+            <label for="userName">Name:</label>
+            <input type="text" name="AddedUsers[0].FirstName" required>
+        </div>
+        <div>
+            <label for="userEmail">Email:</label>
+            <input type="email" name="AddedUsers[0].Email" required>
+        </div>
+        <input type="hidden" />
+        <!-- Add more user fields dynamically using JavaScript -->
+    </div>
+
+    <button type="submit">Continue</button>
+    <a asp-action="FinalBooking" asp-controller="Booking" asp-route-trekId="@Model.TrekId" asp-route-startDate="@Model.StartDate" class="btn btn-secondary">Skip</a>
+</form>
+
+<script>
+    // Optionally add JavaScript to dynamically add more users
+</script>

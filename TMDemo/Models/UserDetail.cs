@@ -12,5 +12,7 @@ namespace TMDemo.Models
         public string City { get; set; }
         public string State { get; set; }
         public EmergencyContact? EmergencyContact { get; set; }
+        public ICollection<TrekReview>? TrekReviews { get; set; }
+        public ICollection<Booking>? Bookings { get; set; }
     }
 }
