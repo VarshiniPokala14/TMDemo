@@ -1,0 +1,44 @@
+﻿@model TMDemo.Models.RescheduleViewModel
+
+@{
+	ViewData["Title"] = "Reschedule";
+	
+}
+
+
+<div class="form-container">
+	<div class="form-wrapper ">
+        <h2>Reschedule Booking</h2>
+        <form asp-action="ProcessReschedule" method="post">
+            <input type="hidden" asp-for="BookingId" />
+			<div class="form-group">
+                <label for="OldStartDate">Old Start Date:</label>
+				<input type="text" asp-for="OldStartDate" readonly>
+			</div>
+			<div class="form-group">
+                <label for="NewStartDate">New Start Date:</label>
+                <select asp-for="NewStartDate">
+                    <option value="">-- Select a New Start Date --</option>
+                    @if (Model.AvailableDates != null && Model.AvailableDates.Any())
+                    {
+                        foreach (var date in Model.AvailableDates)
+                        {
+                            <option value="@date.ToString("yyyy-MM-dd")">@date.ToString("MMMM dd, yyyy")</option>
+                        }
+                    }
+                </select>
+			</div>
+            <div class="form-group">
+                <label for="Reason">Reason:</label>
+                <input type="text" asp-for="Reason" required>
+            </div>
+            <div class="form-group">
+                <label for="ExtraCharges">Extra Charges</label>
+                <input type="text" asp-for="ExtraAmount" readonly>
+            </div>
+			<button type="submit">Confirm Reschedule</button>
+			
+		</form>
+	</div>
+</div>
+

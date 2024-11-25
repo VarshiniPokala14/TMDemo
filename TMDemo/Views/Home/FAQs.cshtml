@@ -1,0 +1,377 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            margin: 50px auto;
+            width: 60%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+            ul li {
+                font-size: 1.2em;
+                margin: 10px 0;
+                cursor: pointer;
+            }
+
+                ul li a {
+                    text-decoration: none;
+                    color: #333;
+                    font-weight: bold;
+                }
+
+                    ul li a:hover {
+                        color: #1A3A6E;
+                    }
+
+        .accordion {
+            margin-top: 20px;
+        }
+
+        .accordion-item {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+            .accordion-item .accordion-header {
+                padding: 15px 20px;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 1em;
+                background-color: #f9f9f9;
+            }
+
+                .accordion-item .accordion-header:hover {
+                    background-color: #e8e8e8;
+                }
+
+                .accordion-item .accordion-header i {
+                    transition: transform 0.3s ease;
+                }
+
+                .accordion-item .accordion-header.open i {
+                    transform: rotate(180deg);
+                }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 20px;
+            transition: max-height 0.3s ease;
+        }
+
+            .accordion-content.open {
+                max-height: 500px;
+                padding: 15px 20px;
+            }
+
+            .accordion-content p,
+            .accordion-content ol {
+                font-size: 0.9em;
+                color: #555;
+            }
+
+        ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .dark-line {
+            border-top: 2px solid #2f2f2f;
+            margin: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>For any queries, look up here</h2>
+        <div class="dark-line"></div>
+        <ul>
+            <li><a href="#registration">> Registration Process</a></li>
+            <li><a href="#">> Trek Facilities</a></li>
+            <li><a href="#">> Payment Issues</a></li>
+            <li><a href="#">> Cancellation</a></li>
+            <li><a href="#">> Women Safety</a></li>
+        </ul>
+        <div class="dark-line"></div>
+        <div class="accordion">
+            <h2>Registration Issues</h2>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>How Do I Register for a Trek</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>Our registration process is entirely an online process. You'll be able to complete it in a few simple steps:</p>
+                    <ol>
+                        <li>Head to the upcoming treks page and choose a trek.</li>
+                        <li>Click on View Dates and select a date of your choice. Then click on Book.</li>
+                        <li>Create an account for yourself if you don’t already have one.</li>
+                        <li>If you want to add people for your trek you can add</li>
+                        <li>Make the payment online.</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Can I book my slot without paying for a Trek</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>No, slots are confirmed only after the payment is completed to ensure fairness and availability for all participants.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Can I register for Solo trip</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>Yes, solo trips are welcome. Many solo travelers join us for treks, and it's a great way to meet like-minded people!</p>
+                </div>
+            </div>
+        </div>
+        <!---------->
+        <div class="dark-line"></div>
+        <div class="accordion" id="facilities">
+            <h2>Trek Issues</h2>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>How many trekkers stay in a tent?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>Each tent accommodates 3 trekkers comfortably.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>What is the group size on an Indiahikes trek?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>Our groups usually have around 20-25 trekkers to ensure everyone has a personalized and enjoyable experience.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Can I change my pickup location?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>No, you can't' change your pickup location.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>What are the toilets/washroom facilities like on the trek?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>We provide separate toilet tents for men and women with basic hygiene facilities.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Can I carry my laptop on the trek?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>We recommend not carrying laptops on treks to avoid damage or added weight.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Can I get a separate room at the basecamp for an additional cost?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>No, separate rooms are available at an additional cost.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Is smoking and drinking allowed while on trek?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>No, smoking and drinking are strictly prohibited during the trek to ensure safety and health.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>What will happen if I am not fit for the trek?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>If you are deemed unfit during the trek, our trek leaders will ensure you safely return to the basecamp. No compromises are made on safety.</p>
+                </div>
+            </div>
+        </div>
+        <div class="dark-line"></div>
+        <!----------->
+        <div class="accordion" id="facilities">
+            <h2>Payment Concerns</h2>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>My transaction failed. What should I do?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>If your transaction failed, check your bank account to confirm if the amount was debited. Retry after some time or contact our support team for assistance.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>My amount got debited, but I did not get a confirmation. What should I do?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>If the amount was debited but no confirmation was received, please email us at <strong>TrekMastersIndia@gmail.com</strong> with the transaction details.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>What payment modes do you accept?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>We accept payments through credit/debit cards, net banking, UPI, and digital wallets.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Do you accept partial payments?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>Currently, we accept only full payments to confirm your trek booking.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>Can I pay through EMI?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>Unfortunately, we do not have EMI options. Only single-time payments are accepted.</p>
+                </div>
+            </div>
+            <div class="dark-line"></div>
+
+            <!-- Cancellation Section -->
+            <div class="accordion" id="cancellation">
+                <h2>Cancellation</h2>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>What is your cancellation policy?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Our cancellation policy varies based on how far in advance you cancel. Please refer to our cancellation terms for detailed information at <strong>https://localhost:7133/Home/Cancellation</strong>.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>How many days in advance should I cancel my trek?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>It’s best to cancel at least 30 days before the trek for a partial refund. Refund policies are stricter for last-minute cancellations.To know about refund policies checkout at <strong>https://localhost:7133/Home/Cancellation</strong></p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>How do I cancel my trek?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>To cancel your trek, log in to your account, go to 'My Treks,' and click on the cancellation option for the trek you booked.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>How long does the refund process take?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Refunds are processed within 7-10 working days after cancellation.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="dark-line"></div>
+
+            <!-- Women Safety Section -->
+            <div class="accordion" id="womenSafety">
+                <h2>Women Safety</h2>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>How safe are Indiahikes treks for women?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Indiahikes treks are highly safe for women. We ensure equal treatment, separate toilet facilities, and a strong code of conduct among participants.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Can I trek when I'm menstruating? Can I trek with periods?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Yes, you can trek during your periods. Ensure you carry proper sanitary products, and our staff will assist with any needs or concerns.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>How is the tent sharing?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Tents are shared between 2-3 trekkers of the same gender unless you're trekking with family or friends.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <script>
+            // JavaScript for accordion functionality
+            document.querySelectorAll('.accordion-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    header.classList.toggle('open');
+                    content.classList.toggle('open');
+                });
+            });
+        </script>
+</body>
+</html>

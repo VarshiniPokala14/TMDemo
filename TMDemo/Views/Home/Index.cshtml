@@ -1,5 +1,5 @@
 ﻿<div class="relative custom-serif">
-    <img src="~/images/HomeImg.jpg" class="bg-opacity-10"/>
+    <img src="~/images/HomeImg.jpg" class="bg-opacity-10" />
     <div class="absolute inset-0 flex items-center justify-center text-center text-white ">
         <h1 class=" text-5xl text-white font-bold">
             Your Journey Begins
@@ -14,17 +14,17 @@
 </div>
 
 <div class="bg-white py-8">
-    <h2 class="text-center text-2xl font-bold mb-4">
+    <h2 class="text-center text-3xl font-bold mb-4 mt-4 ">
         Discover the New Journey
     </h2>
     <div class="DivClass max-w-4xl mx-auto flex flex-col md:flex-row items-center">
         <!-- Left Image -->
-        <div class="w-full md:w-1/2 image-container">
-            <img alt="Person with a backpack looking at the mountains" src="https://storage.googleapis.com/a1aa/image/044EIfl56N05V6L1miHbf9M5jSwytdFksCQUzID9czSWvemnA.jpg" />
+        <div class="w-full md:w-1/2 image-container mb-0">
+            <img alt="Person with a backpack looking at the mountains" src="~/images/home2.png" />
         </div>
 
         <!-- Right Text -->
-        <div class="md:ml-8 mt-4 md:mt-0 text-gray-700">
+        <div class="w-full md:w-1/2 info">
             <p>
                 As you lace up your boots and step into the great outdoors, remember that each trek is not just a physical journey, but an invitation to discover new horizons within yourself. Trekking allows you to escape the everyday hustle, breathe in fresh air, and immerse yourself in the beauty of nature.
             </p>
@@ -44,9 +44,13 @@
 
         .relative img {
             width: 100%;
-            height: 700px;
+            height: 900px;
             object-fit: cover;
         }
+
+    .info p {
+        margin-left: 0px;
+    }
 
     .absolute {
         position: absolute;
@@ -56,23 +60,30 @@
         bottom: 0;
         justify-content: center;
         align-items: center;
-        padding-top:200px;
+        padding-top: 200px;
     }
 
-        .absolute h1 {
-            font-size: 5rem;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
-        }
-        .absolute p{
-            font-size:2rem;
-        }
-        .absolute a{
-            font-size:2rem;
-            background-color:gray;
-            border:10px;
-            padding:30px;
-            text-decoration:none;
-        }
+    .image-container img {
+        height: 715px;
+    }
+
+    .absolute h1 {
+        font-size: 5rem;
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+    }
+
+    .absolute p {
+        font-size: 2rem;
+    }
+
+    .absolute a {
+        font-size: 2rem;
+        background-color: gray;
+        border: 10px;
+        padding: 30px;
+        text-decoration: none;
+    }
+
     .custom-serif {
         font-family: 'Times New Roman', serif; /* Use Times New Roman */
     }
@@ -80,13 +91,22 @@
     .DivClass {
         display: flex;
         justify-content: space-between;
-        gap: 16px;
+        gap: 0px;
         width: 100%;
-        padding-bottom: 10px;
     }
 
-        .DivClass > div {
-            flex: 1;
-            max-width: 48%;
+    .info {
+        flex: 1;
+        text-align: left;
+        background-color: #DEE1E6;
+        padding-left: 0px;
+    }
+
+        .info p {
+            padding-top: 20px;
+            font-size: 25px;
+            margin-right: 180px;
+            font-family: 'Times New Roman', Times, serif;
+            margin-left: 60px;
         }
 </style>

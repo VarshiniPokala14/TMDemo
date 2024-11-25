@@ -118,13 +118,16 @@ namespace TMDemo.Controllers
         public IActionResult MyBookings()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Retrieve logged-in user ID
+
+            // Filter bookings where IsCancelled is false or null
             var bookings = _context.Bookings
                 .Include(b => b.Trek)
-                .Where(b => b.UserId == userId)
+                .Where(b => b.UserId == userId && (b.IsCancelled == false || b.IsCancelled == null))
                 .ToList();
 
             return View(bookings);
         }
+
 
     }
 }

@@ -1,26 +1,140 @@
-﻿@model TMDemo.Models.AddUsersViewModel
+﻿@model AddUsersViewModel
 
-<h1>Add Participants for @Model.TrekName</h1>
-<h3>Start Date: @Model.StartDate.ToString("dd MMM yyyy")</h3>
+@{
+    ViewData["Title"] = "Add Trek Mate";
+     
+}
 
-<form asp-action="FinalBooking" asp-controller="Booking" asp-route-trekId="@Model.TrekId" asp-route-startDate="@Model.StartDate" asp-route-trekName="@Model.TrekName" method="post">
-    <div id="users-container">
-        <div>
-            <label for="userName">Name:</label>
-            <input type="text" name="AddedUsers[0].FirstName" required>
-        </div>
-        <div>
-            <label for="userEmail">Email:</label>
-            <input type="email" name="AddedUsers[0].Email" required>
-        </div>
-        <input type="hidden" />
-        <!-- Add more user fields dynamically using JavaScript -->
-    </div>
 
-    <button type="submit">Continue</button>
-    <a asp-action="FinalBooking" asp-controller="Booking" asp-route-trekId="@Model.TrekId" asp-route-startDate="@Model.StartDate" class="btn btn-secondary">Skip</a>
-</form>
 
-<script>
-    // Optionally add JavaScript to dynamically add more users
-</script>
+<div class="form-container">
+	<div class="form-wrapper ">
+        <h2>Add TrekMates</h2>
+        <form asp-action="AddUsers" method="post">
+            <input type="hidden" asp-for="TrekId" />
+            <input type="hidden" asp-for="TrekName" />
+            <input type="hidden" asp-for="StartDate" />
+			<div class="form-group">
+                <div id="user-list">
+                    @for (int i = 0; i < Model.Emails.Count; i++)
+                    {
+                        <div class="email-field">
+                            <input asp-for="@Model.Emails[i]" class="form-control" placeholder="Email Id" />
+                        </div>
+                    }
+                </div>
+			</div>
+			<div class="form-group">
+                <label for="Emails">Email:</label>
+                <input type="text" id="Emails" name="email" class="form-control" />
+                <button type="submit" name="action" value="AddMember" class="btn btn-secondary">+ Member to join Trek</button>
+			</div>
+            <button type="submit" name="action" value="Book" class="btn btn-primary">Proceed With the Registration</button>
+			
+			
+		</form>
+	</div>
+</div>
+
+
+
+<style>
+    .form-container {
+        background-color: rgba(255, 255, 255, 0.75);
+        padding: 2rem;
+        border-radius: 8px;       
+        width: 100%;
+        
+    }
+
+        .form-container h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .treks{
+            backgroung-color: gray;
+        }
+    .email-field {
+        margin-bottom: 1rem;
+    }
+
+        .email-field input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #6B3738;
+            border-radius: 5px;
+            background-color: #6B3738;
+            color: white;
+            font-size: 1rem;
+        }
+
+            .email-field input:focus {
+                border-color: #6B3738;
+                outline: none;
+            }
+
+    .form-control {
+        padding: 0.75rem;
+        width: 100%;
+        border-radius: 5px;
+        font-size: 1rem;
+        border: 1px solid #6B3738;
+    }
+
+        .form-control:focus {
+            border-color: #6B3738;
+            outline: none;
+        }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 1rem;
+        margin-left:0px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary {
+        background-color: #6B3738;
+        color: white;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #6B3738;
+        }
+
+    .btn-primary {
+        background-color: #6B3745;
+        color: white;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #6B3745;
+        }
+
+    .add-member-btn {
+        display: block;
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+
+        .add-member-btn button {
+            background-color: #6B3738;
+            color: white;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+            .add-member-btn button:hover {
+                background-color: #C80000;
+            }
+</style>

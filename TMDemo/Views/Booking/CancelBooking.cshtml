@@ -5,42 +5,47 @@
     ViewData["Title"] = "Cancel Booking";
 }
 
-<div class="container mt-5">
-    <h2>Cancel Booking</h2>
-    <form asp-action="ProcessCancellation" method="post">
-        <input type="hidden" name="BookingId" value="@Model.Booking.BookingId" />
-        <input type="hidden" name="RefundAmount" value="@Model.RefundAmount" />
 
-        <div class="form-group">
-            <label><strong>Trek Name:</strong></label>
-            <p>@Model.Booking.Trek.Name</p>
-        </div>
 
-        <div class="form-group">
-            <label><strong>Booking Date:</strong></label>
-            <p>@Model.Booking.BookingDate.ToShortDateString()</p>
-        </div>
+<div class="form-container">
+	<div class="form-wrapper ">
+        <h2>Cancel Booking</h2>
+        <form asp-action="ProcessCancellation" method="post">
+            <input type="hidden" name="BookingId" value="@Model.Booking.BookingId" />
+            <input type="hidden" name="RefundAmount" value="@Model.RefundAmount" />
+            <div class="form-group">
+                <label><strong>Trek Name:</strong></label>
+                <p>@Model.Booking.Trek.Name</p>
+            </div>
 
-        <div class="form-group">
-            <label><strong>Price:</strong></label>
-            <p>@Model.Booking.TotalAmount</p>
-        </div>
+            <div class="form-group">
+                <label><strong>Booking Date:</strong></label>
+                <p>@Model.Booking.BookingDate.ToShortDateString()</p>
+            </div>
 
-        <div class="form-group">
-            <label><strong>Cancel Date:</strong></label>
-            <p>@DateTime.Now.ToShortDateString()</p>
-        </div>
+            <div class="form-group">
+                <label><strong>Price:</strong></label>
+                <p>@Model.Booking.TotalAmount</p>
+            </div>
 
-        <div class="form-group">
-            <label><strong>Refund Amount:</strong></label>
-            <p>@Model.RefundAmount</p>
-        </div>
+            <div class="form-group">
+                <label><strong>Cancel Date:</strong></label>
+                <p>@DateTime.Now.ToShortDateString()</p>
+            </div>
 
-        <div class="form-group">
-            <label for="Reason">Cancellation Reason *</label>
-            <textarea id="Reason" name="Reason" required class="form-control" placeholder="Provide cancellation reason"></textarea>
-        </div>
+            <div class="form-group">
+                <label><strong>Refund Amount:</strong></label>
+                <p>@Model.RefundAmount</p>
+            </div>
 
-        <button type="submit" class="btn btn-danger mt-3">Cancel Booking</button>
-    </form>
+            <div class="form-group">
+                <label for="Reason">Cancellation Reason *</label>
+                <textarea id="Reason" name="Reason" required class="form-control" placeholder="Provide cancellation reason"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-danger mt-3">Cancel Booking</button>
+			
+		</form>
+	</div>
 </div>
+

@@ -4,30 +4,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TMDemo.Models
 {
-    public class Reschedule
+
+    public class RescheduleViewModel
     {
-        [Key]
-        public int RescheduleId { get; set; }
+        public int BookingId { get; set; }
+        public DateTime OldStartDate { get; set; }
 
         [Required]
-        [ForeignKey("Booking")]
-        public int BookingId { get; set; } // Foreign key to Booking
-
-        public DateTime? OldAvailableDate { get; set; } // Nullable to handle cases where old date may not exist
-        [Required]
-        public DateTime NewAvailableDate { get; set; }
-
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal ExtraAmount { get; set; }
+        public DateTime NewStartDate { get; set; } 
 
         [Required]
         public string Reason { get; set; }
 
-        [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime RescheduleDate { get; set; } 
+        public decimal ExtraAmount { get; set; } 
 
-        // Navigation property
-        public Booking? Booking { get; set; }
+        public List<DateTime> AvailableDates { get; set; } = new List<DateTime>(); 
     }
+
+
+
+
 }

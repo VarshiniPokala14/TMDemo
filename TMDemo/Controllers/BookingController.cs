@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +14,7 @@ namespace TMDemo.Controllers
     {
         private readonly AppDbContext _context;
         private readonly UserManager<UserDetail> _userManager;
-        public BookingController(AppDbContext context,UserManager<UserDetail> userManager)
+        public BookingController(AppDbContext context, UserManager<UserDetail> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -23,7 +22,7 @@ namespace TMDemo.Controllers
         [Authorize]
         public IActionResult AddUsers(int trekId, string startDate)
         {
-            // Log the parameters for debugging
+
             Console.WriteLine($"trekId: {trekId}, startDate: {startDate}");
 
             DateTime parsedDate;
@@ -37,53 +36,72 @@ namespace TMDemo.Controllers
             {
                 return NotFound();
             }
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            List<string> emails = new List<String>
+            {
+                userEmail
+            };
 
             var viewModel = new AddUsersViewModel
             {
                 TrekId = trekId,
                 TrekName = trek.Name,
                 StartDate = parsedDate,
-                AddedUsers = new List<AddedUser>() // Initialize the AddedUsers list
+                Emails = emails // Initialize the AddedUsers list
             };
 
             return View(viewModel);
         }
 
+
         [Authorize]
         [HttpPost]
-        public IActionResult FinalBooking(AddUsersViewModel model)
+        public IActionResult AddUsers(AddUsersViewModel model, string action, string? email)
         {
             if (ModelState.IsValid)
             {
-                var trek = _context.Treks.FirstOrDefault(t => t.TrekId == model.TrekId);
-                if (trek == null)
+                if (action == "AddMember")
                 {
-                    return NotFound();
+                    // Add an empty email field
+                    model.Emails.Add(email);
+                    return View(model);
                 }
-
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Retrieves logged-in user ID
-
-                var totalAmount = trek.Price * model.AddedUsers.Count; // Calculate total amount
-
-                var booking = new Booking
+                else if (action == "Book")
                 {
-                    TrekId = model.TrekId,
-                    UserId = userId, // Use the logged-in user's ID
-                    BookingDate = DateTime.Now,
-                    NumberOfPeople = model.AddedUsers.Count,
-                    TotalAmount = totalAmount,
-                    TrekStartDate = model.StartDate
-                };
 
-                _context.Bookings.Add(booking);
-                //Console.WriteLine($"TrekId: {model.TrekId}, StartDate: {model.StartDate}, BookingDate: {DateTime.Now}");
-                Console.WriteLine($"BookingDate: {booking.BookingDate}");
-                //_context.Entry(booking).State = EntityState.Modified;
-                _context.SaveChanges();
+                    var trek = _context.Treks.FirstOrDefault(t => t.TrekId == model.TrekId);
+                    if (trek == null)
+                    {
+                        return NotFound();
+                    }
 
-                //_context.SaveChanges();
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Retrieves logged-in user ID
 
-                return View("PaymentPage", booking);
+                    var amount = trek.Price * (model.Emails.Count); // Calculate total amount
+                    var tax = amount * 0.1M;
+                    var totalAmount = amount + tax + 10;
+
+                    var booking = new Booking
+                    {
+                        TrekId = model.TrekId,
+                        UserId = userId,
+                        BookingDate = DateTime.Now,
+                        NumberOfPeople = model.Emails.Count,
+                        TotalAmount = totalAmount,
+                        TrekStartDate = model.StartDate,
+                        CancellationDate = DateTime.MinValue // A default placeholder for non-cancelled bookings.
+
+                    };
+
+                    _context.Bookings.Add(booking);
+
+                    Console.WriteLine($"BookingDate: {booking.BookingDate}");
+
+                    _context.SaveChanges();
+
+
+                    return View("PaymentPage", booking);
+                }
             }
             return Ok(ModelState);
         }
@@ -108,23 +126,12 @@ namespace TMDemo.Controllers
                 return NotFound();
             }
 
-            // Assume the payment is successful. In a real application, integrate with a payment gateway.
-            var payment = new Payment
-            {
-                BookingId = bookingId,
-                Amount = booking.TotalAmount,
-                PaymentDate = DateTime.Now,
-                PaymentMethod = paymentMethod
-            };
-
-            _context.Payments.Add(payment);
+            booking.PaymentSuccess = true;
             _context.SaveChanges();
 
-            // Update booking status (optional)
-            // booking.Status = "Paid";
-            // _context.SaveChanges();
+            
 
-            return RedirectToAction("BookingDetails", new { bookingId = bookingId });
+            return View("BookingSuccess");
         }
         [HttpGet]
         public IActionResult CancelBooking(int bookingId)
@@ -194,29 +201,97 @@ namespace TMDemo.Controllers
             }
 
             // Calculate refund amount again (although it was already done in the GET request)
-            
+
             decimal refundAmount = model.RefundAmount;
 
-           
+
 
             // Create the cancellation entry in the database
-            var cancellation = new Cancellation
-            {
-                BookingId = model.BookingId,
-                Reason = model.Reason,
-                RefundAmount = refundAmount,
-                CancellationDate = DateTime.Now
-            };
+            book.IsCancelled = true;
 
-            _context.Cancellations.Add(cancellation);
-
-            // Remove the booking from the Bookings table
-            _context.Bookings.Remove(book);
+            book.Reason = model.Reason;
+            book.RefundAmount = refundAmount;
+            book.CancellationDate = DateTime.Now;
 
             await _context.SaveChangesAsync();
 
             // Redirect to MyBookings page
             return RedirectToAction("MyBookings", "Profile");
+        }
+        [Authorize]
+        [HttpGet]
+        public IActionResult RescheduleBooking(int bookingId)
+        {
+            var booking = _context.Bookings
+                .Include(b => b.Trek) // Load related trek details
+                .FirstOrDefault(b => b.BookingId == bookingId);
+
+            if (booking == null)
+            {
+                return NotFound("Booking not found.");
+            }
+
+            // Fetch all available dates for the specific trek
+            var availableDates = _context.Availabilities
+                .Where(a => a.TrekId == booking.TrekId && a.StartDate > DateTime.Now)
+                .Select(a => a.StartDate)
+                .Distinct() // Ensure unique dates
+                .OrderBy(d => d) // Sort dates in ascending order
+                .ToList();
+
+            // Handle case where no available dates exist
+            if (availableDates == null || !availableDates.Any())
+            {
+                ModelState.AddModelError("", "No available dates for this trek.");
+                return View("Error");
+            }
+
+            var model = new RescheduleViewModel
+            {
+                BookingId = booking.BookingId,
+                OldStartDate = booking.TrekStartDate,
+                AvailableDates = availableDates, 
+                ExtraAmount = 0 
+            };
+
+            return View(model);
+        }
+
+
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult ProcessReschedule(RescheduleViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("RescheduleBooking", model);
+            }
+
+            var booking = _context.Bookings.FirstOrDefault(b => b.BookingId == model.BookingId);
+            if (booking == null)
+            {
+                return NotFound("Booking not found.");
+            }
+
+            
+            var daysDifference = (model.OldStartDate - DateTime.Now).Days;
+            decimal extraAmount = 0;
+            if (daysDifference <= 25)
+            {
+                extraAmount = booking.TotalAmount * 0.05M; 
+            }
+            booking.ExtraAmount = extraAmount;
+            booking.RescheduleReason = model.Reason;
+            booking.TrekStartDate = model.NewStartDate;
+            booking.TotalAmount += extraAmount;
+            if (model.OldStartDate != model.NewStartDate)
+            {
+				_context.SaveChanges();
+
+				return View("RescheduleSuccess");
+			}
+            return View(model);
         }
 
 

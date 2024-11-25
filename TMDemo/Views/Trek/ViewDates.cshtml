@@ -1,35 +1,13 @@
-﻿@model TrekDetailsViewModel
-
-<div class="container mt-4">
-
-
-    <!-- Button to Open the Modal -->
-    <button type="button" class="btn btn-primary mt-4" data-bs-toggle="modal" data-bs-target="#datesModal">
-        View Dates
-    </button>
-
-    <!-- Modal for Available Dates -->
-    <div class="modal fade" id="datesModal" tabindex="-1" aria-labelledby="datesModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="datesModalLabel">Available Dates for @Model.Trek.Name</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    @if (Model.AvailabilityDates != null && Model.AvailabilityDates.Any())
-                    {
-                        @await Html.PartialAsync("_Viewdates", Model)
-                    }
-                    else
-                    {
-                        <p>No Available Dates</p>
-                    }
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+﻿<select name="startDate" class="w-full mt-2 p-2 border border-gray-300 rounded">
+    @foreach (var monthGroup in Model.AvailabilityDates)
+    {
+        <optgroup label="@monthGroup.Month">
+            @foreach (var date in monthGroup.Dates)
+            {
+                <option value="@date.StartDate.ToString("yyyy-MM-dd")">
+                    @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM")
+                </option>
+            }
+        </optgroup>
+    }
+</select>

@@ -31,12 +31,27 @@ namespace TMDemo.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime TrekStartDate { get; set; }
+        public bool? PaymentSuccess {  get; set; }
+        
+        public bool? IsCancelled { get; set; }
+
+        [DataType(DataType.DateTime)]
+
+        public DateTime? CancellationDate { get; set; } = null;
+
+        public string? Reason { get; set; }
+
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? RefundAmount { get; set; }
+        
+        public string? RescheduleReason { get; set; }
+
+        public decimal? ExtraAmount { get; set; } // Calculated extra charge
 
         // Navigation properties
         public UserDetail? User { get; set; }
         public Trek? Trek { get; set; }
-        public Payment? Payment { get; set; } 
-        public Reschedule? Reschedule { get; set; }
-        public Cancellation? Cancellation { get; set; }
+       
+
     }
 }

@@ -146,7 +146,7 @@
                         <a href="/Category/ByRegion">Region</a>
                     </div>
                 </li>
-                <li><a href="/About">About Us</a></li>
+                <li><a href="/Home/AboutUs">About Us</a></li>
             </ul>
             <div class="right-section">
                 
@@ -179,8 +179,12 @@
                         </a>
                     }
                 </div>
-                <form class="search-form">
-                    <input type="text" placeholder="Search ..." class="search-input">
+                <form asp-controller="Trek" asp-action="Index" class="search-form">
+                    <p>
+                        <input type="text" placeholder="Search ..." class="search-input" name="SearchString">
+                        
+                    </p>
+                   
                 </form>
             </div>
         </nav>
@@ -195,7 +199,9 @@
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-header">
-                <img src="~/images/Logo1.png" style="width:178px;" />
+                <a href="/Home/Index">
+                    <img src="~/images/Logo1.png" style="width:178px;" asp-action="Index" asp-controller="Home" />
+                </a>
             </div>
 
             <h2 class="footer-title">Trek By Category</h2>
@@ -262,26 +268,42 @@
                 <div>
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="#">Upcoming Treks</a></li>
-                        <li><a href="#">FAQs</a></li>
-                        <li><a href="#">Cancellation Policy</a></li>
-                        <li><a href="#">About Us</a></li>
+                        <li><a href="/Trek/UpcomingTreks">Upcoming Treks</a></li>
+                        <li><a href="/Home/FAQs">FAQs</a></li>
+                        <li><a href="/Home/Cancellation">Cancellation Policy</a></li>
+                        <li><a href="/Home/AboutUs">About Us</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3>Follow us on</h3>
                     <ul class="social-links">
-                        <li><a href="#">Instagram</a></li>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">LinkedIn</a></li>
-                        <li><a href="#">WhatsApp</a></li>
+                        <li>
+                            <a href="https://www.instagram.com/" target="_blank" style="color: inherit; text-decoration: none; padding:5px;">
+                                <i class="fab fa-instagram fa-2x" style=" color: #E4405F;"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.facebook.com/?_rdr" target="_blank" style="color: inherit; text-decoration: none; padding:5px;">
+                                <i class="fab fa-facebook fa-2x" style="color: #1877F2;"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://in.linkedin.com/" target="_blank" style="color: inherit; text-decoration: none; padding:5px;">
+                                <i class="fab fa-linkedin fa-2x" style="color: #0077B5;"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://web.whatsapp.com/" target="_blank" style="color: inherit; text-decoration: none; padding:5px;">
+                                <i class="fab fa-whatsapp fa-2x" style="color: #25D366;"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <div>
                     <h3>Contact us</h3>
                     <ul>
-                        <li><span>📞</span> 987654321</li>
-                        <li><span>📞</span> 987654321</li>
+                        <li><span>📞</span> 9876543210</li>
+                        <li><span>📞</span> 9876543210</li>
                         <li><span>⏰</span> Mon-Sun 9:30 - 19:00</li>
                         <li><span>✉️</span> TrekMastersIndia@gmail.com</li>
                     </ul>

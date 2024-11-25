@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Trek>
+
+<div class="container">
+    <div class="row">
+        @if (Model == null || !Model.Any())
+        {
+            <div class="col-12">
+                <p>No treks available. Loading all treks...</p>
+                @{
+                    // Reload the "AllTreks" view explicitly
+                    var allTreks = ViewContext.HttpContext.RequestServices
+                    .GetService(typeof(TMDemo.Data.AppDbContext)) as TMDemo.Data.AppDbContext;
+                    var allTrekList = allTreks.Treks.ToList();
+                     
+                        foreach (var trek in allTrekList)
+                        {
+                            @await Html.PartialAsync("_TrekCard", trek)
+                        }
+                    
+                }
+            </div>
+        }
+        else
+        {
+            foreach (var trek in Model)
+            {
+                @await Html.PartialAsync("_TrekCard", trek)
+            }
+        }
+    </div>
+</div>

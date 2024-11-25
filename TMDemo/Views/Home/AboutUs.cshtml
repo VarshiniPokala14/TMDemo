@@ -1,0 +1,164 @@
+﻿<div class="relative">
+    <img src="~/images/HomeImg.jpg" class="bg-opacity-10" />
+    <div class="absolute inset-0 flex items-center justify-center text-center text-white ">
+        <h1 class=" text-5xl text-white font-bold">
+            About TrekMasters
+        </h1>
+    </div>
+</div>
+
+<div class="bg-white py-8 custom-serif">
+    <h2 class="heading text-3xl font-bold mb-4 mt-4 ">
+        Our Vision
+    </h2>
+    <div class="dark-line"></div>
+    <div class="DivClass max-w-4xl mx-auto flex flex-col md:flex-row items-center">
+        <div class="w-full info">
+            <p>
+                At TrekMasters, we believe that adventure should be accessible, enjoyable, and memorable. Whether you're a seasoned trekker or a first-time explorer, we’re here to make your journey unforgettable. TrekMasters is dedicated to providing exceptional trekking experiences in some of the most stunning landscapes. Our expert guides are passionate about the outdoors and committed to ensuring your safety and enjoyment every step of the way. From the moment you book with us to the moment you return home, we strive to create a seamless and enriching experience.
+            </p>
+            
+        </div>
+    </div>
+</div>
+<div class="bg-white py-8 custom-serif">
+    <h2 class="heading text-3xl font-bold mb-4 mt-4">
+        Our Services
+    </h2>
+    <div class="dark-line"></div>
+    
+        
+    <div class="services-container mx-auto relative">
+        
+        <div class="service-box top-center">
+            <p class="font-bold">Guided Treks</p>
+            <p class="mt-2 text-gray-700">Explore breathtaking trails with experienced leaders.</p>
+        </div>
+        <div class="service-box  top-left">
+            <p class="font-bold">Equipment</p>
+            <p class="mt-2 text-gray-700">High-quality trekking gear for your journey.</p>
+        </div>
+        <div class="service-box top-right">
+            <p class="font-bold">Delicious Meals</p>
+            <p class="mt-2 text-gray-700">Nutritious and delicious meals tailored for you.</p>
+        </div>
+        <div class="service-box bottom-left">
+            <p class="font-bold">Hygiene and Safety</p>
+            <p class="mt-2 text-gray-700">Top-notch hygiene practices for your safety.</p>
+        </div>
+        <div class="service-box bottom-right">
+            <p class="font-bold">Comfortable Accommodation</p>
+            <p class="mt-2 text-gray-700">Relax in cozy lodging after an adventurous day.</p>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .relative {
+        position: relative;
+    }
+
+        .relative img {
+            width: 100%;
+            height: 700px;
+            object-fit: cover;
+        }
+    .absolute {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        justify-content: center;
+        align-items: center;
+        padding-top: 200px;
+    }
+
+    .absolute h1 {
+        font-size: 5rem;
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+        margin-top:50px;
+    }
+    .custom-serif {
+        font-family: 'Times New Roman', serif; /* Use Times New Roman */
+    }
+
+    .dark-line {
+        border-top: 2px solid #2f2f2f;
+        margin: 10px 20px;
+    }
+    .DivClass {
+        width: 100%;
+    }
+    .heading{
+        color: #6A3C3C;
+        font-size:55px;
+        margin-left:40px;
+    }
+    .info {
+        text-align: left;
+        padding-left: 10px;
+    }
+        .info p {
+            padding-top: 20px;
+            font-size: 30px;
+            margin-right: 180px;
+            font-family: 'Times New Roman', Times, serif;
+            margin-left: 60px;
+        }
+
+    .services-container {
+        width: 450px; 
+        height: 450px; 
+        position: relative;
+        margin-top: 20px;
+        margin-bottom:20px;
+    }
+
+    
+    .service-box {
+        position: absolute;
+        width: 140px; 
+        padding: 16px;
+        background: #f3f3f3;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .service-box:hover {
+            transform: scale(1.5);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+   
+    .top-center {
+        top: 0;
+        left: 35%;
+    }
+
+    .top-left {
+        top: 25%; 
+        left: 0%; 
+    }
+
+    .top-right {
+        top: 25%; 
+        right: 0%; 
+    }
+
+    .bottom-left {
+        top: 50%;
+        left: -35%; 
+    }
+
+    .bottom-right {
+        top: 50%; 
+        right: -35%; 
+    }
+
+
+</style>
