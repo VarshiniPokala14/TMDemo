@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace TMDemo.Views.Shared
+namespace TMDemo.Views.Trek
 {
     public class _InclusionExclusionPartialModel : PageModel
     {

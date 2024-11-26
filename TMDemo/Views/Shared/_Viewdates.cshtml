@@ -1,20 +1,58 @@
-﻿@model TrekDetailsViewModel
+﻿@* @model TMDemo.Models.TrekDetailsViewModel
 
-<div class="mt-4 pb-4">
-    <div class="available-dates">
+<div class="available-dates">
+    @if (Model.AvailabilityDates != null && Model.AvailabilityDates.Any())
+    {
         <label class="block text-black font-bold mt-3 fs-5 fst-normal" for="dates">Available Dates</label>
-        <select class="w-full mt-2 p-2 border border-gray-300 rounded d-block" id="dates">
-            @foreach (var monthGroup in Model.AvailabilityDates)
-            {
-                <optgroup label="@monthGroup.Month">
-                    @foreach (var date in monthGroup.Dates)
-                    {
-                        <option class="font-bold text-black">
-                            @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM")
-                        </option>
-                    }
-                </optgroup>
-            }
-        </select>
-    </div>
+        <form method="get" action="/Booking/AddUsers">
+            <input type="hidden" name="trekId" value="@Model.Trek.TrekId" />
+            <label for="dates">Select Start Date:</label>
+            <select name="startDate" class="w-full mt-2 p-2 border border-gray-300 rounded">
+                @foreach (var monthGroup in Model.AvailabilityDates)
+                {
+                    <optgroup label="@monthGroup.Month">
+                        @foreach (var date in monthGroup.Dates)
+                        {
+                            if (date.RemainingSlots == 0)
+                            {
+                                <option value="@date.StartDate.ToString("yyyy-MM-dd")" disabled>
+                                    @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM") (@date.RemainingSlots AVBL)
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@date.StartDate.ToString("yyyy-MM-dd")">
+                                    @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM") (@date.RemainingSlots AVBL)
+                                </option>
+                            }
+                        }
+                    </optgroup>
+                }
+            </select>
+
+            <button type="submit" class="mt-2">Book</button>
+        </form>
+
+    }
+    else
+    {
+        <p class="text-black font-bold mt-5 fs-5 pt-3 align-content-center">No Available Dates</p>
+    }
 </div>
+
+ *@
+@model TMDemo.Models.TrekDetailsViewModel
+
+<select name="startDate" class="w-full mt-2 p-2 border border-gray-300 rounded">
+    @foreach (var monthGroup in Model.AvailabilityDates)
+    {
+        <optgroup label="@monthGroup.Month">
+            @foreach (var date in monthGroup.Dates)
+            {
+                <option value="@date.StartDate.ToString("yyyy-MM-dd")">
+                    @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM")
+                </option>
+            }
+        </optgroup>
+    }
+</select>

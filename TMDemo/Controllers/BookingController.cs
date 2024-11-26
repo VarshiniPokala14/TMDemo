@@ -75,10 +75,10 @@ namespace TMDemo.Controllers
                         return NotFound();
                     }
 
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Retrieves logged-in user ID
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
 
-                    var amount = trek.Price * (model.Emails.Count); // Calculate total amount
-                    var tax = amount * 0.1M;
+                    var amount = trek.Price * (model.Emails.Count); 
+                    var tax = amount * 0.05M;
                     var totalAmount = amount + tax + 10;
 
                     var booking = new Booking
@@ -89,7 +89,7 @@ namespace TMDemo.Controllers
                         NumberOfPeople = model.Emails.Count,
                         TotalAmount = totalAmount,
                         TrekStartDate = model.StartDate,
-                        CancellationDate = DateTime.MinValue // A default placeholder for non-cancelled bookings.
+                        CancellationDate = DateTime.MinValue 
 
                     };
 

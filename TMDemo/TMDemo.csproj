@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Shared\_AdminLayout.cshtml" />
     <Content Remove="wwwroot\images\cancel.webp" />
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Shared\_AdminLayout.cshtml" />
     <_ContentIncludedByDefault Remove="wwwroot\images\cancel.webp" />
   </ItemGroup>
 
@@ -27,6 +29,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Shared\_AdminLayout.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -83,7 +83,7 @@ namespace TMDemo.Controllers
                         if (roles.Contains("Admin"))
                         {
                             // Redirect to Admin-specific page
-                            return RedirectToAction("AddTrek", "Admin");
+                            return RedirectToAction("Treks", "Admin");
                         }
                         else if (roles.Contains("User"))
                         {

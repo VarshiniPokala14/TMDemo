@@ -15,7 +15,7 @@
             <th>End Date</th>
             <th>Month</th>
             <th>Max Group Size</th>
-            <th>Actions</th>
+            
         </tr>
     </thead>
     <tbody>
@@ -27,10 +27,6 @@
                 <td>@availability.EndDate.ToString("yyyy-MM-dd")</td>
                 <td>@availability.Month</td>
                 <td>@availability.MaxGroupSize</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@availability.AvailabilityId" class="btn btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@availability.AvailabilityId" class="btn btn-danger">Delete</a>
-                </td>
             </tr>
         }
     </tbody>

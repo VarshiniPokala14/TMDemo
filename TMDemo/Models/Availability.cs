@@ -22,6 +22,7 @@ namespace TMDemo.Models
 
         [Required]
         public int MaxGroupSize { get; set; }
+
         
         public Trek? Trek { get; set; }
     }

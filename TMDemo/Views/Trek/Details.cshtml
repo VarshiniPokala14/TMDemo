@@ -240,41 +240,15 @@
                 </div>
             </div>
             <div>
-                <a href="" class="text-white d-block">Inclusions & Exclusions</a>
-                <a href="" class="text-white d-block"> Cancellation Policy</a>
+                <a href="javascript:void(0);" class="text-white d-block" id="inclusionsExclusionsBtn">Inclusions & Exclusions</a>
+
+                <a href="/Home/Cancellation" class="text-white d-block"> Cancellation Policy</a>
             </div>
             <div class="mt-4 pb-4">
                 <div class="available-dates">
                     @if (Model.AvailabilityDates != null && Model.AvailabilityDates.Any())
                     {
                         <label class="block text-black font-bold mt-3 fs-5 fst-normal" for="dates">Available Dates</label>
-                        @* <select class="w-full mt-2 p-2 border border-gray-300 rounded" id="dates" onchange="redirectToAddUsers(this.value)">
-                            @foreach (var monthGroup in Model.AvailabilityDates)
-                            {
-                                <optgroup label="@monthGroup.Month">
-                                    @foreach (var date in monthGroup.Dates)
-                                    {
-                                        <option value="@Url.Action("AddUsers", "Booking", new { trekId = Model.Trek.TrekId, startDate = date.StartDate })" class="font-bold text-black">
-                                            @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM")
-                                        </option>
-                                    }
-                                </optgroup>
-                            }
-                        </select> *@
-                        @* <select class="w-full mt-2 p-2 border border-gray-300 rounded" id="dates" onchange="redirectToAddUsers(this.value)">
-                            @foreach (var monthGroup in Model.AvailabilityDates)
-                            {
-                                <optgroup label="@monthGroup.Month">
-                                    @foreach (var date in monthGroup.Dates)
-                                    {
-                                        Console.WriteLine(@date.StartDate);
-                                        <option value="@Url.Action("AddUsers", "Booking", new { trekId = Model.Trek.TrekId, startDate = date.StartDate })">
-                                            @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM")
-                                        </option>
-                                    }
-                                </optgroup>
-                            }
-                        </select> *@
                         <form method="get" action="/Booking/AddUsers">
                             <input type="hidden" name="trekId" value="@Model.Trek.TrekId" />
                             <label for="dates">Select Start Date:</label>
@@ -284,15 +258,26 @@
                                     <optgroup label="@monthGroup.Month">
                                         @foreach (var date in monthGroup.Dates)
                                         {
-                                            <option value="@date.StartDate.ToString("yyyy-MM-dd")">
-                                                @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM")
-                                            </option>
+                                            if (date.RemainingSlots == 0)
+                                            {
+                                                <option value="@date.StartDate.ToString("yyyy-MM-dd")" disabled>
+                                                    @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM") (@date.RemainingSlots AVBL)
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@date.StartDate.ToString("yyyy-MM-dd")">
+                                                    @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM") (@date.RemainingSlots AVBL)
+                                                </option>
+                                            }
                                         }
                                     </optgroup>
                                 }
                             </select>
+
                             <button type="submit" class="mt-2">Book</button>
                         </form>
+
                     }
                     else
                     {
@@ -340,38 +325,26 @@
     
     
 </div>
+<div class="modal fade" id="inclusionsExclusionsModal" tabindex="-1" aria-labelledby="inclusionsExclusionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inclusionsExclusionsModalLabel">Inclusions and Exclusions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_InclusionExclusionPartial")
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    document.getElementById('inclusionsExclusionsBtn').addEventListener('click', function (e) {
+        e.preventDefault();  // Prevent the default anchor behavior
+        var myModal = new bootstrap.Modal(document.getElementById('inclusionsExclusionsModal'));
+        myModal.show();
+    });
     
-    function redirectToAddUsers(url) {
-        if (url) {
-            // Log the URL for debugging
-            console.log("Original URL:", url);
-
-            // Extract the URL parameters
-            var urlParams = new URLSearchParams(window.location.search); // Get current URL search params
-            var startDate = urlParams.get('startDate'); // Extract the startDate from the URL
-
-            if (startDate) {
-                console.log("Original startDate:", startDate);
-
-                // Format the date into a standard format (yyyy-MM-dd)
-                var formattedDate = new Date(startDate).toISOString().split('T')[0]; // yyyy-MM-dd format
-                console.log("Formatted startDate:", formattedDate);
-
-                // Replace the old startDate in the URL with the formatted one
-                url = url.replace(startDate, formattedDate);
-
-                // Log the final URL to be redirected to
-                console.log("Redirecting to: " + url);
-
-                // Redirect to the new URL
-                window.location.href = url;
-            } else {
-                console.error("startDate is missing from the URL");
-            }
-        }
-
-    }
     var price = @Model.Trek.Price;
     var formattedPrice = '₹' + price.toLocaleString();
     document.querySelector('.formatted-price').innerHTML = formattedPrice;
@@ -379,3 +352,11 @@
     var formattedHeigth = Heigth.toLocaleString() + ' ft';
     document.querySelector('.formatted-heigth').innerHTML = formattedHeigth;
 </script>
+
+<!-- Add in the <head> section of your _Layout.cshtml -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Add before the closing </body> tag -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+

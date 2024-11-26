@@ -1,0 +1,56 @@
+﻿@model IEnumerable<TrekAvailabilityViewModel>
+@{
+    var trekName = ViewBag.TrekName as string;
+}
+
+<h2 style="font-family:'Times New Roman', Times, serif; padding:10px; font:10px; color:brown; padding:20px;text-align:center;">Bookings for @trekName</h2>
+<div class="availability-container m-3">
+    @foreach (var booking in Model)
+    {
+        <div class="card mb-3 bg-light">
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Start Date:</strong><br />
+                        @booking.StartDate.ToString("yyyy-MM-dd")
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Max Group Size:</strong><br />
+                        @booking.MaxGroupSize
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Remaining Slots:</strong><br />
+                        @booking.RemainingSlots
+                    </div>
+                    <div class="col-md-3 pl-2">
+                        <a href="@Url.Action("Users", "Admin", new { availabilityId = booking.AvailabilityId })" class="btn btn-primary">Users</a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    }
+</div>
+<style>
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+    }
+
+    .card-body .row {
+        align-items: center; /* Align items vertically in case of varying content */
+    }
+
+    .card-body .col-md-4 {
+        padding: 10px; /* Space between columns */
+        border-right: 1px solid #eee; /* Optional: Add a vertical separator */
+    }
+
+        .card-body .col-md-4:last-child {
+            border-right: none; /* Remove the separator for the last column */
+        }
+
+    
+</style>

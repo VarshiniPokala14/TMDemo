@@ -1,7 +1,23 @@
-﻿@{
-	Layout = null;
+﻿
+@{
+    ViewData["Title"] = "Booking Success";
 }
-<div style="justify-content:center; align-items:center ;width:400px;height:400px; padding:10px;margin:100px">
-	<img src="~/images/Success.png" />
-	<h4>Your Booking is successful</h4>
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@ViewData["Title"]</title>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container text-center mt-5">
+<div class="card shadow-sm p-4">
+<h1 class="text-success"><i class="fas fa-check-circle"></i> Your Booking has been Scheduled Successfully</h1>
+<a href="/" class="btn btn-primary mt-3">Back to Home</a>
 </div>
+</div>  
+</body>
+</html>
+ 

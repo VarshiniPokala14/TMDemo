@@ -149,7 +149,7 @@
                 <li><a href="/Home/AboutUs">About Us</a></li>
             </ul>
             <div class="right-section">
-                
+
                 <div class="right-section">
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -165,7 +165,7 @@
                                         <button type="submit" class="nav-link btn btn-link text-dark dropdown-item" style=" margin-left:0px;">Logout</button>
                                     </form>
                                 </div>
-                                
+
 
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                     }
                     else
                     {
-                        
+
                         <a href="/Account/Register" class="profile-link">
                             <span class="profile-icon">👤</span> MyProfile
                         </a>
@@ -182,9 +182,9 @@
                 <form asp-controller="Trek" asp-action="Index" class="search-form">
                     <p>
                         <input type="text" placeholder="Search ..." class="search-input" name="SearchString">
-                        
+
                     </p>
-                   
+
                 </form>
             </div>
         </nav>

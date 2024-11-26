@@ -1,13 +1,1 @@
-﻿<select name="startDate" class="w-full mt-2 p-2 border border-gray-300 rounded">
-    @foreach (var monthGroup in Model.AvailabilityDates)
-    {
-        <optgroup label="@monthGroup.Month">
-            @foreach (var date in monthGroup.Dates)
-            {
-                <option value="@date.StartDate.ToString("yyyy-MM-dd")">
-                    @date.StartDate.ToString("dd MMM") - @date.EndDate.ToString("dd MMM")
-                </option>
-            }
-        </optgroup>
-    }
-</select>
+﻿@await Html.PartialAsync("_Viewdates");

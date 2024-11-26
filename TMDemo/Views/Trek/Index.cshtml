@@ -7,7 +7,6 @@
             <div class="col-12">
                 <p>No treks available. Loading all treks...</p>
                 @{
-                    // Reload the "AllTreks" view explicitly
                     var allTreks = ViewContext.HttpContext.RequestServices
                     .GetService(typeof(TMDemo.Data.AppDbContext)) as TMDemo.Data.AppDbContext;
                     var allTrekList = allTreks.Treks.ToList();
@@ -16,7 +15,6 @@
                         {
                             @await Html.PartialAsync("_TrekCard", trek)
                         }
-                    
                 }
             </div>
         }

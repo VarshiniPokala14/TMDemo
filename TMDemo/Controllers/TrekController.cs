@@ -37,7 +37,7 @@ namespace TMDemo.Controllers
             var today = DateTime.Today;
             var threeMonthsLater = today.AddMonths(3);            
             var treks = await _context.Treks
-                .Include(t => t.Availabilities) // Ensure Availabilities is included
+                .Include(t => t.Availabilities) 
                 .Where(t => t.Availabilities.Any(a => a.StartDate >= DateTime.Now && a.StartDate <= threeMonthsLater))
                 .ToListAsync();
 
@@ -45,7 +45,7 @@ namespace TMDemo.Controllers
         }
         public IActionResult ViewDates(int trekId)
         {
-            // Retrieve the trek and its availabilities
+            
             var trek = _context.Treks
                             .Include(t => t.Availabilities)
                             .FirstOrDefault(t => t.TrekId == trekId);
@@ -55,12 +55,12 @@ namespace TMDemo.Controllers
                 return NotFound();
             }
 
-            // Group availability dates by month and map to MonthAvailability model
+           
             var availabilityDates = trek.Availabilities
-                .GroupBy(a => a.StartDate.ToString("MMMM yyyy")) // Group by Month and Year
+                .GroupBy(a => a.StartDate.ToString("MMMM yyyy")) 
                 .Select(group => new MonthAvailability
                 {
-                    Month = group.Key, // e.g., "March 2025"
+                    Month = group.Key, 
                     Dates = group.Select(a => new DateRange
                     {
                         StartDate = a.StartDate,
@@ -69,58 +69,22 @@ namespace TMDemo.Controllers
                 })
                 .ToList();
 
-            // Populate the view model
+            
             var viewModel = new TrekDetailsViewModel
             {
                 Trek = trek,
                 AvailabilityDates = availabilityDates
             };
 
-            // Pass the view model to the view
+          
             return View(viewModel);
         }
-        //public IActionResult Details(int trekId)
-        //{
-        //    // Fetch the trek details including availability
-        //    var trek = _context.Treks
-        //        .Include(t => t.Availabilities)
-        //        .FirstOrDefault(t => t.TrekId == trekId);
-
-        //    if (trek == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    // Group availability dates by month and map to MonthAvailability model
-        //    var availabilityDates = trek.Availabilities
-        //        .GroupBy(a => a.StartDate.ToString("MMMM yyyy")) // Group by Month and Year
-        //        .Select(group => new MonthAvailability
-        //        {
-        //            Month = group.Key, // e.g., "March 2025"
-        //            Dates = group.Select(a => new DateRange
-        //            {
-        //                StartDate = a.StartDate,
-        //                EndDate = a.EndDate
-        //            }).ToList()
-        //        })
-        //        .ToList();
-
-        //    // Populate the view model
-        //    var viewModel = new TrekDetailsViewModel
-        //    {
-        //        Trek = trek,
-        //        AvailabilityDates = availabilityDates
-        //    };
-
-        //    // Pass the view model to the view
-        //    return View(viewModel);
-        //}
         public IActionResult Details(int trekId)
         {
             var trek = _context.Treks
                 .Include(t => t.Availabilities)
-                .Include(t => t.TrekReviews) // Include reviews in the query
-                .ThenInclude(r => r.User) // Optional: Include user details for each review
+                .Include(t => t.TrekReviews) 
+                .ThenInclude(r => r.User) 
                 .FirstOrDefault(t => t.TrekId == trekId);
 
             if (trek == null)
@@ -128,15 +92,17 @@ namespace TMDemo.Controllers
                 return NotFound();
             }
 
-            var availabilityDates = trek.Availabilities
-                .GroupBy(a => a.StartDate.ToString("MMMM yyyy"))
+
+             var availabilityDates = trek.Availabilities
+               .GroupBy(a => a.StartDate.ToString("MMMM yyyy"))
                 .Select(group => new MonthAvailability
                 {
                     Month = group.Key,
                     Dates = group.Select(a => new DateRange
                     {
                         StartDate = a.StartDate,
-                        EndDate = a.EndDate
+                        EndDate = a.EndDate,
+                        RemainingSlots = GetRemainingSlots(trek.TrekId, a.StartDate) 
                     }).ToList()
                 })
                 .ToList();
@@ -145,13 +111,32 @@ namespace TMDemo.Controllers
             {
                 Trek = trek,
                 AvailabilityDates = availabilityDates,
-                Reviews = trek.TrekReviews.OrderByDescending(r => r.CreatedAt).ToList() // Sort by most recent
+                Reviews = trek.TrekReviews.OrderByDescending(r => r.CreatedAt).ToList() 
             };
 
             return View(viewModel);
         }
+        
 
-        [HttpPost]
+    private int GetRemainingSlots(int trekId, DateTime startDate)
+    {
+        
+        int totalSlots = _context.Availabilities
+            .Where(a => a.TrekId == trekId && a.StartDate == startDate)
+            .Select(a => a.MaxGroupSize)
+            .FirstOrDefault();
+
+        int totalbookedSlots = _context.Bookings
+            .Where(b => b.TrekId == trekId && b.TrekStartDate == startDate)
+            .Sum(b => b.NumberOfPeople);
+
+            int totalcancelledslots = _context.Bookings
+                .Where(b => b.TrekId == trekId && b.TrekStartDate == startDate && (b.IsCancelled==true))
+                .Sum(b => b.NumberOfPeople);
+        return totalSlots - (totalbookedSlots - totalcancelledslots);
+    }
+
+    [HttpPost]
         public async Task<IActionResult> Add(TrekReview review)
         {
             if (ModelState.IsValid)

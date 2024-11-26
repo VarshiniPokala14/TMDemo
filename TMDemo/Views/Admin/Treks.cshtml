@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Trek>
+
+<h2 style="font-family:'Times New Roman', Times, serif; padding:10px; font:10px; color:brown; padding:20px;text-align:center;">All Treks</h2>
+<div class="row" style="margin:10px">
+    @foreach (var trek in Model)
+    {
+        <div class="card-container col-4 mb-4 ml-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold" style="color:saddlebrown">@trek.Name</h5>
+                    <p class="card-text">
+                        <strong>Region:</strong> @trek.Region<br />
+                        <strong>Price:</strong> $@trek.Price<br />
+                        <strong>Highest Altitude:</strong> @trek.HighAltitude meters
+                    </p>
+                    <a href="@Url.Action("TrekBookings", "Admin", new { trekId = trek.TrekId })" class="btn bg-info"  style="width=50%; text-align:center; margin-left:150px;text-decoration :none;">Bookings</a>
+                </div>
+                
+            </div>
+        </div>
+    }
+</div>
+<style>
+    
+</style>

@@ -108,5 +108,72 @@ namespace TMDemo.Controllers
 
             return View(availabilities);
         }
+        public ActionResult Treks()
+        {
+            var treks = _context.Treks.ToList();
+            return View(treks);
+        }
+
+        // Action to display bookings for a specific trek
+        public ActionResult TrekBookings(int trekId)
+        {
+            var bookings = _context.Availabilities
+                .Where(a => a.TrekId == trekId)
+                .Select(a => new TrekAvailabilityViewModel
+                {
+                    AvailabilityId = a.AvailabilityId,
+                    StartDate = a.StartDate,
+                    MaxGroupSize = a.MaxGroupSize,
+                    RemainingSlots = a.MaxGroupSize - (_context.Bookings
+                        .Where(b => b.TrekId == trekId && b.TrekStartDate == a.StartDate)
+                        .Sum(b => b.NumberOfPeople)-
+                        _context.Bookings.Where(b=>b.TrekId==trekId && b.TrekStartDate== a.StartDate && (b.IsCancelled == true)).Sum(b => b.NumberOfPeople))
+                })
+                .ToList();
+
+            var trekName = _context.Treks.FirstOrDefault(t => t.TrekId == trekId)?.Name;
+            ViewBag.TrekName = trekName;
+
+            return View(bookings);
+        }
+
+        // Action to display users for a specific availability
+        public ActionResult Users(int availabilityId)
+        {
+            // Retrieve the start date for the given availability ID
+            var startDate = _context.Availabilities
+                .Where(a => a.AvailabilityId == availabilityId)
+                .Select(a => a.StartDate)
+                .FirstOrDefault();
+
+            if (startDate == default)
+            {
+                // Handle case where the availability ID is invalid
+                return NotFound("Availability not found.");
+            }
+
+            // Get users who booked this trek and are not cancelled
+            var users = _context.Bookings
+                .Where(b => b.TrekStartDate == startDate && (b.IsCancelled == false || b.IsCancelled == null)) // Include only non-cancelled bookings
+                .Select(b => new UserViewModel
+                {
+                    UserName = b.User.FirstName,
+                    Email = b.User.Email,
+                    NumberOfPeople = b.NumberOfPeople,
+                    BookingDate = b.BookingDate
+                })
+                .ToList();
+
+            // Retrieve additional information for the view
+            var availability = _context.Availabilities
+                .Include(a => a.Trek) // Ensure the related trek is loaded
+                .FirstOrDefault(a => a.AvailabilityId == availabilityId);
+
+            ViewBag.TrekName = availability?.Trek?.Name;
+            ViewBag.StartDate = availability?.StartDate.ToString("yyyy-MM-dd");
+
+            return View(users);
+        }
+
     }
 }
