@@ -1,6 +1,4 @@
-﻿using System.Net.Mail;
-using System.Net;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TMDemo.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -43,7 +41,7 @@ namespace TMDemo.Controllers
                     State = model.State,
                     UserName=model.FirstName
                 };
-                //await _userStore.SetUserNameAsync(user, model.FirstName, CancellationToken.None);
+                
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -82,17 +80,17 @@ namespace TMDemo.Controllers
                         var roles = await _userManager.GetRolesAsync(user);
                         if (roles.Contains("Admin"))
                         {
-                            // Redirect to Admin-specific page
+                            
                             return RedirectToAction("Treks", "Admin");
                         }
                         else if (roles.Contains("User"))
                         {
-                            // Redirect to User-specific page
+                            
                             return RedirectToAction("Index", "Home");
                         }
                         else
                         {
-                            // Handle if the user has no defined role
+                           
                             ModelState.AddModelError(string.Empty, "User role not assigned.");
                             return View(model);
                         }

@@ -29,7 +29,9 @@ namespace TMDemo.Models
         public decimal Price { get; set; } 
         public byte[] TrekImg {  get; set; }
 
+
         // Navigation Property: Links to Availability table
+        public ICollection<TrekPlan>? TrekPlans { get; set; }
         public ICollection<Availability>? Availabilities { get; set; }
         public ICollection<TrekReview>? TrekReviews { get; set; }
        public ICollection<Booking>? Bookings { get; set; }

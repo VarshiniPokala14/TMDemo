@@ -6,29 +6,7 @@ namespace TMDemo.Models
 {
     public class EmailSender : IEmailSender
     {
-        //private readonly IConfiguration _configuration;
-
-        //public EmailSender(IConfiguration )
-        //{
-        //    this.smtpServer = smtpServer;
-        //    this.smtpPort = smtpPort;
-        //}
-
-        //public EmailSender(string smtpHost, int smtpPort, string fromEmail, string fromPassword)
-        //{
-        //    _smtpClient = new SmtpClient(smtpHost, smtpPort)
-        //    {
-        //        Credentials = new NetworkCredential(fromEmail, fromPassword),
-        //        EnableSsl = true
-        //    };
-        //    _fromEmail = fromEmail;
-        //}
-
-        //public Task SendEmailAsync(string to, string subject, string message)
-        //{
-        //    var mailMessage = new MailMessage(_fromEmail, to, subject, message);
-        //    return _smtpClient.SendMailAsync(mailMessage);
-        //}
+        
         private readonly IConfiguration _configuration;
 
         public EmailSender(IConfiguration configuration)

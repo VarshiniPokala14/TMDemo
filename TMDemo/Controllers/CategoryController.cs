@@ -85,7 +85,7 @@ namespace TMDemo.Controllers
                 .OrderBy(g => DateTime.ParseExact(g.Key, "MMMM", null)) 
                 .ToList();
 
-            // Prepare the model with grouped availabilities
+            
             var model = groupedByMonth.Select(group => new GroupedTreksByCategory
             {
                 Category = group.Key,

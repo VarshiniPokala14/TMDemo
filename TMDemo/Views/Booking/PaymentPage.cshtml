@@ -28,30 +28,11 @@
                     <option value="UPI">UPI</option>
                 </select>
 			</div>
-            <button class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#bookingSuccessModal">Pay</button>
-			
+            <button class="btn btn-primary">Pay @((Model.NumberOfPeople * Model.Trek.Price) + (Model.NumberOfPeople * Model.Trek.Price * 0.05M)+10)</button>
 		</form>
 	</div>
 </div>
 
-<div class="modal fade" id="bookingSuccessModal" tabindex="-1" aria-labelledby="bookingSuccessModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="bookingSuccessModalLabel">Booking Successful</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <p>Your booking has been successfully completed!</p>
-                <p><strong>Total Paid:</strong> ₹@Model.TotalAmount</p>
-                <p>Thank you for choosing our service!</p>
-            </div>
-            <div class="modal-footer">
-                <a href="@Url.Action("MyBookings", "Profile")" class="btn btn-primary">Go to My Bookings</a>
-            </div>
-        </div>
-    </div>
-</div>
 <style>
     .form-container {
         background-color: rgba(255, 255, 255, 0.75);

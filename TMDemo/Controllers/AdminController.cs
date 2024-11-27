@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using TMDemo.Data;
 using TMDemo.Models;
-
 namespace TMDemo.Controllers
 {
-    
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly AppDbContext _context;
@@ -35,7 +33,8 @@ namespace TMDemo.Controllers
                     DurationDays = model.DurationDays,
                     HighAltitude = model.HighAltitude,
                     Price = model.Price,
-                    Season = model.SelectedSeasons
+                    Season = model.SelectedSeasons,
+                    
                 };
 
                 if (model.TrekImgFile != null)
@@ -49,10 +48,59 @@ namespace TMDemo.Controllers
                 _context.Treks.Add(trek);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index","Home"); 
+                return RedirectToAction("AddTrekPlan", new { trekId = trek.TrekId });
             }
 
             return View(model);
+        }
+        public IActionResult AddTrekPlan(int trekId)
+        {
+            var trek = _context.Treks.FirstOrDefault(t => t.TrekId == trekId);
+            if (trek == null)
+            {
+                return NotFound("Trek not found.");
+            }
+
+            var viewModel = new TrekPlanViewModel
+            {
+                TrekId = trekId,
+                DurationDays = trek.DurationDays,
+                Activities = new List<ActivityInputModel>()
+            };
+
+            
+            for (int i = 1; i <= trek.DurationDays; i++)
+            {
+                viewModel.Activities.Add(new ActivityInputModel { Day = i });
+            }
+
+            return View(viewModel);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddTrekPlan(TrekPlanViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var activity in model.Activities)
+                {
+                    var trekPlan = new TrekPlan
+                    {
+                        TrekId = model.TrekId,
+                        Day = activity.Day,
+                        ActivityDescription = activity.ActivityDescription
+                    };
+
+                    _context.TrekPlans.Add(trekPlan);
+                }
+
+                _context.SaveChanges(); 
+                return RedirectToAction("Treks", "Admin");
+            }
+
+            return View(model); 
         }
         [HttpGet]
         public async Task<IActionResult> AddAvailability()
@@ -91,10 +139,7 @@ namespace TMDemo.Controllers
                 return RedirectToAction("Index","Admin");
             }
 
-            else
-            {
-                return Ok(ModelState);
-            }
+            
             ViewBag.Treks = await _context.Treks.OrderBy(t => t.Name).ToListAsync();
             return View(availability);
         }
@@ -114,7 +159,7 @@ namespace TMDemo.Controllers
             return View(treks);
         }
 
-        // Action to display bookings for a specific trek
+        
         public ActionResult TrekBookings(int trekId)
         {
             var bookings = _context.Availabilities
@@ -137,10 +182,10 @@ namespace TMDemo.Controllers
             return View(bookings);
         }
 
-        // Action to display users for a specific availability
+        
         public ActionResult Users(int availabilityId)
         {
-            // Retrieve the start date for the given availability ID
+            
             var startDate = _context.Availabilities
                 .Where(a => a.AvailabilityId == availabilityId)
                 .Select(a => a.StartDate)
@@ -148,13 +193,13 @@ namespace TMDemo.Controllers
 
             if (startDate == default)
             {
-                // Handle case where the availability ID is invalid
+                
                 return NotFound("Availability not found.");
             }
 
-            // Get users who booked this trek and are not cancelled
+            
             var users = _context.Bookings
-                .Where(b => b.TrekStartDate == startDate && (b.IsCancelled == false || b.IsCancelled == null)) // Include only non-cancelled bookings
+                .Where(b => b.TrekStartDate == startDate && (b.IsCancelled == false || b.IsCancelled == null)) 
                 .Select(b => new UserViewModel
                 {
                     UserName = b.User.FirstName,
@@ -164,9 +209,9 @@ namespace TMDemo.Controllers
                 })
                 .ToList();
 
-            // Retrieve additional information for the view
+           
             var availability = _context.Availabilities
-                .Include(a => a.Trek) // Ensure the related trek is loaded
+                .Include(a => a.Trek) 
                 .FirstOrDefault(a => a.AvailabilityId == availabilityId);
 
             ViewBag.TrekName = availability?.Trek?.Name;

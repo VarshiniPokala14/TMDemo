@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TMDemo.Models.TMDemo.Models;
+
 
 namespace TMDemo.Models
 {
@@ -11,14 +11,14 @@ namespace TMDemo.Models
         public int BookingId { get; set; }
         [ForeignKey("UserDetail")]
         [Required]
-        public string UserId { get; set; } // Foreign key to UserDetail
+        public string UserId { get; set; } 
         [ForeignKey("Trek")]
         [Required]
-        public int TrekId { get; set; } // Foreign key to Trek
+        public int TrekId { get; set; } 
 
         [Required]
         [DataType(DataType.DateTime)]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        
         public DateTime BookingDate { get; set; }  
 
         [Required]
@@ -46,9 +46,7 @@ namespace TMDemo.Models
         
         public string? RescheduleReason { get; set; }
 
-        public decimal? ExtraAmount { get; set; } // Calculated extra charge
-
-        // Navigation properties
+        public decimal? ExtraAmount { get; set; } 
         public UserDetail? User { get; set; }
         public Trek? Trek { get; set; }
        

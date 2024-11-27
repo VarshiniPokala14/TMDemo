@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TMDemo.Data;
 
@@ -11,9 +12,11 @@ using TMDemo.Data;
 namespace TMDemo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241127051729_AddTrekPlan")]
+    partial class AddTrekPlan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -348,19 +351,18 @@ namespace TMDemo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlanId"));
 
-                    b.Property<string>("ActivityDescription")
+                    b.Property<string>("Activities")
                         .IsRequired()
+                        .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Day")
-                        .HasColumnType("int");
 
                     b.Property<int>("TrekId")
                         .HasColumnType("int");
 
                     b.HasKey("PlanId");
 
-                    b.HasIndex("TrekId");
+                    b.HasIndex("TrekId")
+                        .IsUnique();
 
                     b.ToTable("TrekPlans");
                 });
@@ -591,8 +593,8 @@ namespace TMDemo.Migrations
             modelBuilder.Entity("TMDemo.Models.TrekPlan", b =>
                 {
                     b.HasOne("TMDemo.Models.Trek", "Trek")
-                        .WithMany("TrekPlans")
-                        .HasForeignKey("TrekId")
+                        .WithOne("TrekPlan")
+                        .HasForeignKey("TMDemo.Models.TrekPlan", "TrekId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -624,7 +626,7 @@ namespace TMDemo.Migrations
 
                     b.Navigation("Bookings");
 
-                    b.Navigation("TrekPlans");
+                    b.Navigation("TrekPlan");
 
                     b.Navigation("TrekReviews");
                 });

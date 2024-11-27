@@ -5,7 +5,10 @@
         public Trek Trek { get; set; }
         public IEnumerable<TrekReview> Reviews { get; set; }
         public List<MonthAvailability> AvailabilityDates { get; set; }
+        public List<string> TrekPlan { get; set; }
         public string CurrentUserId { get; set; }
+        
+
     }
 
     public class MonthAvailability
@@ -21,6 +24,10 @@
         public int RemainingSlots { get; set; } 
     }
 
-
+    public class ActivityWithDate
+    {
+        public string Day { get; set; }  // day1, day2, day3, etc.
+        public string Description { get; set; }
+    }
 
 }

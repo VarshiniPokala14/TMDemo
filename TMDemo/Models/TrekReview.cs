@@ -20,7 +20,7 @@ namespace TMDemo.Models
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
+       
         [ForeignKey("UserId")]
         public UserDetail? User { get; set; }
 

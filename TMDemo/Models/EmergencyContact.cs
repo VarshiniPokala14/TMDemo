@@ -25,8 +25,8 @@ namespace TMDemo.Models
         public string Relation { get; set; }
 
         [ForeignKey("UserDetail")]
-        public string UserId { get; set; } // FK should match `IdentityUser` key type (string by default)
+        public string UserId { get; set; } 
 
-        public UserDetail? UserDetail { get; set; } // Navigation property
+        public UserDetail? UserDetail { get; set; } 
     }
 }

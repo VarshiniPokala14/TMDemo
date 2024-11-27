@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TMDemo.Data;
 using TMDemo.Models;
-using TMDemo.Models.TMDemo.Models;
+
 
 namespace TMDemo.Controllers
 {
@@ -47,7 +47,7 @@ namespace TMDemo.Controllers
                 TrekId = trekId,
                 TrekName = trek.Name,
                 StartDate = parsedDate,
-                Emails = emails // Initialize the AddedUsers list
+                Emails = emails 
             };
 
             return View(viewModel);
@@ -62,7 +62,7 @@ namespace TMDemo.Controllers
             {
                 if (action == "AddMember")
                 {
-                    // Add an empty email field
+                    
                     model.Emails.Add(email);
                     return View(model);
                 }
@@ -136,9 +136,9 @@ namespace TMDemo.Controllers
         [HttpGet]
         public IActionResult CancelBooking(int bookingId)
         {
-            // Retrieve the booking details from the database
+            
             var booking = _context.Bookings
-                .Include(b => b.Trek)  // Load related Trek details
+                .Include(b => b.Trek)  
                 .FirstOrDefault(b => b.BookingId == bookingId);
 
             if (booking == null)
@@ -146,13 +146,13 @@ namespace TMDemo.Controllers
                 return NotFound("Booking not found.");
             }
 
-            // Calculate refund amount based on the business rules
+            
             var startDate = booking.TrekStartDate;
             var cancelDate = DateTime.Now;
             var totalAmount = booking.TotalAmount;
             decimal refundAmount = 0;
 
-            // Calculate days between booking date and cancellation date
+            
             var daysDifference = (startDate - cancelDate).Days;
 
             if (daysDifference > 30)
@@ -172,12 +172,12 @@ namespace TMDemo.Controllers
                 refundAmount = 0; // No refund
             }
 
-            // Prepare the cancellation view model
+           
             var model = new CancellationViewModel
             {
                 BookingId = booking.BookingId,
                 Booking = booking,
-                RefundAmount = refundAmount // This will be displayed on the form
+                RefundAmount = refundAmount 
             };
 
             return View(model);
@@ -187,12 +187,12 @@ namespace TMDemo.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("CancelBooking", model); // Re-render the cancellation form if validation fails
+                return View("CancelBooking", model); 
             }
 
-            // Retrieve the booking from the database
+            
             var book = await _context.Bookings
-                .Include(b => b.Trek) // Ensure the Trek is loaded
+                .Include(b => b.Trek) 
                 .FirstOrDefaultAsync(b => b.BookingId == model.BookingId);
 
             if (book == null)
@@ -200,13 +200,13 @@ namespace TMDemo.Controllers
                 return NotFound("Booking not found.");
             }
 
-            // Calculate refund amount again (although it was already done in the GET request)
+            
 
             decimal refundAmount = model.RefundAmount;
 
 
 
-            // Create the cancellation entry in the database
+            
             book.IsCancelled = true;
 
             book.Reason = model.Reason;
@@ -215,7 +215,7 @@ namespace TMDemo.Controllers
 
             await _context.SaveChangesAsync();
 
-            // Redirect to MyBookings page
+            
             return RedirectToAction("MyBookings", "Profile");
         }
         [Authorize]
@@ -223,7 +223,7 @@ namespace TMDemo.Controllers
         public IActionResult RescheduleBooking(int bookingId)
         {
             var booking = _context.Bookings
-                .Include(b => b.Trek) // Load related trek details
+                .Include(b => b.Trek) 
                 .FirstOrDefault(b => b.BookingId == bookingId);
 
             if (booking == null)
@@ -231,15 +231,15 @@ namespace TMDemo.Controllers
                 return NotFound("Booking not found.");
             }
 
-            // Fetch all available dates for the specific trek
+            
             var availableDates = _context.Availabilities
                 .Where(a => a.TrekId == booking.TrekId && a.StartDate > DateTime.Now)
                 .Select(a => a.StartDate)
-                .Distinct() // Ensure unique dates
-                .OrderBy(d => d) // Sort dates in ascending order
+                .Distinct() 
+                .OrderBy(d => d) 
                 .ToList();
 
-            // Handle case where no available dates exist
+            
             if (availableDates == null || !availableDates.Any())
             {
                 ModelState.AddModelError("", "No available dates for this trek.");

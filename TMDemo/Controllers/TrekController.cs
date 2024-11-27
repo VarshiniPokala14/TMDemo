@@ -79,12 +79,51 @@ namespace TMDemo.Controllers
           
             return View(viewModel);
         }
+        //public IActionResult Details(int trekId)
+        //{
+        //    var trek = _context.Treks
+        //        .Include(t => t.Availabilities)
+        //        .Include(t => t.TrekReviews)
+        //        .ThenInclude(r => r.User)
+        //        .FirstOrDefault(t => t.TrekId == trekId);
+
+        //    if (trek == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+
+        //    var availabilityDates = trek.Availabilities
+        //      .GroupBy(a => a.StartDate.ToString("MMMM yyyy"))
+        //       .Select(group => new MonthAvailability
+        //       {
+        //           Month = group.Key,
+        //           Dates = group.Select(a => new DateRange
+        //           {
+        //               StartDate = a.StartDate,
+        //               EndDate = a.EndDate,
+        //               RemainingSlots = GetRemainingSlots(trek.TrekId, a.StartDate)
+        //           }).ToList()
+        //       })
+        //       .ToList();
+
+        //    var viewModel = new TrekDetailsViewModel
+        //    {
+        //        Trek = trek,
+        //        AvailabilityDates = availabilityDates,
+        //        Reviews = trek.TrekReviews.OrderByDescending(r => r.CreatedAt).ToList(),
+
+        //    };
+
+        //    return View(viewModel);
+        //}
         public IActionResult Details(int trekId)
         {
             var trek = _context.Treks
                 .Include(t => t.Availabilities)
-                .Include(t => t.TrekReviews) 
-                .ThenInclude(r => r.User) 
+                .Include(t => t.TrekReviews)
+                .ThenInclude(r => r.User)
+                .Include(t=>t.TrekPlans)
                 .FirstOrDefault(t => t.TrekId == trekId);
 
             if (trek == null)
@@ -93,33 +132,33 @@ namespace TMDemo.Controllers
             }
 
 
-             var availabilityDates = trek.Availabilities
-               .GroupBy(a => a.StartDate.ToString("MMMM yyyy"))
-                .Select(group => new MonthAvailability
-                {
-                    Month = group.Key,
-                    Dates = group.Select(a => new DateRange
-                    {
-                        StartDate = a.StartDate,
-                        EndDate = a.EndDate,
-                        RemainingSlots = GetRemainingSlots(trek.TrekId, a.StartDate) 
-                    }).ToList()
-                })
-                .ToList();
-
+            var availabilityDates = trek.Availabilities
+              .GroupBy(a => a.StartDate.ToString("MMMM yyyy"))
+               .Select(group => new MonthAvailability
+               {
+                   Month = group.Key,
+                   Dates = group.Select(a => new DateRange
+                   {
+                       StartDate = a.StartDate,
+                       EndDate = a.EndDate,
+                       RemainingSlots = GetRemainingSlots(trek.TrekId, a.StartDate)
+                   }).ToList()
+               })
+               .ToList();
+            var trekplan = trek.TrekPlans.OrderBy(tp => tp.Day).Select(tp => tp.ActivityDescription).ToList();
             var viewModel = new TrekDetailsViewModel
             {
                 Trek = trek,
                 AvailabilityDates = availabilityDates,
-                Reviews = trek.TrekReviews.OrderByDescending(r => r.CreatedAt).ToList() 
+                Reviews = trek.TrekReviews.OrderByDescending(r => r.CreatedAt).ToList(),
+                TrekPlan= trekplan
             };
 
             return View(viewModel);
         }
-        
 
-    private int GetRemainingSlots(int trekId, DateTime startDate)
-    {
+        private int GetRemainingSlots(int trekId, DateTime startDate)
+        {
         
         int totalSlots = _context.Availabilities
             .Where(a => a.TrekId == trekId && a.StartDate == startDate)
@@ -134,9 +173,9 @@ namespace TMDemo.Controllers
                 .Where(b => b.TrekId == trekId && b.TrekStartDate == startDate && (b.IsCancelled==true))
                 .Sum(b => b.NumberOfPeople);
         return totalSlots - (totalbookedSlots - totalcancelledslots);
-    }
+        }
 
-    [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Add(TrekReview review)
         {
             if (ModelState.IsValid)
@@ -167,9 +206,5 @@ namespace TMDemo.Controllers
             
             return View(await treks.ToListAsync());
         }
-
-
-
     }
-
 }

@@ -10,7 +10,7 @@
         <form asp-page="/Admin/AddTrek" method="post" enctype="multipart/form-data">
 
             <div class="row g-3">
-                <!-- Name -->
+                
                 <div class="col-md-6">
                     <label asp-for="Name">Name *</label>
                     <input asp-for="Name" class="form-control" >
@@ -87,6 +87,8 @@
                     <input asp-for="TrekImgFile" class="form-control" type="file" />
                     <span asp-validation-for="TrekImgFile" class="text-danger"></span>
                 </div>
+                
+
             </div>
 
             <button type="submit" class="btn btn-primary">Add Trek</button>

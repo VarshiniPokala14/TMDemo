@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TMDemo.Data;
 using TMDemo.Models;
-using static System.Net.WebRequestMethods;
 
 namespace TMDemo.Controllers
 {
@@ -23,7 +22,7 @@ namespace TMDemo.Controllers
         
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(User); // Fetch the current user
+            var user = await _userManager.GetUserAsync(User); 
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
@@ -117,9 +116,9 @@ namespace TMDemo.Controllers
         }
         public IActionResult MyBookings()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Retrieve logged-in user ID
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
 
-            // Filter bookings where IsCancelled is false or null
+            
             var bookings = _context.Bookings
                 .Include(b => b.Trek)
                 .Where(b => b.UserId == userId && (b.IsCancelled == false || b.IsCancelled == null))

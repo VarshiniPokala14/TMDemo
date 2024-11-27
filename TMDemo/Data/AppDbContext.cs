@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TMDemo.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using TMDemo.Models.TMDemo.Models;
+
 
 namespace TMDemo.Data
 {
@@ -15,9 +15,7 @@ namespace TMDemo.Data
         public DbSet<Availability> Availabilities { get; set; }
         public DbSet<TrekReview> TrekReviews { get; set; }
         public DbSet<Booking> Bookings { get; set; }
-        //public DbSet<Payment> Payments { get; set; }
-        //public DbSet<Reschedule> Reschedules { get; set; }
-        //public DbSet<Cancellation> Cancellations { get; set; }
+        public DbSet<TrekPlan> TrekPlans { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -73,24 +71,12 @@ namespace TMDemo.Data
                 .WithMany()
                 .HasForeignKey(b => b.TrekId)
                 .OnDelete(DeleteBehavior.Restrict);
-            //modelBuilder.Entity<Payment>()
-            //    .ToTable("Payments")
-            //    .HasOne(p => p.Booking)  // Each payment is associated with one booking
-            //    .WithOne(b => b.Payment) // Each booking has one payment
-            //    .HasForeignKey<Payment>(p => p.BookingId)
-            //    .OnDelete(DeleteBehavior.Cascade);
-            //modelBuilder.Entity<Reschedule>()
-            //   .HasOne(r => r.Booking)
-            //   .WithMany()
-            //   .HasForeignKey(r => r.BookingId)
-            //   .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Trek>()
+                .HasMany(t => t.TrekPlans)
+                .WithOne(tp => tp.Trek)
+                .HasForeignKey(tp => tp.TrekId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //// Set up relationships for Cancellations
-            //modelBuilder.Entity<Cancellation>()
-            //    .HasOne(c => c.Booking)
-            //    .WithMany()
-            //    .HasForeignKey(c => c.BookingId)
-            //    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
