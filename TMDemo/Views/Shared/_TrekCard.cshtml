@@ -41,14 +41,12 @@
             <!-- Action Buttons -->
             <div class="trek-card-actions">
                 <a href="@Url.Action("Details", "Trek", new { trekid = Model.TrekId })" class="btn btn-success">Get Trek Info</a>
-                @* <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ViewdatesModal">
-                    View Dates
-                </button> *@
+                
                 <a href="@Url.Action("ViewDates","Trek",new {trekid=Model.TrekId})" class="btn btn-primary" >View Dates</a>
             </div>
         </div>
     </div>
-     @* @await Html.PartialAsync("_Viewdates")  *@
+     
 </div> 
 
 

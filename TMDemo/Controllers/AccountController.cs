@@ -73,6 +73,23 @@ namespace TMDemo.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
+                    if (!user.EmailConfirmed)
+                    {
+                        
+                        var confirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                        
+                        var confirmationLink = Url.Action("ConfirmEmailDuringLogin", "Account",
+                            new { userId = user.Id, token = confirmationCode }, Request.Scheme);
+
+                        
+                        await _emailSender.SendEmailAsync(user.Email, "Email Authentication",
+                            $"Please confirm your email by clicking on the link: <a href='{confirmationLink}'>Confirm Email</a>");
+
+                        
+                        TempData["Message"] = "A confirmation link has been sent to your email. Please confirm your email to proceed.";
+                        return RedirectToAction("Login");
+                    }
                     var result = await _signInManager.PasswordSignInAsync(user, model.Password,model.RememberMe, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
@@ -111,6 +128,28 @@ namespace TMDemo.Controllers
                 }
             }
             return Ok(ModelState);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmailDuringLogin(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return BadRequest("Invalid email confirmation request.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                TempData["Message"] = "Your email has been successfully confirmed. Please log in.";
+                return RedirectToAction("Login");
+            }
+            TempData["Error"] = "Email confirmation failed. Please try again.";
+            return RedirectToAction("Login");
         }
         [HttpGet]
         public IActionResult ForgotPassword()

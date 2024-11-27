@@ -139,7 +139,7 @@ faq :hover {
 /* Main content styles */
 .main-content {
     flex-grow: 1; /* Takes the remaining horizontal space */
-    padding: 20px;
+    padding: 10px;
     overflow-y: auto; /* Enable scrolling for main content */
     height: 120vh; /* Ensure full height for scrolling */
     background-color: #f8f9fa; /* Light background color */
