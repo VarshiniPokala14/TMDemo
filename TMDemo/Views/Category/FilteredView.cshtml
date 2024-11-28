@@ -1,0 +1,19 @@
+﻿@model GroupedTreksByCategory
+<h2 style="font-family:'Times New Roman', Times, serif; padding:10px; font:10px; color:black; padding:20px;text-align:center;">Treks Categorized by @Model.Category</h2>
+<div class="row" style="margin-left:10px; margin-right:10px;">
+    @if (Model.Treks != null && Model.Treks.Any())
+    {
+
+        @foreach (var trek in Model.Treks)
+        {
+            @await Html.PartialAsync("_TrekCard", trek)
+            ;
+        }
+
+    }
+    else
+    {
+        <p>No treks found for this category.</p>
+    }
+</div>
+

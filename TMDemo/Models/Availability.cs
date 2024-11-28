@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TMDemo.Validation;
 
 namespace TMDemo.Models
 {
@@ -12,12 +13,14 @@ namespace TMDemo.Models
 
         [Required]
         [DataType(DataType.Date)]
+        [FutureOrTodayDate(ErrorMessage="Date shouldn't be past date")]
         public DateTime StartDate { get; set; } 
 
         [Required]
         [DataType(DataType.Date)]
+        [FutureOrTodayDate(ErrorMessage = "Date shouldn't be past date")]
         public DateTime EndDate { get; set; }
-
+        [Required]
         public string Month { get; set; }
 
         [Required]

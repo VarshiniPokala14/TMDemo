@@ -1,4 +1,5 @@
-﻿@model TMDemo.Models.TrekDetailsViewModel
+﻿@using System.Security.Claims
+@model TMDemo.Models.TrekDetailsViewModel
 
 
 
@@ -304,22 +305,29 @@
         {
             <p class="mt-4 text-gray-700">No reviews yet. Be the first to review this trek!</p>
         }
-
-        <!-- Add Review Section -->
         @if (User.Identity.IsAuthenticated)
         {
-            <div class="mt-4">
-                <h3 class="text-xl font-bold">Leave a Review</h3>
-                <form method="post" action="/Reviews/Add">
-                    <input type="hidden" name="TrekId" value="@Model.Trek.TrekId" />
-                    <textarea name="ReviewText" class="w-full p-2 border border-gray-300 rounded mt-2" rows="4" placeholder="Write your review here..."></textarea>
-                    <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Submit</button>
+            if (Model.IsTrekCompleted && !Model.HasReviewed)
+            {
+                <form method="post" action="/Trek/AddReview">
+                    <input type="hidden" name="trekId" value="@Model.Trek.TrekId" />
+
+                    <textarea name="reviewText" placeholder="Write your review here..." required></textarea>
+                    <button type="submit">Submit Review</button>
                 </form>
-            </div>
+            }
+            else if (!Model.IsTrekCompleted)
+            {
+                <p>You can only leave a review after completing the trek.</p>
+            }
+            else if (Model.HasReviewed)
+            {
+                <p>You have already reviewed this trek.</p>
+            }
         }
         else
         {
-            <p class="mt-4 text-gray-500">Please <a href="/Account/Login" class="text-blue-600">log in</a> to leave a review.</p>
+            <p style="margin-top:10px;">Please <a href="/Account/Login">log in</a> to leave a review.</p>
         }
     </div>
 

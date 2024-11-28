@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TMDemo.Validation;
 
 
 namespace TMDemo.Models
@@ -30,6 +31,7 @@ namespace TMDemo.Models
 
         [Required]
         [DataType(DataType.Date)]
+        [FutureOrTodayDate(ErrorMessage = "Date shouldn't be past date")]
         public DateTime TrekStartDate { get; set; }
         public bool? PaymentSuccess {  get; set; }
         

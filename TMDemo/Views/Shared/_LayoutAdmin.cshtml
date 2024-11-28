@@ -11,13 +11,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 </head>
 
-
 <body>
-
     <header class="header">
         <nav class="navbar">
             <div class="logo">
-                <a href="/" class="logo-link">
+                <a href="/Admin/Treks" class="logo-link">
                     <img style="width:140px;" src="~/images/Logo1.png" />
                 </a>
             </div>
@@ -34,14 +32,13 @@
             </ul>
             <ul class="right-section" style="text-decoration:none;">
                 <li>
-                    <div style="margin-left:0px;  padding: 0.1rem 1rem;  text-decoration: none; color: #000;">
+                    <div style="margin-left:0px;  padding: 0.1rem 1rem;  text-decoration: none;">
                         <form class="align-content-center" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                             <button type="submit" class="nav-link btn btn-link text-dark dropdown-item" style=" margin-left:0px;">Logout</button>
                         </form>
                     </div>
                 </li>
             </ul>
-
         </nav>
     </header>
 

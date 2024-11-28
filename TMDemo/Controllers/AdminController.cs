@@ -126,6 +126,10 @@ namespace TMDemo.Controllers
                 ViewBag.Treks = await _context.Treks.OrderBy(t => t.Name).ToListAsync();
                 return View(availability);
             }
+            if (availability.StartDate.Date < DateTime.Now.Date)
+            {
+                ModelState.AddModelError("StartDate", "Start date cannot be in the past.");
+            }
             availability.Month = availability.StartDate.ToString("MMMM");
             if (string.IsNullOrWhiteSpace(availability.Month))
             {

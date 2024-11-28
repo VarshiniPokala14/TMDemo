@@ -12,9 +12,9 @@ namespace TMDemo.Models
         public string UserId { get; set; } 
 
         [Required]
-        public int TrekId { get; set; } 
+        public int TrekId { get; set; }
 
-
+        [Required]
         public string? Comment { get; set; }
 
         [Required]

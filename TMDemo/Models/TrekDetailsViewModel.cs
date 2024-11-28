@@ -3,9 +3,12 @@
     public class TrekDetailsViewModel
     {
         public Trek Trek { get; set; }
-        public IEnumerable<TrekReview> Reviews { get; set; }
+        public List<Booking> Bookings { get; set; }
+        public List<TrekReview> Reviews { get; set; }
         public List<MonthAvailability> AvailabilityDates { get; set; }
         public List<string> TrekPlan { get; set; }
+        public bool IsTrekCompleted { get; set; }
+        public bool HasReviewed {  get; set; }
         public string CurrentUserId { get; set; }
         
 

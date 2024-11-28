@@ -6,7 +6,7 @@ namespace TMDemo.Models
         [Key]
         public int TrekId { get; set; }
 
-        [Required, MaxLength(100)]
+        [Required, MaxLength(50)]
         public string Name { get; set; }
 
         [Required]
@@ -22,7 +22,7 @@ namespace TMDemo.Models
         public int DurationDays { get; set; }
 
         [Required]
-        public decimal HighAltitude { get; set; } // meters/feet
+        public decimal HighAltitude { get; set; } 
         [Required]
         public List<string> Season { get; set; }
         [Required]
@@ -30,7 +30,7 @@ namespace TMDemo.Models
         public byte[] TrekImg {  get; set; }
 
 
-        // Navigation Property: Links to Availability table
+        
         public ICollection<TrekPlan>? TrekPlans { get; set; }
         public ICollection<Availability>? Availabilities { get; set; }
         public ICollection<TrekReview>? TrekReviews { get; set; }

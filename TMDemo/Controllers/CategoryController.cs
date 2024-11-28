@@ -94,6 +94,65 @@ namespace TMDemo.Controllers
 
             return View(model);
         }
+        [HttpGet]
+        public async Task<IActionResult> FilterByCategory(string categoryType, string filterValue)
+        {
+            IEnumerable<Trek> filteredTreks = new List<Trek>();
+
+            switch (categoryType.ToLower())
+            {
+                case "season":
+                    filteredTreks = await _context.Treks
+                        .Where(trek => trek.Season.Contains(filterValue))
+                        .ToListAsync();
+                    break;
+
+                case "difficulty":
+                    filteredTreks = await _context.Treks
+                        .Where(trek => trek.DifficultyLevel == filterValue)
+                        .ToListAsync();
+                    break;
+
+                case "region":
+                    filteredTreks = await _context.Treks
+                        .Where(trek => trek.Region == filterValue)
+                        .ToListAsync();
+                    break;
+
+                case "duration":
+                    if (filterValue == "6+")
+                    {
+                        filteredTreks = await _context.Treks
+                            .Where(trek => trek.DurationDays > 6)
+                            .ToListAsync();
+                    }
+                    else if (int.TryParse(filterValue, out int days))
+                    {
+                        filteredTreks = await _context.Treks
+                            .Where(trek => trek.DurationDays == days)
+                            .ToListAsync();
+                    }
+                    break;
+
+                case "month":
+                    filteredTreks = await _context.Availabilities
+                        .Include(a => a.Trek)
+                        .Where(a => a.Month == filterValue && a.Trek != null)
+                        .Select(a => a.Trek)
+                        .Distinct()
+                        .ToListAsync();
+                    break;
+            }
+
+            
+            var model = new GroupedTreksByCategory
+            {
+                Category = filterValue,
+                Treks = filteredTreks.ToList()
+            };
+
+            return View("FilteredView", model);
+        }
 
     }
 }

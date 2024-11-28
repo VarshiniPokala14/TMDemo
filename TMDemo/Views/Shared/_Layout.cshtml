@@ -118,6 +118,7 @@
                     text-decoration: underline;
                 }
 
+        
     </style>
 </head>
 
@@ -205,61 +206,65 @@
             </div>
 
             <h2 class="footer-title">Trek By Category</h2>
+            
             <div class="categories">
                 <div class="category">
-                    <h3>Trek by Season</h3>
+                    <h3><a href="/Category/BySeason" style="text-decoration:none; color:black;">Trek by Season</a></h3>
                     <ul>
-                        <li>Spring</li>
-                        <li>Summer</li>
-                        <li>Monsoon</li>
-                        <li>Autumn</li>
-                        <li>Winter</li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "season", filterValue = "Spring" })" style="text-decoration:none; color:black;">Spring</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "season", filterValue = "Summer" })" style="text-decoration:none; color:black;">Summer</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "season", filterValue = "Winter" })" style="text-decoration:none; color:black;">Winter</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "season", filterValue = "Autumn" })" style="text-decoration:none; color:black;">Autumn</a></li>
+
                     </ul>
                 </div>
                 <div class="category">
-                    <h3>Trek by Duration</h3>
+                    <h3><a href="/Category/ByDuration" style="text-decoration:none; color:black;">Trek by Duration</a></h3>
                     <ul>
-                        <li>2 days</li>
-                        <li>3 days</li>
-                        <li>4 days</li>
-                        <li>5 days</li>
-                        <li>6+ days</li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Duration", filterValue = "2" })" style="text-decoration:none; color:black;">2 days</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Duration", filterValue = "3" })" style="text-decoration:none; color:black;">3 days</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Duration", filterValue = "4" })" style="text-decoration:none; color:black;">4 days</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Duration", filterValue = "5" })" style="text-decoration:none; color:black;">5 days</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Duration", filterValue = "6" })" style="text-decoration:none; color:black;">6+ days</a></li>
                     </ul>
                 </div>
                 <div class="category">
-                    <h3>Trek by Month</h3>
+                    <h3><a href="/Category/ByMonth" style="text-decoration:none; color:black;">Trek by Month</a></h3>
                     <ul class="grid-2">
-                        <li>Jan</li>
-                        <li>Jul</li>
-                        <li>Feb</li>
-                        <li>Aug</li>
-                        <li>Mar</li>
-                        <li>Sep</li>
-                        <li>Apr</li>
-                        <li>Oct</li>
-                        <li>May</li>
-                        <li>Nov</li>
-                        <li>Jun</li>
-                        <li>Dec</li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "January" })" style="text-decoration:none; color:black;">Jan</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "July" })" style="text-decoration:none; color:black;">Jul</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "February" })" style="text-decoration:none; color:black;">Feb</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "August" })" style="text-decoration:none; color:black;">Aug</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "March" })" style="text-decoration:none; color:black;">Mar</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "September" })" style="text-decoration:none; color:black;">Sep</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "April" })" style="text-decoration:none; color:black;">Apr</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "October" })" style="text-decoration:none; color:black;">Oct</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "May" })" style="text-decoration:none; color:black;">May</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "November" })" style="text-decoration:none; color:black;">Nov</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "June" })" style="text-decoration:none; color:black;">Jun</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Month", filterValue = "December" })" style="text-decoration:none; color:black;">Dec</a></li>
+
+                        
                     </ul>
                 </div>
                 <div class="category">
-                    <h3>Trek by Difficulty</h3>
+                    <h3><a href="/Category/ByDifficulty" style="text-decoration:none; color:black;">Trek by Difficulty</a></h3>
                     <ul>
-                        <li>Easy</li>
-                        <li>Moderate</li>
-                        <li>Difficulty</li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Difficulty", filterValue = "Easy" })" style="text-decoration:none; color:black;">Easy</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Difficulty", filterValue = "Moderate" })" style="text-decoration:none; color:black;">Moderate</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Difficulty", filterValue = "Difficult" })" style="text-decoration:none; color:black;">Difficult</a></li>
+
                     </ul>
                 </div>
                 <div class="category">
-                    <h3>Trek by Region</h3>
+                    <h3><a href="/Category/ByRegion" style="text-decoration:none; color:black;">Trek by Region</a></h3>
                     <ul>
-                        <li>Uttarakhand</li>
-                        <li>Nagaland</li>
-                        <li>Manipur</li>
-                        <li>Sikkim</li>
-                        <li>Ladakh</li>
-                        <li>Karnataka</li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "Uttarakhand" })" style="text-decoration:none; color:black;">Uttarakhand</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "Nagaland" })" style="text-decoration:none; color:black;">Nagaland</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "Manipur" })" style="text-decoration:none; color:black;">Manipur</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "Sikkim" })" style="text-decoration:none; color:black;">Sikkim</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "Ladakh" })" style="text-decoration:none; color:black;">Ladakh</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "karnataka" })" style="text-decoration:none; color:black;">Karnataka</a></li>
                     </ul>
                 </div>
             </div>
