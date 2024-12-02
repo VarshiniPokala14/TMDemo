@@ -1,4 +1,6 @@
-﻿namespace TMDemo.Models
+﻿using TMDemo.Models;
+
+namespace TMDemo.ViewModel
 {
     public class TrekDetailsViewModel
     {
@@ -8,9 +10,9 @@
         public List<MonthAvailability> AvailabilityDates { get; set; }
         public List<string> TrekPlan { get; set; }
         public bool IsTrekCompleted { get; set; }
-        public bool HasReviewed {  get; set; }
+        public bool HasReviewed { get; set; }
         public string CurrentUserId { get; set; }
-        
+
 
     }
 
@@ -24,7 +26,7 @@
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int RemainingSlots { get; set; } 
+        public int RemainingSlots { get; set; }
     }
 
     public class ActivityWithDate

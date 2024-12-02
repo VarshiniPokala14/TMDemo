@@ -1,4 +1,4 @@
-﻿namespace TMDemo.Models
+﻿namespace TMDemo.ViewModel
 {
     public class ActivityInputModel
     {

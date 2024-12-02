@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TMDemo.Data;
 using TMDemo.Models;
+using TMDemo.ViewModel;
 
 
 namespace TMDemo.Controllers
@@ -19,7 +20,7 @@ namespace TMDemo.Controllers
         }
         public IActionResult AllTreks()
         {
-            var treks = _context.Treks
+            List<Trek> treks = _context.Treks
                 .Include(t=>t.Availabilities)
                 .ToList();
             
@@ -27,7 +28,7 @@ namespace TMDemo.Controllers
         }
         public IActionResult GetImage(int trekId)
         {
-            var trek = _context.Treks.FirstOrDefault(t => t.TrekId == trekId);
+            Trek trek = _context.Treks.FirstOrDefault(t => t.TrekId == trekId);
             if (trek.TrekImg != null)
             {
                 return File(trek.TrekImg, "image/jpg");
@@ -37,9 +38,9 @@ namespace TMDemo.Controllers
         public async Task<IActionResult> UpcomingTreks()
         {
             
-            var today = DateTime.Today;
-            var threeMonthsLater = today.AddMonths(3);            
-            var treks = await _context.Treks
+            DateTime today = DateTime.Today;
+            DateTime threeMonthsLater = today.AddMonths(3);            
+            List<Trek> treks = await _context.Treks
                 .Include(t => t.Availabilities) 
                 .Where(t => t.Availabilities.Any(a => a.StartDate >= DateTime.Now && a.StartDate <= threeMonthsLater))
                 .ToListAsync();
@@ -49,7 +50,7 @@ namespace TMDemo.Controllers
         public IActionResult Details(int trekId)
         {
             CleanupPastAvailabilities();
-            var trek = _context.Treks
+            Trek trek = _context.Treks
                 .Include(t => t.Availabilities)
                 .Include(t => t.TrekReviews)
                 .Include(t => t.Bookings)
@@ -63,11 +64,11 @@ namespace TMDemo.Controllers
             }
 
             
-            var currentDate = DateTime.Now;
+            DateTime currentDate = DateTime.Now;
 
-            var userBooking = trek.Bookings.FirstOrDefault(b => b.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier) );
+            Booking userBooking = trek.Bookings.FirstOrDefault(b => b.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier) );
 
-            var trekEndDate = userBooking != null
+            DateTime trekEndDate = userBooking != null
                 ? userBooking.TrekStartDate.AddDays(trek.DurationDays)
                 : DateTime.MinValue;
 
@@ -90,13 +91,16 @@ namespace TMDemo.Controllers
                     }).ToList()
                 })
                 .ToList();
-
+            List<TrekReview> review= _context.TrekReviews
+                .Include(u=>u.User)
+                .Where(t=>t.TrekId == trek.TrekId)
+                .OrderByDescending(r=>r.CreatedAt).ToList();
             var trekplan = trek.TrekPlans.OrderBy(tp => tp.Day).Select(tp => tp.ActivityDescription).ToList();
-            var viewModel = new TrekDetailsViewModel
+            TrekDetailsViewModel viewModel = new TrekDetailsViewModel
             {
                 Trek = trek,
                 AvailabilityDates = availabilityDates,
-                Reviews = trek.TrekReviews.OrderByDescending(r => r.CreatedAt).ToList(),
+                Reviews = review,
                 TrekPlan = trekplan,
                 Bookings = trek.Bookings.ToList(),
                 IsTrekCompleted = isTrekCompleted,
@@ -125,7 +129,7 @@ namespace TMDemo.Controllers
         }
         private void CleanupPastAvailabilities()
         {
-            var pastAvailabilities = _context.Availabilities
+            List<Availability> pastAvailabilities = _context.Availabilities
                 .Where(a => a.StartDate < DateTime.Now)
                 .ToList();
 
@@ -141,7 +145,7 @@ namespace TMDemo.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
-            var booking = await _context.Bookings
+            Booking booking = await _context.Bookings
                 .Include(t=>t.Trek)
                 .FirstOrDefaultAsync(b => b.UserId == userId && b.TrekId == trekId && (b.IsCancelled==false||b.IsCancelled==null));
 
@@ -151,14 +155,14 @@ namespace TMDemo.Controllers
 
             }
 
-            var trekEndDate = booking.TrekStartDate.AddDays(booking.Trek.DurationDays);
+            DateTime trekEndDate = booking.TrekStartDate.AddDays(booking.Trek.DurationDays);
 
             if (trekEndDate > DateTime.Now)
             {
                 return Ok("You can only leave a review after completing the trek.");
             }
 
-            var reviewExists = await _context.TrekReviews
+            bool reviewExists = await _context.TrekReviews
                 .AnyAsync(r => r.UserId == userId && r.TrekId == trekId);
 
             if (reviewExists)
@@ -167,7 +171,7 @@ namespace TMDemo.Controllers
                 
             }
 
-            var review = new TrekReview
+            TrekReview review = new TrekReview
             {
                 UserId = userId,
                 TrekId = trekId,

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TMDemo.Models
+namespace TMDemo.ViewModel
 {
     public class RegisterViewModel
     {
@@ -20,7 +20,7 @@ namespace TMDemo.Models
         public DateTime DOB { get; set; }
 
         [Required]
-        public String Gender { get; set; }
+        public string Gender { get; set; }
 
         [Required]
         public string Country { get; set; }

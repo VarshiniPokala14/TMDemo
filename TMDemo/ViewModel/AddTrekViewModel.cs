@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TMDemo
+namespace TMDemo.ViewModel
 {
     public class AddTrekViewModel
     {
@@ -14,22 +14,22 @@ namespace TMDemo
         public string Description { get; set; }
 
         [Required]
-        public string DifficultyLevel { get; set; } 
+        public string DifficultyLevel { get; set; }
 
         [Required]
         public int DurationDays { get; set; }
 
         [Required]
-        public decimal HighAltitude { get; set; } 
+        public decimal HighAltitude { get; set; }
 
         [Required]
         public decimal Price { get; set; }
 
         [Required]
-        public List<string> SelectedSeasons { get; set; } = new List<string>(); 
+        public List<string> SelectedSeasons { get; set; } = new List<string>();
 
 
-        public IFormFile TrekImgFile { get; set; } 
-       
+        public IFormFile TrekImgFile { get; set; }
+
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TMDemo.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using TMDemo.ViewModel;
 namespace TMDemo.Controllers
 {
     public class AccountController : Controller
@@ -28,7 +29,7 @@ namespace TMDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new UserDetail
+                UserDetail user = new UserDetail
                 {
                     Email = model.Email,
                     FirstName = model.FirstName,
@@ -51,11 +52,6 @@ namespace TMDemo.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
             }
             return View(model);
         }
@@ -70,7 +66,7 @@ namespace TMDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
+                UserDetail user = await _userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
                     if (!user.EmailConfirmed)
@@ -137,7 +133,7 @@ namespace TMDemo.Controllers
                 return BadRequest("Invalid email confirmation request.");
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
+            UserDetail user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 return NotFound("User not found.");
@@ -145,10 +141,10 @@ namespace TMDemo.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                TempData["Message"] = "Your email has been successfully confirmed. Please log in.";
+                
                 return RedirectToAction("Login");
             }
-            TempData["Error"] = "Email confirmation failed. Please try again.";
+            
             return RedirectToAction("Login");
         }
         [HttpGet]
@@ -163,15 +159,15 @@ namespace TMDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
+                UserDetail user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     
                     return RedirectToAction("ForgotPasswordConfirmation");
                 }
                 
-                var otp = GenerateOtp();
-                var otpExpiry = DateTime.UtcNow.AddMinutes(10); 
+                string otp = GenerateOtp();
+                DateTime otpExpiry = DateTime.UtcNow.AddMinutes(10); 
                 
                 HttpContext.Session.SetString("OTP", otp);
                 HttpContext.Session.SetString("OTPExpiry", otpExpiry.ToString());
@@ -195,10 +191,10 @@ namespace TMDemo.Controllers
             if (ModelState.IsValid)
             {
                 
-                var storedOtp = HttpContext.Session.GetString("OTP");
-                var otpExpiry = DateTime.Parse(HttpContext.Session.GetString("OTPExpiry"));
-                var userEmail = HttpContext.Session.GetString("UserEmail");
-                var user = await _userManager.FindByEmailAsync(userEmail);
+                string storedOtp = HttpContext.Session.GetString("OTP");
+                DateTime otpExpiry = DateTime.Parse(HttpContext.Session.GetString("OTPExpiry"));
+                string userEmail = HttpContext.Session.GetString("UserEmail");
+                UserDetail user = await _userManager.FindByEmailAsync(userEmail);
                 var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
                
                 if (storedOtp == model.Otp && DateTime.UtcNow <= otpExpiry)
@@ -225,7 +221,7 @@ namespace TMDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
+                UserDetail user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
                     return RedirectToAction("ResetPasswordConfirmation");
@@ -237,10 +233,7 @@ namespace TMDemo.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Login");
                 }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                
             }
             return View(model);
         }

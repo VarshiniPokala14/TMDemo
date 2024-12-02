@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TMDemo.Data;
 using TMDemo.Models;
+using TMDemo.ViewModel;
 namespace TMDemo.Controllers
 {
     [Authorize]
@@ -24,7 +25,7 @@ namespace TMDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var trek = new Trek
+                Trek trek = new Trek
                 {
                     Name = model.Name,
                     Region = model.Region,
@@ -55,13 +56,13 @@ namespace TMDemo.Controllers
         }
         public IActionResult AddTrekPlan(int trekId)
         {
-            var trek = _context.Treks.FirstOrDefault(t => t.TrekId == trekId);
+            Trek trek = _context.Treks.FirstOrDefault(t => t.TrekId == trekId);
             if (trek == null)
             {
                 return NotFound("Trek not found.");
             }
 
-            var viewModel = new TrekPlanViewModel
+            TrekPlanViewModel viewModel = new TrekPlanViewModel
             {
                 TrekId = trekId,
                 DurationDays = trek.DurationDays,
@@ -86,7 +87,7 @@ namespace TMDemo.Controllers
             {
                 foreach (var activity in model.Activities)
                 {
-                    var trekPlan = new TrekPlan
+                    TrekPlan trekPlan = new TrekPlan
                     {
                         TrekId = model.TrekId,
                         Day = activity.Day,
@@ -119,7 +120,7 @@ namespace TMDemo.Controllers
 
         {
             ModelState.Remove("Month");
-            var trek = await _context.Treks.FindAsync(availability.TrekId);
+            Trek trek = await _context.Treks.FindAsync(availability.TrekId);
             if (trek == null)
             {
                 ModelState.AddModelError("", "Invalid Trek selected.");
@@ -150,7 +151,7 @@ namespace TMDemo.Controllers
         public async Task<IActionResult> Index()
         {
            
-            var availabilities = await _context.Availabilities
+            List<Availability> availabilities = await _context.Availabilities
                 .Include(a => a.Trek)
                 .OrderBy(a => a.StartDate)
                 .ToListAsync();
@@ -180,7 +181,7 @@ namespace TMDemo.Controllers
                 })
                 .ToList();
 
-            var trekName = _context.Treks.FirstOrDefault(t => t.TrekId == trekId)?.Name;
+            string trekName = _context.Treks.FirstOrDefault(t => t.TrekId == trekId)?.Name;
             ViewBag.TrekName = trekName;
 
             return View(bookings);
@@ -190,7 +191,7 @@ namespace TMDemo.Controllers
         public ActionResult Users(int availabilityId)
         {
             
-            var startDate = _context.Availabilities
+            DateTime startDate = _context.Availabilities
                 .Where(a => a.AvailabilityId == availabilityId)
                 .Select(a => a.StartDate)
                 .FirstOrDefault();
@@ -214,7 +215,7 @@ namespace TMDemo.Controllers
                 .ToList();
 
            
-            var availability = _context.Availabilities
+            Availability availability = _context.Availabilities
                 .Include(a => a.Trek) 
                 .FirstOrDefault(a => a.AvailabilityId == availabilityId);
 

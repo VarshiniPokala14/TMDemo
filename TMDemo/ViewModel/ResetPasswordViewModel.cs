@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TMDemo.Models
+namespace TMDemo.ViewModel
 {
     public class ResetPasswordViewModel
     {
@@ -19,7 +19,7 @@ namespace TMDemo.Models
         [Compare("NewPassword", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        
+
 
     }
 }

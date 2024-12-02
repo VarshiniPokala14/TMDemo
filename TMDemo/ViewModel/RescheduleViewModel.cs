@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TMDemo.Models
+namespace TMDemo.ViewModel
 {
 
     public class RescheduleViewModel
@@ -11,14 +11,14 @@ namespace TMDemo.Models
         public DateTime OldStartDate { get; set; }
 
         [Required]
-        public DateTime NewStartDate { get; set; } 
+        public DateTime NewStartDate { get; set; }
 
         [Required]
         public string Reason { get; set; }
 
-        public decimal ExtraAmount { get; set; } 
+        public decimal ExtraAmount { get; set; }
 
-        public List<DateTime> AvailableDates { get; set; } = new List<DateTime>(); 
+        public List<DateTime> AvailableDates { get; set; } = new List<DateTime>();
     }
 
 

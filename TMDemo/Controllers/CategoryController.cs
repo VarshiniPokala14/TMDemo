@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TMDemo.Data;
 using TMDemo.Models;
+using TMDemo.ViewModel;
 
 namespace TMDemo.Controllers
 {

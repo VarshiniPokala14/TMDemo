@@ -1,8 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TMDemo.Models;
 
-namespace TMDemo.Models
+namespace TMDemo.ViewModel
 {
     public class CancellationViewModel
     {
