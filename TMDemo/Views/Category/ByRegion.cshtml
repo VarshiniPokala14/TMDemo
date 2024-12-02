@@ -8,8 +8,8 @@
     {
         foreach (var group in Model)
         {
-            <div class="region-group">
-                <h3 class="region-title">@group.Category</h3>
+            <div class="category-group">
+                <h3 class="category-title" style="color: #007bff;">@group.Category</h3>
 
                 <div class="row">
                     @foreach (var trek in group.Treks)
@@ -26,14 +26,4 @@
     }
 </div>
 
-<style>
-    .region-group {
-        margin-bottom: 40px;
-    }
 
-    .region-title {
-        font-size: 1.5rem;
-        color: #007bff;
-        margin-bottom: 20px;
-    }
-</style>

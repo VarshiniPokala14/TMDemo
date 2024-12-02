@@ -74,7 +74,7 @@ namespace TMDemo.Controllers
         public async Task<IActionResult> ByMonth()
         {
             
-            var availabilities = await _context.Availabilities
+            List<Availability> availabilities = await _context.Availabilities
                 .Include(a => a.Trek)
                 .Where(a => a.Trek != null) 
                 .ToListAsync();

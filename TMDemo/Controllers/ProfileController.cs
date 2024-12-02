@@ -43,7 +43,7 @@ namespace TMDemo.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var emergencyContact = await _context.EmergencyContacts
+            EmergencyContact emergencyContact = await _context.EmergencyContacts
                                 .FirstOrDefaultAsync(e => e.UserId == user.Id);
 
             
@@ -86,7 +86,7 @@ namespace TMDemo.Controllers
 
 
 
-            var emergencyContact = await _context.EmergencyContacts
+            EmergencyContact emergencyContact = await _context.EmergencyContacts
             .FirstOrDefaultAsync(e => e.UserId == user.Id);
 
             if (emergencyContact == null)
@@ -120,7 +120,7 @@ namespace TMDemo.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
 
             
-            var bookings = _context.Bookings
+            List<Booking> bookings = _context.Bookings
                 .Include(b => b.Trek)
                 .Where(b => b.UserId == userId && (b.IsCancelled == false || b.IsCancelled == null))
                 .ToList();

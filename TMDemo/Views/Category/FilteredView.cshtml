@@ -6,10 +6,8 @@
 
         @foreach (var trek in Model.Treks)
         {
-            @await Html.PartialAsync("_TrekCard", trek)
-            ;
+            @await Html.PartialAsync("_TrekCard", trek);
         }
-
     }
     else
     {

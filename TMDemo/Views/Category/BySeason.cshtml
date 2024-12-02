@@ -7,9 +7,9 @@
     {
         foreach (var group in Model)
         {
-            <div class="season-group">
-                
-                <h3 class="season-title">@group.Category</h3>
+            <div class="category-group">
+
+                <h3 class="category-title" style="color: #007bff;">@group.Category</h3>
 
                 <div class="row">
                     @foreach (var trek in group.Treks)
@@ -27,14 +27,4 @@
     }
 </div>
 
-<style>
-    .season-group {
-        margin-bottom: 40px;
-    }
 
-    .season-title {
-        font-size: 1.5rem;
-        color: #007bff;
-        margin-bottom: 20px;
-    }
-</style>

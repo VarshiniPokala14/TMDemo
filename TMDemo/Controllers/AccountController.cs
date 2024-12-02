@@ -52,6 +52,10 @@ namespace TMDemo.Controllers
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
+                foreach(var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
             return View(model);
         }
@@ -256,7 +260,7 @@ namespace TMDemo.Controllers
         
         private string GenerateOtp()
         {
-            var random = new Random();
+            Random random = new Random();
             return random.Next(100000, 999999).ToString();
         }
     }

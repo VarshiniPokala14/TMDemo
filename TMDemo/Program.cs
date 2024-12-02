@@ -28,7 +28,7 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-// 5. Add MVC and Razor Pages support
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 

@@ -40,7 +40,7 @@ namespace TMDemo.Controllers
 
                 if (model.TrekImgFile != null)
                 {
-                    using var memoryStream = new MemoryStream();
+                    using MemoryStream memoryStream = new MemoryStream();
                     await model.TrekImgFile.CopyToAsync(memoryStream);
                     trek.TrekImg = memoryStream.ToArray();
                 }
@@ -68,8 +68,6 @@ namespace TMDemo.Controllers
                 DurationDays = trek.DurationDays,
                 Activities = new List<ActivityInputModel>()
             };
-
-            
             for (int i = 1; i <= trek.DurationDays; i++)
             {
                 viewModel.Activities.Add(new ActivityInputModel { Day = i });
@@ -77,8 +75,6 @@ namespace TMDemo.Controllers
 
             return View(viewModel);
         }
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddTrekPlan(TrekPlanViewModel model)
@@ -113,13 +109,13 @@ namespace TMDemo.Controllers
 
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAvailability(Availability availability)
 
         {
             ModelState.Remove("Month");
+            ModelState.Remove("EndDate");
             Trek trek = await _context.Treks.FindAsync(availability.TrekId);
             if (trek == null)
             {
@@ -127,10 +123,7 @@ namespace TMDemo.Controllers
                 ViewBag.Treks = await _context.Treks.OrderBy(t => t.Name).ToListAsync();
                 return View(availability);
             }
-            if (availability.StartDate.Date < DateTime.Now.Date)
-            {
-                ModelState.AddModelError("StartDate", "Start date cannot be in the past.");
-            }
+           
             availability.Month = availability.StartDate.ToString("MMMM");
             if (string.IsNullOrWhiteSpace(availability.Month))
             {
@@ -160,11 +153,9 @@ namespace TMDemo.Controllers
         }
         public ActionResult Treks()
         {
-            var treks = _context.Treks.ToList();
+            List<Trek> treks = _context.Treks.ToList();
             return View(treks);
         }
-
-        
         public ActionResult TrekBookings(int trekId)
         {
             var bookings = _context.Availabilities
@@ -186,8 +177,6 @@ namespace TMDemo.Controllers
 
             return View(bookings);
         }
-
-        
         public ActionResult Users(int availabilityId)
         {
             
@@ -214,7 +203,6 @@ namespace TMDemo.Controllers
                 })
                 .ToList();
 
-           
             Availability availability = _context.Availabilities
                 .Include(a => a.Trek) 
                 .FirstOrDefault(a => a.AvailabilityId == availabilityId);

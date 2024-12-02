@@ -6,42 +6,46 @@
 
 
 <div class="form-container">
-    <div class="form-wrapper">
+    <div class="form-wrapper" style="height:90%;">
         <h2>Create New Account</h2>
         <form asp-controller="Account" asp-action="Register" method="post">
             <div class="form-row">
-                <!-- First Name -->
+                
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="FirstName">First Name *</label>
                     <input type="text" id="FirstName" name="FirstName" placeholder="First Name">
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
-                <!-- Last Name -->
+               
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="LastName">Last Name *</label>
                     <input type="text" id="LastName" name="LastName" placeholder="Last Name">
+                    <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-row">
-                <!-- Email -->
+                
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="Email">Email *</label>
                     <input type="text" id="Email" name="Email" placeholder="Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-                <!-- Mobile Number -->
+               
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="PhoneNumber">Mobile Number *</label>
                     <input type="text" id="PhoneNumber" name="PhoneNumber" placeholder="Mobile Number">
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-row">
-                <!-- DOB -->
+               
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="DOB">DOB *</label>
                     <input type="date" id="DOB" name="DOB">
+                    <span asp-validation-for="DOB" class="text-danger"></span>
                 </div>
-                <!-- Gender -->
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="Gender">Gender *</label>
                     <select id="Gender" name="Gender">
@@ -50,41 +54,43 @@
                         <option>Female</option>
                         <option>Other</option>
                     </select>
+                    <span asp-validation-for="Gender" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-row">
-                <!-- Country -->
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="Country">Country *</label>
                     <input type="text" id="Country" name="Country" placeholder="Country">
+                    <span asp-validation-for="Country" class="text-danger"></span>
                 </div>
-                <!-- State -->
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="State">State *</label>
                     <input type="text" id="State" name="State" placeholder="State">
+                    <span asp-validation-for="State" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-row">
-                <!-- City -->
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="City">City *</label>
                     <input type="text" id="City" name="City" placeholder="City">
+                    <span asp-validation-for="City" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-row">
-                <!-- Country -->
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="Password">Password *</label>
                     <input type="password" id="Password" name="Password" placeholder="Password">
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
-                <!-- State -->
                 <div class="form-group" style="flex: 1;">
                     <label asp-for="ConfirmPassword">ConfirmPassword *</label>
                     <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="ConfirmPassword">
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
             </div>
+           
             <button type="submit">Register</button>
             <p class="login-link">
                 Already have an Account? <a asp-controller="Account" asp-action="Login">Login</a>

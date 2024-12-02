@@ -18,7 +18,7 @@ namespace TMDemo.Models
 
         [Required]
         [DataType(DataType.Date)]
-        [FutureOrTodayDate(ErrorMessage = "Date shouldn't be past date")]
+        [FutureOrTodayDate(ErrorMessage = "EndDate shouldn't be past date")]
         public DateTime EndDate { get; set; }
         [Required]
         public string Month { get; set; }

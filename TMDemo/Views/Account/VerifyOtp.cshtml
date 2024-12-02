@@ -2,12 +2,13 @@
 
 
 <div class="form-container">
-	<div class="form-wrapper ">
+	<div class="form-wrapper" style="height:300px;">
 		<h2>Verify OTP</h2>
-		<form asp-action="VerifyOtp" method="post">
+		<form asp-action="VerifyOtp" method="post" >
 			<div class="form-group">
 				<label for="Otp">OTP</label>
 				<input type="text" id="Otp" name="Otp" placeholder="Enter you Otp" required>
+				<span asp-validation-for="Otp" class="text-danger" ></span>
 			</div>
 			<button type="submit">Submit</button>
 		</form>

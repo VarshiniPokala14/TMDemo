@@ -136,13 +136,12 @@ faq :hover {
 
 
 
-/* Main content styles */
 .main-content {
-    flex-grow: 1; /* Takes the remaining horizontal space */
+    flex-grow: 1;
     padding: 10px;
-    overflow-y: auto; /* Enable scrolling for main content */
-    height: 120vh; /* Ensure full height for scrolling */
-    background-color: #f8f9fa; /* Light background color */
+    overflow-y: auto; 
+    height: 120vh; 
+    background-color: #f8f9fa; 
     margin-left:300px;
     margin-top:96px;
     position:absolute;

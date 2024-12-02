@@ -8,8 +8,8 @@
     {
         foreach (var group in Model)
         {
-            <div class="duration-group">
-                <h3 class="duration-title">@group.Category</h3>
+            <div class="category-group">
+                <h3 class="category-title" style="color:#28a745;">@group.Category</h3>
 
                 <div class="row">
                     @foreach (var trek in group.Treks)
@@ -25,14 +25,3 @@
         <p>No treks available for any Duration Days.</p>
     }
 </div>
-<style>
-    .duration-group {
-        margin-bottom: 40px;
-    }
-
-    .duration-title {
-        font-size: 1.5rem;
-        color: #28a745;
-        margin-bottom: 20px;
-    }
-</style>
