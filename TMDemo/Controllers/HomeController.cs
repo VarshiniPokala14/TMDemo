@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
-
 namespace TMDemo.Controllers
 {
     public class HomeController : Controller

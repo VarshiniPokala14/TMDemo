@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
+﻿
 namespace TMDemo.Models
 {
     public class UserDetail : IdentityUser

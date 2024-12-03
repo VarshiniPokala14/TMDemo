@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using TMDemo.Validation;
-
-namespace TMDemo.Models
+﻿namespace TMDemo.Models
 {
     public class Availability
     {

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace TMDemo.ViewModel
 {
     public class RegisterViewModel

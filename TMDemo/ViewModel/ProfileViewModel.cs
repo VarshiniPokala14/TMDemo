@@ -1,5 +1,4 @@
-﻿using TMDemo.Models;
-
+﻿
 namespace TMDemo.ViewModel
 {
     public class ProfileViewModel

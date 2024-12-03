@@ -1,6 +1,4 @@
-﻿using TMDemo.Models;
-
-namespace TMDemo.ViewModel
+﻿namespace TMDemo.ViewModel
 {
     public class GroupedTreksByCategory
     {

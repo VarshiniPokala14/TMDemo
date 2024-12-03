@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TMDemo.ViewModel
+﻿namespace TMDemo.ViewModel
 {
     public class VerifyOtpViewModel
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace TMDemo.ViewModel
+﻿namespace TMDemo.ViewModel
 {
 
     public class RescheduleViewModel

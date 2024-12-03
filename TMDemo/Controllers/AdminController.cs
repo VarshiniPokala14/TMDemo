@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TMDemo.Data;
-using TMDemo.Models;
-using TMDemo.ViewModel;
-namespace TMDemo.Controllers
+﻿namespace TMDemo.Controllers
 {
     [Authorize]
     public class AdminController : Controller
@@ -190,8 +184,6 @@ namespace TMDemo.Controllers
                 
                 return NotFound("Availability not found.");
             }
-
-            
             var users = _context.Bookings
                 .Where(b => b.TrekStartDate == startDate && (b.IsCancelled == false || b.IsCancelled == null)) 
                 .Select(b => new UserViewModel

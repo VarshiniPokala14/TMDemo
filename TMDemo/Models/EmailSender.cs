@@ -1,6 +1,4 @@
-﻿using System.Net.Mail;
-using System.Net;
-using Microsoft.AspNetCore.Identity.UI.Services;
+﻿
 
 namespace TMDemo.Models
 {

@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using TMDemo.Models;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using TMDemo.ViewModel;
-namespace TMDemo.Controllers
+﻿namespace TMDemo.Controllers
 {
     public class AccountController : Controller
     {
@@ -75,18 +70,11 @@ namespace TMDemo.Controllers
                 {
                     if (!user.EmailConfirmed)
                     {
-                        
                         var confirmationCode = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-                        
                         var confirmationLink = Url.Action("ConfirmEmailDuringLogin", "Account",
                             new { userId = user.Id, token = confirmationCode }, Request.Scheme);
-
-                        
                         await _emailSender.SendEmailAsync(user.Email, "Email Authentication",
                             $"Please confirm your email by clicking on the link: <a href='{confirmationLink}'>Confirm Email</a>");
-
-                        
                         TempData["Message"] = "A confirmation link has been sent to your email. Please confirm your email to proceed.";
                         return RedirectToAction("Login");
                     }
@@ -102,25 +90,15 @@ namespace TMDemo.Controllers
                         }
                         else if (roles.Contains("User"))
                         {
-                            
                             return RedirectToAction("Index", "Home");
                         }
                         else
                         {
-                           
                             ModelState.AddModelError(string.Empty, "User role not assigned.");
                             return View(model);
                         }
                     }
-                    if (result.IsLockedOut)
-                    {
-                        
-                        return View("Lockout");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    }
+                    
                 }
                 else
                 {
@@ -145,7 +123,6 @@ namespace TMDemo.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                
                 return RedirectToAction("Login");
             }
             
@@ -193,8 +170,7 @@ namespace TMDemo.Controllers
         public async Task<IActionResult> VerifyOtp(VerifyOtpViewModel model)
         {
             if (ModelState.IsValid)
-            {
-                
+            { 
                 string storedOtp = HttpContext.Session.GetString("OTP");
                 DateTime otpExpiry = DateTime.Parse(HttpContext.Session.GetString("OTPExpiry"));
                 string userEmail = HttpContext.Session.GetString("UserEmail");
@@ -212,7 +188,6 @@ namespace TMDemo.Controllers
             }
             return View(model);
         }
-       
         [HttpGet]
         public IActionResult ResetPassword(string email,string Otp)
         {
@@ -257,7 +232,6 @@ namespace TMDemo.Controllers
         {
             return View();
         }
-        
         private string GenerateOtp()
         {
             Random random = new Random();

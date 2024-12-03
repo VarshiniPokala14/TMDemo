@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-namespace TMDemo.Models
+﻿namespace TMDemo.Models
 {
     public class Trek
     {
