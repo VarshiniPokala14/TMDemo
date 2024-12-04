@@ -1,16 +1,42 @@
 ﻿@model VerifyOtpViewModel
 
-
+@section Scripts {
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.3/jquery.validate.min.js"></script>
+	<script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+}
 <div class="form-container">
-	<div class="form-wrapper" style="height:300px;">
+	<div class="form-wrapper" style="height:350px;">
 		<h2>Verify OTP</h2>
+		<div id="otpMessage" style="margin-top: 15px;">
+			<p>An OTP has been sent to your email. Please enter it below.</p>
+			<p id="timer">Time remaining:<strong> 10:00</strong> </p>
+		</div>
 		<form asp-action="VerifyOtp" method="post" >
 			<div class="form-group">
 				<label for="Otp">OTP</label>
-				<input type="text" id="Otp" name="Otp" placeholder="Enter you Otp" required>
+				<input type="text" id="Otp" name="Otp" placeholder="Enter you Otp" required asp-for="Otp"><br/>
 				<span asp-validation-for="Otp" class="text-danger" ></span>
 			</div>
 			<button type="submit">Submit</button>
 		</form>
+		
 	</div>
 </div>
+<script>
+	var timerElement = document.getElementById('timer');
+	var timeRemaining = 600; 
+
+	var interval = setInterval(function () {
+		var minutes = Math.floor(timeRemaining / 60);
+		var seconds = timeRemaining % 60;
+		timerElement.textContent = 'Time remaining: ' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+
+		if (timeRemaining <= 0) {
+			clearInterval(interval);
+			timerElement.textContent = 'OTP expired.';
+		}
+
+		timeRemaining--;
+	}, 1000);
+</script>

@@ -1,6 +1,6 @@
 ﻿namespace TMDemo.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly AppDbContext _context;

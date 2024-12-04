@@ -1,22 +1,28 @@
 ﻿@model TrekPlanViewModel
 
-<h2>Add Trek Plan</h2>
 
-<form asp-action="AddTrekPlan" method="post">
-    <input type="hidden" asp-for="TrekId" />
-    <input type="hidden" asp-for="DurationDays" />
+<div class="form-container">
+    <div class="form-wrapper" style=" height:85%;">
+        <h2 style="text-align:center;">Add Trek Plan</h2>
+        <form asp-action="AddTrekPlan" method="post" style="margin-top:0px;">
+            <input type="hidden" asp-for="TrekId" />
+            <input type="hidden" asp-for="DurationDays" />
 
-    <div>
-        @for (var i = 0; i < Model.Activities.Count; i++)
-        {
-            <div class="form-group">
-                <label>Day @Model.Activities[i].Day:</label>
-                <input type="hidden" asp-for="Activities[i].Day" />
-                <input asp-for="Activities[i].ActivityDescription" class="form-control" placeholder="Enter activity for Day @Model.Activities[i].Day" />
-                <span asp-validation-for="Activities[i].ActivityDescription" class="text-danger"></span>
+            <div>
+                @for (var i = 0; i < Model.Activities.Count; i++)
+                {
+                    <div class="form-group">
+                        <label>Day @Model.Activities[i].Day:</label>
+                        <input type="hidden" asp-for="Activities[i].Day" />
+                        <input asp-for="Activities[i].ActivityDescription" class="form-control" placeholder="Enter activity for Day @Model.Activities[i].Day" />
+                        <span asp-validation-for="Activities[i].ActivityDescription" class="text-danger"></span>
+                    </div>
+                }
             </div>
-        }
-    </div>
 
-    <button type="submit" class="btn btn-primary">Save Trek Plan</button>
-</form>
+            <button type="submit" class="btn btn-primary">Save Trek Plan</button>
+        </form>
+
+    </div>
+</div>
+

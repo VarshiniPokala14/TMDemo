@@ -2,32 +2,38 @@
 {
     public class AddTrekViewModel
     {
-        [Required, MaxLength(100)]
+        [Required(ErrorMessage = "Name is required.")]
+       
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Region is required.")]
         public string Region { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Difficulty Level is required.")]
         public string DifficultyLevel { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Duration (in days) is required.")]
+        [Range(1, 365, ErrorMessage = "Duration must be between 1 and 365 days.")]
         public int DurationDays { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "High Altitude is required.")]
+        [Range(0.1, double.MaxValue, ErrorMessage = "Altitude must be greater than 0.")]
         public decimal HighAltitude { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Price is required.")]
+        [Range(0.1, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
         public decimal Price { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please select at least one season.")]
         public List<string> SelectedSeasons { get; set; } = new List<string>();
 
-
+        [Required(ErrorMessage = "Trek image is required.")]
+        [DataType(DataType.Upload)]
+        [RegularExpression(@"^.*\.(jpg|jpeg|png|gif|bmp|webp)$",
+            ErrorMessage = "Only image files (.jpg, .jpeg, .png, .gif, .bmp, .webp) are allowed.")]
         public IFormFile TrekImgFile { get; set; }
-
     }
 }

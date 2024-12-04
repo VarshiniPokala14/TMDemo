@@ -19,5 +19,22 @@ namespace TMDemo.Controllers
         {
             return View();
         }
+        [Route("Error/{statusCode}")]
+        public IActionResult HandleError(int statusCode)
+        {
+            switch (statusCode)
+            {
+                case 404:
+                    return View("404");
+                case 500:
+                    return View("500");
+                case 403:
+                    return View("403");
+                default:
+                    return View("GenericError");
+            }
+        }
+        
+
     }
 }

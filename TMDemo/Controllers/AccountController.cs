@@ -105,7 +105,7 @@
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 }
             }
-            return Ok(ModelState);
+            return View(model);
         }
         [HttpGet]
         public async Task<IActionResult> ConfirmEmailDuringLogin(string userId, string token)
@@ -183,7 +183,7 @@
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid or expired OTP.");
+                    return View(model);
                 }
             }
             return View(model);

@@ -1,5 +1,4 @@
-﻿
-namespace TMDemo.ViewModel
+﻿namespace TMDemo.ViewModel
 {
     public class RegisterViewModel
     {
@@ -10,9 +9,12 @@ namespace TMDemo.ViewModel
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email is Required")]
+        [EmailAddress(ErrorMessage ="Enter valid Email")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "PhoneNumber is Required")]
+        [Required(ErrorMessage = "Phone Number is required.")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone Number must be exactly 10 digits.")]
         public string PhoneNumber { get; set; }
+
 
         [Required(ErrorMessage = "DOB is Required")]
         [DataType(DataType.Date)]
@@ -32,11 +34,13 @@ namespace TMDemo.ViewModel
 
         [Required(ErrorMessage = "Password is mandatory")]
         [DataType(DataType.Password)]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
+    ErrorMessage = "Password must be at least 8 characters long, contain one uppercase letter, one number, and one special character.")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "ConfirmPassword is mandatory")]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage = "Password and confirmationPassword do not match.")]
         public string ConfirmPassword { get; set; }
     }
 }

@@ -4,7 +4,11 @@
 	ViewData["Title"] = "Login";
 	
 }
-
+@section Scripts {
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.6.0.min.js"></script>
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.3/jquery.validate.min.js"></script>
+	<script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+}
 
 <div class="form-container">
 	<div class="form-wrapper" style="height:350px;">
@@ -12,12 +16,12 @@
 		<form asp-action="Login" method="post">
 			<div class="form-group">
 				<label for="Email">Email</label>
-				<input type="text" id="Email" name="Email" placeholder="Email" required>
+				<input type="text" id="Email" name="Email" placeholder="Email" required asp-for="Email"><br/>
 				<span asp-validation-for="Email" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<label for="Password">Password</label>
-				<input type="password" id="Password" name="Password" placeholder="Password" required>
+				<input type="password" id="Password" name="Password" placeholder="Password" required asp-for="Password">
 				<span asp-validation-for="Password" class="text-danger"></span>
 			</div>
 			<button type="submit">Login</button>

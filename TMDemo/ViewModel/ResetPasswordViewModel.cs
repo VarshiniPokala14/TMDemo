@@ -3,7 +3,7 @@
     public class ResetPasswordViewModel
     {
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Enter valid Email")]
         public string Email { get; set; }
 
         [Required]
@@ -14,7 +14,7 @@
         public string NewPassword { get; set; }
         [Required(ErrorMessage = "ReEnter The Password")]
         [DataType(DataType.Password)]
-        [Compare("NewPassword", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("NewPassword", ErrorMessage = "Password and ConfirmationPassword do not match.")]
         public string ConfirmPassword { get; set; }
 
 

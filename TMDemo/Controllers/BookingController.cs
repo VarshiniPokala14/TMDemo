@@ -1,9 +1,6 @@
-﻿
-
-
-namespace TMDemo.Controllers
+﻿namespace TMDemo.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="User")]
     public class BookingController : Controller
     {
         private readonly AppDbContext _context;
@@ -285,9 +282,5 @@ namespace TMDemo.Controllers
 			}
             return View("RescheduleBooking",model);
         }
-
-
-
-
     }
 }

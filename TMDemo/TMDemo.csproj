@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Category\FilteredView.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\404.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\_AdminLayout.cshtml" />
     <_ContentIncludedByDefault Remove="wwwroot\css\adminCSS.css" />
     <_ContentIncludedByDefault Remove="wwwroot\images\cancel.webp" />
@@ -51,6 +52,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Category\FilteredView.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Home\404.cshtml" />
   </ItemGroup>
 
 </Project>

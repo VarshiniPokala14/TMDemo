@@ -3,7 +3,11 @@
 @{
     ViewData["Title"] = "Add Trek";
 }
-
+@section Scripts {
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+}
 <div class="form-container">
     <div class="form-wrapper" style="height:80%;">
         <h2>Add New Trek</h2>
@@ -53,7 +57,7 @@
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label>Select Seasons *</label>
+                    <label asp-for="SelectedSeasons">Select Seasons *</label>
                     <div class="row">
                         <div class="col-6">
                             <div class="form-check">
@@ -84,7 +88,7 @@
                 </div>
                 <div class="col-md-6">
                     <label asp-for="TrekImgFile">Upload Trek Image</label>
-                    <input asp-for="TrekImgFile" class="form-control" type="file" />
+                    <input asp-for="TrekImgFile" class="form-control" type="file"/>
                     <span asp-validation-for="TrekImgFile" class="text-danger"></span>
                 </div>
                 

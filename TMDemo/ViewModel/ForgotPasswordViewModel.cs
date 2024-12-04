@@ -1,10 +1,9 @@
-﻿
-namespace TMDemo.ViewModel
+﻿namespace TMDemo.ViewModel
 {
     public class ForgotPasswordViewModel
     {
         [Required(ErrorMessage = "Email field is required")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage ="Enter valid Email")]
         public string Email { get; set; }
     }
 }

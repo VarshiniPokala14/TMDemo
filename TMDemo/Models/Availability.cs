@@ -20,10 +20,10 @@
         [Required]
         public string Month { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Max Group Size is required.")]
+        [Range(10, 30, ErrorMessage = "Max Group Size must be between 10 and 30.")]
         public int MaxGroupSize { get; set; }
 
-        
         public Trek? Trek { get; set; }
     }
 }

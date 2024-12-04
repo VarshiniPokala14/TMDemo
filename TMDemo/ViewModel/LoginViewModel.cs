@@ -3,10 +3,10 @@
     public class LoginViewModel
     {
         [Required(ErrorMessage = "Email field is Required")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage ="Enter valid Email")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Enter the password")]
+        [Required(ErrorMessage = "Enter valid password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         public bool RememberMe { get; set; }
