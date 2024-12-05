@@ -31,9 +31,7 @@
         public List<string> SelectedSeasons { get; set; } = new List<string>();
 
         [Required(ErrorMessage = "Trek image is required.")]
-        [DataType(DataType.Upload)]
-        [RegularExpression(@"^.*\.(jpg|jpeg|png|gif|bmp|webp)$",
-            ErrorMessage = "Only image files (.jpg, .jpeg, .png, .gif, .bmp, .webp) are allowed.")]
+        [AllowedFileTypes(new[] { ".jpg", ".jpeg", ".png", ".gif" , ".webp"}, ErrorMessage = "Only image files (.jpg, .jpeg, .png, .gif, .webp) are allowed.")]
         public IFormFile TrekImgFile { get; set; }
     }
 }

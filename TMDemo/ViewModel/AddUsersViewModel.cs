@@ -7,11 +7,4 @@
         public DateTime StartDate { get; set; }
         public List<string> Emails { get; set; }
     }
-
-    public class AddedUser
-    {
-        public string FirstName { get; set; }
-        public string Email { get; set; }
-    }
-
 }

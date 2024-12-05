@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using TMDemo.Repository;
+using TMDemo.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -20,9 +22,13 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
     options.IdleTimeout = TimeSpan.FromMinutes(10); 
 });
-
-
+builder.Services.AddMemoryCache();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 
 builder.Services.AddControllersWithViews();
