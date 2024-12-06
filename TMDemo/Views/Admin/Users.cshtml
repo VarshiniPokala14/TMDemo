@@ -1,10 +1,11 @@
 ﻿@model IEnumerable<UserViewModel>
+
 @{
     var trekName = ViewBag.TrekName as string;
-    var startDate = ViewBag.StartDate as string;
+    var startDate = ViewBag.TrekStartDate as string;  // Make sure this matches the key name set in the controller
 }
 
-<h2 style="font-family:'Times New Roman', Times, serif; padding:10px; font:10px; color:brown; padding:20px;text-align:center;">Users for Trek:  (Start Date: @startDate)</h2>
+<h2 style="font-family:'Times New Roman', Times, serif; padding:10px; font:10px; color:brown; padding:20px;text-align:center;">Users for Trek: @trekName (Start Date: @startDate)</h2>
 <div class="availability-container m-3">
     @foreach (var user in Model)
     {

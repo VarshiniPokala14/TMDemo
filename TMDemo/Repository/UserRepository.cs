@@ -1,14 +1,22 @@
-﻿namespace TMDemo.Repository
+﻿
+namespace TMDemo.Repository
 {
     public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _context;
-
-        public UserRepository(AppDbContext context)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<UserDetail> _userManager;
+        public UserRepository(AppDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<UserDetail> userManager)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
-
+        public string GetCurrentUserId()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+            return _userManager.GetUserId(user);
+        }
         public async Task<UserDetail> GetUserAsync(string userId)
         {
             return await _context.Users.FindAsync(userId);

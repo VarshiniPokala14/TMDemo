@@ -121,6 +121,12 @@
                     <textarea name="reviewText" placeholder="Write your review here..." required></textarea>
                     <button type="submit">Submit Review</button>
                 </form>
+                @if (TempData["ReviewMessage"] != null)
+                {
+                    <div class="alert alert-danger">
+                        @TempData["ReviewMessage"]
+                    </div>
+                }
             }
             else if (!Model.IsTrekCompleted)
             {

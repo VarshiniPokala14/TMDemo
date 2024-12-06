@@ -1,51 +1,29 @@
-﻿namespace TMDemo.Controllers
+﻿using TMDemo.Service;
+
+namespace TMDemo.Controllers
 {
     [Authorize(Roles ="User")]
     public class BookingController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IBookingService _bookingService;
         private readonly UserManager<UserDetail> _userManager;
-        public BookingController(AppDbContext context, UserManager<UserDetail> userManager)
+
+        public BookingController(IBookingService bookingService, UserManager<UserDetail> userManager)
         {
-            _context = context;
+            _bookingService = bookingService;
             _userManager = userManager;
         }
-        [Authorize]
+
+        
         public IActionResult AddUsers(int trekId, string startDate)
         {
-
-            Console.WriteLine($"trekId: {trekId}, startDate: {startDate}");
-
-            DateTime parsedDate;
-            if (!DateTime.TryParse(startDate, out parsedDate))
-            {
-                return BadRequest("Invalid date format.");
-            }
-
-            Trek trek = _context.Treks.FirstOrDefault(t => t.TrekId == trekId);
-            if (trek == null)
-            {
-                return NotFound();
-            }
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
-            List<string> emails = new List<String>
-            {
-                userEmail
-            };
-
-            AddUsersViewModel viewModel = new AddUsersViewModel
-            {
-                TrekId = trekId,
-                TrekName = trek.Name,
-                StartDate = parsedDate,
-                Emails = emails 
-            };
+            string userEmail = User.FindFirstValue(ClaimTypes.Email);
+            var viewModel = _bookingService.GetAddUsersViewModel(trekId, startDate, userEmail);
 
             return View(viewModel);
         }
 
-
-        [Authorize]
+        
         [HttpPost]
         public IActionResult AddUsers(AddUsersViewModel model, string action, string? email)
         {
@@ -53,234 +31,71 @@
             {
                 if (action == "AddMember")
                 {
-                    
-                    model.Emails.Add(email);
+                    _bookingService.AddMember(model, email);
                     return View(model);
                 }
                 else if (action == "Book")
                 {
-
-                    Trek trek = _context.Treks.FirstOrDefault(t => t.TrekId == model.TrekId);
-                    if (trek == null)
-                    {
-                        return NotFound();
-                    }
-
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); 
-
-                    decimal amount = trek.Price * (model.Emails.Count); 
-                    decimal tax = amount * 0.05M;
-                    decimal totalAmount = amount + tax + 10;
-
-                    Booking booking = new Booking
-                    {
-                        TrekId = model.TrekId,
-                        UserId = userId,
-                        BookingDate = DateTime.Now,
-                        NumberOfPeople = model.Emails.Count,
-                        TotalAmount = totalAmount,
-                        TrekStartDate = model.StartDate,
-                        CancellationDate = DateTime.MinValue 
-
-                    };
-
-                    _context.Bookings.Add(booking);
-
-                    Console.WriteLine($"BookingDate: {booking.BookingDate}");
-
-                    _context.SaveChanges();
-
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var booking = _bookingService.CreateBooking(model, userId);
 
                     return View("PaymentPage", booking);
                 }
             }
             return Ok(ModelState);
         }
-        [Authorize]
-        public IActionResult PaymentPage(int bookingId)
-        {
-            Booking booking = _context.Bookings.FirstOrDefault(b => b.BookingId == bookingId);
-            if (booking == null)
-            {
-                return NotFound();
-            }
-
-            return View("PaymentPage", booking);
-        }
-        [Authorize]
+       
         [HttpPost]
-        public IActionResult ProcessPayment(int bookingId, string paymentMethod)
+        public async Task<IActionResult> ProcessPayment(int bookingId, string paymentMethod)
         {
-            Booking booking = _context.Bookings.FirstOrDefault(b => b.BookingId == bookingId);
-            if (booking == null)
+            // Call the service layer to process the payment
+            var paymentProcessed = await _bookingService.ProcessPayment(bookingId, paymentMethod);
+
+            if (!paymentProcessed)
             {
-                return NotFound();
+                return NotFound(); // If the payment failed or the booking wasn't found
             }
 
-            booking.PaymentSuccess = true;
-            _context.SaveChanges();
-
-            
-
+            // If payment is successful, return the success view
             return View("BookingSuccess");
         }
-        [HttpGet]
+        
         public IActionResult CancelBooking(int bookingId)
         {
-            
-            Booking booking = _context.Bookings
-                .Include(b => b.Trek)  
-                .FirstOrDefault(b => b.BookingId == bookingId);
-
-            if (booking == null)
-            {
-                return NotFound("Booking not found.");
-            }
-
-            
-            DateTime startDate = booking.TrekStartDate;
-            DateTime cancelDate = DateTime.Now;
-            decimal totalAmount = booking.TotalAmount;
-            decimal refundAmount = 0;
-
-            
-            var daysDifference = (startDate - cancelDate).Days;
-
-            if (daysDifference > 30)
-            {
-                refundAmount = totalAmount;
-            }
-            else if (daysDifference <= 30 && daysDifference > 20)
-            {
-                refundAmount = totalAmount * 0.9M; 
-            }
-            else if (daysDifference <= 20 && daysDifference > 10)
-            {
-                refundAmount = totalAmount * 0.8M; 
-            }
-            else if (daysDifference <= 10)
-            {
-                refundAmount = 0; 
-            }
-
-           
-            CancellationViewModel model = new CancellationViewModel
-            {
-                BookingId = booking.BookingId,
-                Booking = booking,
-                RefundAmount = refundAmount 
-            };
-
+            var model = _bookingService.GetCancellationViewModel(bookingId);
             return View(model);
         }
+
         [HttpPost]
-        public async Task<IActionResult> ProcessCancellation(CancellationViewModel model)
+        public IActionResult ProcessCancellation(CancellationViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View("CancelBooking", model); 
+                _bookingService.ProcessCancellation(model);
+                return RedirectToAction("MyBookings", "Profile");
             }
-
-            
-            Booking book = await _context.Bookings
-                .Include(b => b.Trek) 
-                .FirstOrDefaultAsync(b => b.BookingId == model.BookingId);
-
-            if (book == null)
-            {
-                return NotFound("Booking not found.");
-            }
-            decimal refundAmount = model.RefundAmount;
-            book.IsCancelled = true;
-
-            book.Reason = model.Reason;
-            book.RefundAmount = refundAmount;
-            book.CancellationDate = DateTime.Now;
-
-            await _context.SaveChangesAsync();
-
-            
-            return RedirectToAction("MyBookings", "Profile");
+            return View("CancelBooking", model);
         }
-        [Authorize]
+
+       
         [HttpGet]
         public IActionResult RescheduleBooking(int bookingId)
         {
-            Booking booking = _context.Bookings
-                .Include(b => b.Trek) 
-                .FirstOrDefault(b => b.BookingId == bookingId);
-
-            if (booking == null)
-            {
-                return NotFound("Booking not found.");
-            }
-
-            
-            var availableDates = _context.Availabilities
-                .Where(a => a.TrekId == booking.TrekId && a.StartDate > DateTime.Now)
-                .Select(a => a.StartDate)
-                .Distinct() 
-                .OrderBy(d => d) 
-                .ToList();
-
-            
-            if (availableDates == null || !availableDates.Any())
-            {
-                ModelState.AddModelError("", "No available dates for this trek.");
-                return View("Error");
-            }
-            var daysDifference = (booking.TrekStartDate - DateTime.Now).Days;
-            decimal extraAmount = 0;
-            if (daysDifference <= 25)
-            {
-                extraAmount = booking.TotalAmount * 0.05M; 
-            }
-            RescheduleViewModel model = new RescheduleViewModel
-            {
-                BookingId = booking.BookingId,
-                OldStartDate = booking.TrekStartDate,
-                AvailableDates = availableDates, 
-                ExtraAmount = extraAmount
-            };
-
+            var model = _bookingService.GetRescheduleViewModel(bookingId);
             return View(model);
         }
 
-
-
-        [Authorize]
+       
         [HttpPost]
         public IActionResult ProcessReschedule(RescheduleViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View("RescheduleBooking", model);
+                _bookingService.ProcessReschedule(model);
+                return View("RescheduleSuccess");
             }
-
-            Booking booking = _context.Bookings.FirstOrDefault(b => b.BookingId == model.BookingId);
-            if (booking == null)
-            {
-                return NotFound("Booking not found.");
-            }
-
-            
-            //var daysDifference = (model.OldStartDate - DateTime.Now).Days;
-            //decimal extraAmount = 0;
-            //if (daysDifference <= 25)
-            //{
-            //    extraAmount = booking.TotalAmount * 0.05M; 
-            //}
-            booking.ExtraAmount = model.ExtraAmount;
-            booking.RescheduleReason = model.Reason;
-            booking.TrekStartDate = model.NewStartDate;
-            booking.TotalAmount += model.ExtraAmount;
-            if (model.OldStartDate != model.NewStartDate)
-            {
-				_context.SaveChanges();
-
-				return View("RescheduleSuccess");
-			}
-            return View("RescheduleBooking",model);
+            return View("RescheduleBooking", model);
         }
     }
+
 }
