@@ -6,37 +6,68 @@
 	<script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
 }
 <div class="form-container">
-	<div class="form-wrapper" style="height:350px;">
+	<div class="form-wrapper" style="height:auto;">
 		<h2>Verify OTP</h2>
 		<div id="otpMessage" style="margin-top: 15px;">
 			<p>An OTP has been sent to your email. Please enter it below.</p>
-			<p id="timer">Time remaining:<strong> 10:00</strong> </p>
+			<p id="timer">Time remaining: </p>
 		</div>
-		<form asp-action="VerifyOtp" method="post" >
+		<form asp-action="VerifyOtp" method="post">
 			<div class="form-group">
 				<label for="Otp">OTP</label>
+                <input type="hidden" asp-for="Email" />
 				<input type="text" id="Otp" name="Otp" placeholder="Enter you Otp" required asp-for="Otp"><br/>
 				<span asp-validation-for="Otp" class="text-danger" ></span>
 			</div>
+			@if (!string.IsNullOrEmpty(ViewData["ErrorMessage"]?.ToString()))
+			{
+				<div style="color:darkred; font-weight:bold;">
+					@ViewData["ErrorMessage"]
+				</div>
+			}
 			<button type="submit">Submit</button>
 		</form>
+        <form asp-action="SendOtp" method="post">
+            <input type="hidden" name="email" value="@Model.Email" />
+            <button type="submit" class="btn btn-secondary">Resend OTP</button>
+        </form>
 		
 	</div>
 </div>
 <script>
-	var timerElement = document.getElementById('timer');
-	var timeRemaining = 600; 
+    var timerElement = document.getElementById('timer');
+    var defaultTime = 600; 
+    var remainingTime;
+    @if (TempData["Message"]?.ToString() == "An OTP has been sent to your email.")
+    {
+        <text>
+            localStorage.setItem('remainingTime', defaultTime); 
+        </text>
+    }
 
-	var interval = setInterval(function () {
-		var minutes = Math.floor(timeRemaining / 60);
-		var seconds = timeRemaining % 60;
-		timerElement.textContent = 'Time remaining: ' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+        
+    if (localStorage.getItem('remainingTime')) {
+        remainingTime = parseInt(localStorage.getItem('remainingTime'), 10);
+    } 
+    else {
+        remainingTime = defaultTime;
+        localStorage.setItem('remainingTime', remainingTime); 
+    }
 
-		if (timeRemaining <= 0) {
-			clearInterval(interval);
-			timerElement.textContent = 'OTP expired.';
-		}
+   
+    var interval = setInterval(function () {
+        var minutes = Math.floor(remainingTime / 60);
+        var seconds = remainingTime % 60;
+        timerElement.textContent = 'Time remaining: ' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
 
-		timeRemaining--;
-	}, 1000);
+        if (remainingTime <= 0) {
+            clearInterval(interval);
+            timerElement.textContent = 'OTP expired.';
+            localStorage.removeItem('remainingTime'); 
+        } else {
+            localStorage.setItem('remainingTime', remainingTime); 
+        }
+
+        remainingTime--;
+    }, 1000);
 </script>

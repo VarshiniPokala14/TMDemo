@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using TMDemo.Models;
 using TMDemo.Repository;
 
 namespace TMDemo.Service
@@ -48,6 +47,13 @@ namespace TMDemo.Service
                 model.Emails.Add(email);
             }
         }
+        public void RemoveMember(AddUsersViewModel model, int index)
+        {
+            if (model != null && index >= 0 && index < model.Emails.Count)
+            {
+                model.Emails.RemoveAt(index);
+            }
+        }
 
         public Booking CreateBooking(AddUsersViewModel model, string userId)
         {
@@ -73,26 +79,22 @@ namespace TMDemo.Service
             };
 
             _bookingRepository.AddBooking(booking);
-            _bookingRepository.Save();
             string cacheKey = $"Bookings_{userId}";
             _cache.Remove(cacheKey);
             return booking;
         }
         public async Task<bool> ProcessPayment(int bookingId, string paymentMethod)
         {
-            // Retrieve the booking from the repository
+           
             var booking = _bookingRepository.GetBookingById(bookingId);
             if (booking == null)
             {
                 return false; 
             }
-
-            
             booking.PaymentSuccess = true;
 
             
             _bookingRepository.UpdateBooking(booking);
-            _bookingRepository.Save();
 
             return true; 
         }
@@ -151,7 +153,6 @@ namespace TMDemo.Service
             booking.CancellationDate = DateTime.Now;
 
             _bookingRepository.UpdateBooking(booking);
-            _bookingRepository.Save();
             string cacheKey = $"Bookings_{userId}";
             _cache.Remove(cacheKey);
         }
@@ -202,10 +203,10 @@ namespace TMDemo.Service
             if (model.OldStartDate != model.NewStartDate)
             {
                 _bookingRepository.UpdateBooking(booking);
-                _bookingRepository.Save();
                 string cacheKey = $"Bookings_{userId}";
                 _cache.Remove(cacheKey);
             }
+            
         }
     }
 

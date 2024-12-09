@@ -18,6 +18,7 @@
 
         [Required(ErrorMessage = "DOB is Required")]
         [DataType(DataType.Date)]
+        [DOBValidation(ErrorMessage = "Date shouldn't be Future date")]
         public DateTime DOB { get; set; }
 
         [Required(ErrorMessage = "Gender is Required")]

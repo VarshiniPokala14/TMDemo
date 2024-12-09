@@ -8,7 +8,6 @@
         Task AddEmergencyContactAsync(EmergencyContact emergencyContact);
         Task UpdateEmergencyContactAsync(EmergencyContact emergencyContact);
         Task<List<Booking>> GetBookingsByUserIdAsync(string userId);
-        Task<bool> SaveChangesAsync();
         string GetCurrentUserId();
     }
 }

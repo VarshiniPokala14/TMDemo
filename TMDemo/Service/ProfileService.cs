@@ -18,13 +18,10 @@ namespace TMDemo.Service
         {
             var cacheKey = $"UserDetail_{userId}";
 
-            // Check if the user is in cache
             if (!_cache.TryGetValue(cacheKey, out UserDetail user))
             {
-                // If not in cache, retrieve from DB
                 user = await _userRepository.GetUserAsync(userId);
 
-                // Add to cache with expiration
                 _cache.Set(cacheKey, user, TimeSpan.FromMinutes(30));
             }
 
@@ -37,7 +34,6 @@ namespace TMDemo.Service
 
             if (result)
             {
-                // Update the cache after successful DB update
                 var cacheKey = $"UserDetail_{user.Id}";
                 _cache.Set(cacheKey, user, TimeSpan.FromMinutes(30));
             }
@@ -76,7 +72,6 @@ namespace TMDemo.Service
                 await _userRepository.UpdateEmergencyContactAsync(existingContact);
             }
 
-            // Update cache
             var cacheKey = $"EmergencyContact_{userId}";
             _cache.Set(cacheKey, emergencyContact, TimeSpan.FromMinutes(30));
         }

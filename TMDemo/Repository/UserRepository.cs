@@ -1,5 +1,4 @@
-﻿
-namespace TMDemo.Repository
+﻿namespace TMDemo.Repository
 {
     public class UserRepository : IUserRepository
     {
@@ -52,11 +51,6 @@ namespace TMDemo.Repository
                 .Include(b => b.Trek)
                 .Where(b => b.UserId == userId && (b.IsCancelled == false || b.IsCancelled == null))
                 .ToListAsync();
-        }
-
-        public async Task<bool> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

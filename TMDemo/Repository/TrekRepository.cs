@@ -8,11 +8,6 @@
         {
             _context = context;
         }
-
-        
-
-        
-
         public async Task<List<Trek>> GetUpcomingTreksAsync(DateTime startDate, DateTime endDate)
         {
             return await _context.Treks
@@ -21,11 +16,7 @@
                 .ToListAsync();
         }
 
-        //public async Task<bool> SaveTrekReviewAsync(TrekReview review)
-        //{
-        //    _context.TrekReviews.Add(review);
-        //    return await _context.SaveChangesAsync() > 0;
-        //}
+        
         public async Task<byte[]> GetTrekImageAsync(int trekId)
         {
             return await _context.Treks

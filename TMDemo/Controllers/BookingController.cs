@@ -34,6 +34,15 @@ namespace TMDemo.Controllers
                     _bookingService.AddMember(model, email);
                     return View(model);
                 }
+                else if (action.StartsWith("RemoveMember-"))
+                {
+                    int indexToRemove;
+                    if (int.TryParse(action.Replace("RemoveMember-", ""), out indexToRemove))
+                    {
+                        _bookingService.RemoveMember(model, indexToRemove);
+                    }
+                    return View(model);
+                }
                 else if (action == "Book")
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -48,15 +57,13 @@ namespace TMDemo.Controllers
         [HttpPost]
         public async Task<IActionResult> ProcessPayment(int bookingId, string paymentMethod)
         {
-            // Call the service layer to process the payment
+ 
             var paymentProcessed = await _bookingService.ProcessPayment(bookingId, paymentMethod);
 
             if (!paymentProcessed)
             {
-                return NotFound(); // If the payment failed or the booking wasn't found
+                return NotFound(); 
             }
-
-            // If payment is successful, return the success view
             return View("BookingSuccess");
         }
         
@@ -91,8 +98,13 @@ namespace TMDemo.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 _bookingService.ProcessReschedule(model);
-                return View("RescheduleSuccess");
+                if (model.OldStartDate != model.NewStartDate)
+                {
+                    return View("RescheduleSuccess");
+                }
+                return RedirectToAction("MyBookings", "Profile");
             }
             return View("RescheduleBooking", model);
         }

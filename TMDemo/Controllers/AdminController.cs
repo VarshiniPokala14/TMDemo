@@ -4,6 +4,7 @@ using TMDemo.Service;
 
 namespace TMDemo.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;

@@ -22,18 +22,14 @@
         public void AddBooking(Booking booking)
         {
             _context.Bookings.Add(booking);
+            _context.SaveChanges();
         }
 
         public void UpdateBooking(Booking booking)
         {
             _context.Bookings.Update(booking);
-        }
-
-        public void Save()
-        {
             _context.SaveChanges();
         }
-
         public List<DateTime> GetAvailableDates(int trekId)
         {
             return _context.Availabilities

@@ -11,7 +11,7 @@
 }
 
 <div class="form-container">
-	<div class="form-wrapper" style="height:350px;">
+	<div class="form-wrapper" style="height:auto;">
 		<h2>Login</h2>
 		<form asp-action="Login" method="post">
 			<div class="form-group">
@@ -21,13 +21,25 @@
 			</div>
 			<div class="form-group">
 				<label for="Password">Password</label>
-				<input type="password" id="Password" name="Password" placeholder="Password" required asp-for="Password">
+				<input type="password" id="Password" name="Password" placeholder="Password" required asp-for="Password"><br/>
 				<span asp-validation-for="Password" class="text-danger"></span>
 			</div>
+			@if (!string.IsNullOrEmpty(ViewData["ErrorMessage"]?.ToString()))
+			{
+				<div style="color:darkred; font-weight:bold;">
+					@ViewData["ErrorMessage"]
+				</div>
+			}
 			<button type="submit">Login</button>
 			<p class="login-link">
 				<a asp-controller="Account" asp-action="ForgotPassword">ForgotPassword</a>
 			</p>
+			@if (!string.IsNullOrEmpty(ViewData["Message"]?.ToString()))
+			{
+				<div style="color:darkblue;">
+					@ViewData["Message"]
+				</div>
+			}
 		</form>
 	</div>
 </div>

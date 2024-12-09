@@ -16,6 +16,10 @@
         [HttpGet]
         public IActionResult Register()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         [HttpPost]
@@ -51,12 +55,18 @@
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
+                ViewData["ErrorMessage"] = "You're Registration failed";
+
             }
             return View(model);
         }
         [HttpGet]
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         [HttpPost]
@@ -75,7 +85,7 @@
                             new { userId = user.Id, token = confirmationCode }, Request.Scheme);
                         await _emailSender.SendEmailAsync(user.Email, "Email Authentication",
                             $"Please confirm your email by clicking on the link: <a href='{confirmationLink}'>Confirm Email</a>");
-                        TempData["Message"] = "A confirmation link has been sent to your email. Please confirm your email to proceed.";
+                        ViewData["Message"] = "A confirmation link has been sent to your email. Please confirm your email to proceed.";
                         return RedirectToAction("Login");
                     }
                     var result = await _signInManager.PasswordSignInAsync(user, model.Password,model.RememberMe, lockoutOnFailure: false);
@@ -104,6 +114,8 @@
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 }
+                ViewData["ErrorMessage"] = "Invalid Email or Password";
+
             }
             return View(model);
         }
@@ -131,6 +143,10 @@
         [HttpGet]
         public IActionResult ForgotPassword()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         
@@ -143,8 +159,8 @@
                 UserDetail user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    
-                    return RedirectToAction("ForgotPasswordConfirmation");
+                    ViewData["ErrorMessage"] = "Email you entered is not available or not a valid userEmail";
+                    return View(model);
                 }
                 
                 string otp = GenerateOtp();
@@ -155,15 +171,44 @@
                 HttpContext.Session.SetString("UserEmail", user.Email);
                 
                 await _emailSender.SendEmailAsync(model.Email, "Your OTP for Password Reset", $"Your OTP is {otp}. It will expire in 10 minutes.");
-                return RedirectToAction("VerifyOtp");
+				TempData["Message"] = "An OTP has been sent to your email.";
+				return RedirectToAction("VerifyOtp",new {Email=user.Email});
             }
             return View(model);
         }
-        
-        [HttpGet]
-        public IActionResult VerifyOtp()
+
+        [HttpPost]
+        public async Task<IActionResult> SendOtp(string email)
         {
-            return View();
+            
+            if (!string.IsNullOrEmpty(email))
+            {
+                string generatedOtp = GenerateOtp();
+                DateTime otpExpiry = DateTime.UtcNow.AddMinutes(10);
+
+                HttpContext.Session.SetString("OTP", generatedOtp);
+                HttpContext.Session.SetString("OTPExpiry", otpExpiry.ToString());
+                HttpContext.Session.SetString("UserEmail", email);
+
+                await _emailSender.SendEmailAsync(email, "Your OTP", $"Your OTP is {generatedOtp}");
+
+                TempData["Message"] = "An OTP has been sent to your email.";
+
+                return RedirectToAction("VerifyOtp",new VerifyOtpViewModel { Email=email});
+            }
+
+            TempData["ErrorMessage"] = "Unable to resend OTP. Please try again.";
+            return RedirectToAction("ForgotPassword");
+        }
+
+        [HttpGet]
+        public IActionResult VerifyOtp(string email)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View(new VerifyOtpViewModel { Email=email});
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -179,18 +224,22 @@
                
                 if (storedOtp == model.Otp && DateTime.UtcNow <= otpExpiry)
                 {
-                    return RedirectToAction("ResetPassword", new { email = userEmail,Otp=resetToken });
+                    return RedirectToAction("ResetPassword",new ResetPasswordViewModel { Email=userEmail,Otp=resetToken});
                 }
-                else
-                {
-                    return View(model);
-                }
+				
+				ViewData["ErrorMessage"] = "Invalid OTP";
+                
+
             }
             return View(model);
         }
         [HttpGet]
         public IActionResult ResetPassword(string email,string Otp)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View(new ResetPasswordViewModel { Email = email ,Otp=Otp});
         }
         
@@ -203,16 +252,16 @@
                 UserDetail user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
-                    return RedirectToAction("ResetPasswordConfirmation");
+                    ViewData["ErrorMessage"] = "Invalid User";
+                    return View(model);
                 }
                 var result = await _userManager.ResetPasswordAsync(user, model.Otp, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Login");
                 }
-                
+
             }
             return View(model);
         }
@@ -223,15 +272,7 @@
             await _signInManager.SignOutAsync(); 
             return RedirectToAction("Index", "Home"); 
         }
-        
-        public IActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
-        public IActionResult ResetPasswordConfirmation()
-        {
-            return View();
-        }
+
         private string GenerateOtp()
         {
             Random random = new Random();

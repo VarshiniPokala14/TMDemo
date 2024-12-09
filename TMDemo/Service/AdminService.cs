@@ -42,7 +42,7 @@ namespace TMDemo.Service
             await _adminRepository.AddTrekAsync(trek);
             
 
-            // Return the TrekId
+           
             return trek.TrekId;
         }
 
@@ -68,6 +68,7 @@ namespace TMDemo.Service
 
         public async Task<List<Trek>> GetAllTreksAsync()
         {
+            
             return await _adminRepository.GetAllTreksAsync();
         }
 

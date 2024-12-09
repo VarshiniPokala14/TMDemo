@@ -43,19 +43,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Account/Login";        
         options.AccessDeniedPath = "/Error/403";    
     });
-
-
-builder.Logging.AddDebug();
-builder.Logging.AddConsole();
-
 var app = builder.Build();
-
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
@@ -65,6 +58,6 @@ app.UseAuthorization();
 app.UseStatusCodePagesWithReExecute("/Error/{0}");
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}");
 app.MapRazorPages();
 app.Run();

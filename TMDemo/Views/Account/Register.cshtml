@@ -10,7 +10,7 @@
 }
 
 <div class="form-container">
-    <div class="form-wrapper" style="height:98%; margin-top:10px;">
+    <div class="form-wrapper" style="height:auto; margin-top:10px;">
         <h2>Create New Account</h2>
         <form asp-controller="Account" asp-action="Register" method="post">
             <div class="form-row">
@@ -94,10 +94,15 @@
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
             </div>
-           
+            @if (!string.IsNullOrEmpty(ViewData["ErrorMessage"]?.ToString()))
+            {
+                <div style="color:darkred; font-weight:bold;">
+                    @ViewData["ErrorMessage"]
+                </div>
+            }
             <button type="submit">Register</button>
             <p class="login-link">
-                Already have an Account? <a asp-controller="Account" asp-action="Login">Login</a>
+                Already have an Account? <a asp-controller="Account" asp-action="Login"><strong>Login</strong></a>
             </p>
         </form>
     </div>

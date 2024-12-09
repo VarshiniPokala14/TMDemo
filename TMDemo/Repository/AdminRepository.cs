@@ -14,10 +14,7 @@
             return await _context.Treks.ToListAsync();
         }
 
-        //public async Task<Trek> GetTrekByIdAsync(int trekId)
-        //{
-        //    return await _context.Treks.FirstOrDefaultAsync(t => t.TrekId == trekId);
-        //}
+       
 
         public async Task AddTrekAsync(Trek trek)
         {
@@ -37,10 +34,7 @@
             await _context.SaveChangesAsync();
         }
 
-        //public async Task<List<Availability>> GetAllAvailabilitiesAsync()
-        //{
-        //    return await _context.Availabilities.Include(a => a.Trek).OrderBy(a => a.StartDate).ToListAsync();
-        //}
+        
 
         public async Task<List<TrekAvailabilityViewModel>> GetTrekBookingsAsync(int trekId)
         {

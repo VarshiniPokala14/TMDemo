@@ -17,8 +17,19 @@
     backgroung-color: gray;
 }
 
-.email-field {
+
+/*.email-field {
+    display: flex;
+    justify-content: space-between;
+    gap: 0px;
+    width: 100%;
     margin-bottom: 1rem;
+}
+
+.info {
+    flex: 1;
+    background-color: #DEE1E6;
+    padding-left: 0px;
 }
 
     .email-field input {
@@ -34,7 +45,7 @@
         .email-field input:focus {
             border-color: #6B3738;
             outline: none;
-        }
+        }*/
 
 .form-control {
     padding: 0.75rem;
@@ -99,3 +110,4 @@
         .add-member-btn button:hover {
             background-color: #C80000;
         }
+

@@ -38,7 +38,6 @@ namespace TMDemo.Service
 
             var currentDate = DateTime.Now;
 
-            // Get the user's booking directly
             var userBooking = await _trekRepository.GetUserBookingAsync(userId, trekId);
 
             DateTime trekEndDate = userBooking?.TrekStartDate.AddDays(trek.DurationDays) ?? DateTime.MinValue;
