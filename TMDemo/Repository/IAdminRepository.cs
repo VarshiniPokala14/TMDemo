@@ -11,6 +11,9 @@
         Task<List<TrekAvailabilityViewModel>> GetTrekBookingsAsync(int trekId);
         Task<List<UserViewModel>> GetUsersForAvailabilityAsync(int availabilityId);
         Availability GetAvailabilityById(int availabilityId);
+        Task<bool> AvailabilityExistsAsync(int trekId);
+        Task<List<NotificationRequest>> GetNotificationRequestsAsync(int trekId);
+        Task RemoveNotificationRequests(List<NotificationRequest> notificationRequests);
     }
 
 }

@@ -14,6 +14,8 @@
         Task<bool> ReviewExistsAsync(string userId, int trekId);
         Task AddReviewAsync(TrekReview review);
         Task<List<Trek>> SearchTreksAsync(string searchString);
+        Task<NotificationRequest> GetNotificationRequestAsync(int trekId, string email);
+        Task AddNotificationRequest(NotificationRequest notificationRequest);
 
 
 

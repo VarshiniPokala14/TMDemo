@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using TMDemo.Repository;
 using TMDemo.Service;
 
@@ -9,11 +10,15 @@ namespace TMDemo.Service
         private readonly IAdminRepository _adminRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IBookingRepository _bookingRepository;
-        public AdminService(IAdminRepository adminRepository,ICategoryRepository categoryRepository,IBookingRepository bookingRepository)
+        private readonly IEmailSender _emailSender;
+        private readonly IMemoryCache _cache;
+        public AdminService(IAdminRepository adminRepository,ICategoryRepository categoryRepository,IBookingRepository bookingRepository,IEmailSender emailSender,IMemoryCache cache)
         {
             _adminRepository = adminRepository;
             _categoryRepository = categoryRepository;
             _bookingRepository = bookingRepository;
+            _emailSender = emailSender;
+            _cache = cache;
         }
 
         
@@ -61,10 +66,10 @@ namespace TMDemo.Service
             }
         }
 
-        public async Task AddAvailabilityAsync(Availability availability)
-        {
-            await   _adminRepository.AddAvailabilityAsync(availability);
-        }
+        //public async Task AddAvailabilityAsync(Availability availability)
+        //{
+        //    await   _adminRepository.AddAvailabilityAsync(availability);
+        //}
 
         public async Task<List<Trek>> GetAllTreksAsync()
         {
@@ -94,6 +99,44 @@ namespace TMDemo.Service
         public Availability GetAvailabilityById(int availabilityId)
         {
             return  _adminRepository.GetAvailabilityById(availabilityId);
+        }
+        public async Task AddAvailabilityAsync(int trekId, DateTime startDate, DateTime endDate,string month,int maxGroup)
+        {
+            var trek = _bookingRepository.GetTrekById(trekId);
+            if (trek == null)
+                throw new ArgumentException("Trek not found");
+
+            var availability = new Availability
+            {
+                TrekId = trekId,
+                StartDate = startDate,
+                EndDate = endDate,
+                Month = month,
+                MaxGroupSize=maxGroup
+            };
+
+            
+            
+
+            bool isFirstAvailability = !await _adminRepository.AvailabilityExistsAsync(trekId);
+            await _adminRepository.AddAvailabilityAsync(availability);
+            _cache.Remove("Availabilities:All");
+            if (isFirstAvailability)
+            {
+                await NotifyUsersAboutAvailabilityAsync(trekId);
+            }
+        }
+
+        private async Task NotifyUsersAboutAvailabilityAsync(int trekId)
+        {
+            var trek = _bookingRepository.GetTrekById(trekId);
+            var notificationRequests = await _adminRepository.GetNotificationRequestsAsync(trekId);
+            foreach (var request in notificationRequests)
+            {
+                await _emailSender.SendEmailAsync(request.Email, "New Trek Availability", $"Good News! The Trek you have been looking for to enjoy {trek.Name} is added.");
+            }
+
+            await _adminRepository.RemoveNotificationRequests(notificationRequests);
         }
     }
 

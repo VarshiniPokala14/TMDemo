@@ -1,4 +1,6 @@
-﻿using TMDemo.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using TMDemo.Repository;
 
 namespace TMDemo.Service
 {
@@ -7,13 +9,15 @@ namespace TMDemo.Service
         private readonly ITrekRepository _trekRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IMemoryCache _cache;
        // private readonly IBookingRepository _bookingRepository;
 
-        public TrekService(ITrekRepository trekRepository, IUserRepository userRepository, ICategoryRepository categoryRepository)
+        public TrekService(ITrekRepository trekRepository, IUserRepository userRepository, ICategoryRepository categoryRepository,IMemoryCache cache)
         {
             _trekRepository = trekRepository;
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
+            _cache = cache;
             // _bookingRepository = bookingRepository;
         }
 
@@ -35,6 +39,7 @@ namespace TMDemo.Service
             if (trek == null) return null;
 
             await CleanupPastAvailabilitiesAsync();
+            _cache.Remove("Availabilities:All");
 
             var currentDate = DateTime.Now;
 
@@ -126,5 +131,25 @@ namespace TMDemo.Service
             await _trekRepository.AddReviewAsync(review);
             return null;
         }
+        public async Task AddNotificationRequestAsync(int trekId, string email)
+        {
+            var notificationRequest = new NotificationRequest
+            {
+                TrekId = trekId,
+                Email = email,
+                RequestedOn = DateTime.Now
+            };
+
+            // Save the request to the database
+            _trekRepository.AddNotificationRequest(notificationRequest);
+            
+        }
+
+        public async Task<NotificationRequest> GetNotificationRequestAsync(int trekId, string email)
+        {
+            return await _trekRepository.GetNotificationRequestAsync(trekId, email);
+        }
+
+
     }
 }

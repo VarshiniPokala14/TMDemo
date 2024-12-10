@@ -8,11 +8,13 @@ namespace TMDemo.Service
         private readonly IBookingRepository _bookingRepository;
         private readonly IMemoryCache _cache;
         private readonly IUserRepository _userRepository;
-        public BookingService(IBookingRepository bookingRepository,IMemoryCache cache, IUserRepository userRepository)
+        private readonly ITrekRepository _trekRepository;
+        public BookingService(IBookingRepository bookingRepository,IMemoryCache cache, IUserRepository userRepository, ITrekRepository trekRepository)
         {
             _bookingRepository = bookingRepository;
             _cache = cache;
             _userRepository = userRepository;
+            _trekRepository = trekRepository;
         }
 
         public AddUsersViewModel GetAddUsersViewModel(int trekId, string startDate, string userEmail)
@@ -55,14 +57,19 @@ namespace TMDemo.Service
             }
         }
 
-        public Booking CreateBooking(AddUsersViewModel model, string userId)
+        public async Task<Booking> CreateBookingAsync(AddUsersViewModel model, string userId)
         {
             Trek trek = _bookingRepository.GetTrekById(model.TrekId);
             if (trek == null)
             {
                 throw new KeyNotFoundException("Trek not found.");
             }
+            int remainingSlots = await _trekRepository.GetRemainingSlotsAsync(model.TrekId, model.StartDate);
 
+            if (model.Emails.Count > remainingSlots)
+            {
+                throw new InvalidOperationException($"Only {remainingSlots} slots are available for this trek.");
+            }
             decimal amount = trek.Price * model.Emails.Count;
             decimal tax = amount * 0.05M;
             decimal totalAmount = amount + tax + 10;

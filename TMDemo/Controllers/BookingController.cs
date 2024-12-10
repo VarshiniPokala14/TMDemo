@@ -23,9 +23,38 @@ namespace TMDemo.Controllers
             return View(viewModel);
         }
 
-        
+
+        //[HttpPost]
+        //public IActionResult AddUsers(AddUsersViewModel model, string action, string? email)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (action == "AddMember")
+        //        {
+        //            _bookingService.AddMember(model, email);
+        //            return View(model);
+        //        }
+        //        else if (action.StartsWith("RemoveMember-"))
+        //        {
+        //            int indexToRemove;
+        //            if (int.TryParse(action.Replace("RemoveMember-", ""), out indexToRemove))
+        //            {
+        //                _bookingService.RemoveMember(model, indexToRemove);
+        //            }
+        //            return View(model);
+        //        }
+        //        else if (action == "Book")
+        //        {
+        //            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //            var booking = _bookingService.CreateBooking(model, userId);
+
+        //            return View("PaymentPage", booking);
+        //        }
+        //    }
+        //    return Ok(ModelState);
+        //}
         [HttpPost]
-        public IActionResult AddUsers(AddUsersViewModel model, string action, string? email)
+        public async Task<IActionResult> AddUsers(AddUsersViewModel model, string action, string? email)
         {
             if (ModelState.IsValid)
             {
@@ -45,15 +74,21 @@ namespace TMDemo.Controllers
                 }
                 else if (action == "Book")
                 {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    var booking = _bookingService.CreateBooking(model, userId);
-
-                    return View("PaymentPage", booking);
+                    try
+                    {
+                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        var booking = await _bookingService.CreateBookingAsync(model, userId);
+                        return View("PaymentPage", booking);
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        ModelState.AddModelError("", ex.Message);
+                    }
                 }
             }
-            return Ok(ModelState);
+            return View(model);
         }
-       
+
         [HttpPost]
         public async Task<IActionResult> ProcessPayment(int bookingId, string paymentMethod)
         {

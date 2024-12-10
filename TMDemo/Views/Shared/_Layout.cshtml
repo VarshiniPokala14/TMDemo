@@ -125,13 +125,18 @@
                     text-decoration: underline;
                 }
 
-        
+       
+        .nav-links .active a {
+            font-weight: bold;
+            color: #007bff; 
+            text-decoration: none;
+        }
+    
     </style>
 </head>
 
 
 <body>
-
     <header class="header">
         <nav class="navbar">
             <div class="logo">
@@ -141,7 +146,7 @@
                     <img style="width:140px;" src="~/images/Logo1.png" />
                 </a>
             </div>
-            <ul class="nav-links" style="margin-top:8px;">
+           @*  <ul class="nav-links" style="margin-top:10px;">
                 <li><a href="/Trek/AllTreks">All Treks</a></li>
                 <li><a href="/Trek/UpcomingTreks">Upcoming Treks</a></li>
                 <li class="dropdown">
@@ -155,8 +160,30 @@
                     </div>
                 </li>
                 <li><a href="/Home/AboutUs">About Us</a></li>
+            </ul> *@
+            <ul class="nav-links" style="margin-top:10px;">
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Trek" && ViewContext.RouteData.Values["action"]?.ToString() == "AllTreks" ? "active" : "")">
+                    <a href="/Trek/AllTreks">All Treks</a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Trek" && ViewContext.RouteData.Values["action"]?.ToString() == "UpcomingTreks" ? "active" : "")">
+                    <a href="/Trek/UpcomingTreks">Upcoming Treks</a>
+                </li>
+                <li class="dropdown @(ViewContext.RouteData.Values["controller"]?.ToString() == "Category" ? "active" : "")">
+                    <a href="#" class="dropbtn">Categories</a>
+                    <div class="dropdown-content">
+                        <a href="/Category/BySeason">Season</a>
+                        <a href="/Category/ByDuration">Duration</a>
+                        <a href="/Category/ByMonth">Month</a>
+                        <a href="/Category/ByDifficulty">Difficulty</a>
+                        <a href="/Category/ByRegion">Region</a>
+                    </div>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "AboutUs" ? "active" : "")">
+                    <a href="/Home/AboutUs">About Us</a>
+                </li>
             </ul>
-            <div class="right-section">
+
+            <div class="right-section" style="margin-top:0px;">
 
                 <div class="right-section">
                     @if (User.Identity.IsAuthenticated)
@@ -168,12 +195,9 @@
 
                                 <div><a href="/Profile/MyBookings">My Bookings</a></div>
 
-                                <div style="margin-left:0px;  padding: 0.1rem 1rem;  text-decoration: none; color: #000;">
-                                    <form class="align-content-center" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                        <button type="submit" class="nav-link btn btn-link text-dark dropdown-item" style=" margin-left:0px;">Logout</button>
-                                    </form>
+                                <div>
+                                    <a href="@Url.Action("Logout", "Account", new { returnUrl = Url.Action("Index", "Home") })" class="dropdown-item" style="text-decoration: none; color: #000;">Logout</a>
                                 </div>
-
 
                             </div>
                         </div>
@@ -181,9 +205,12 @@
                     }
                     else
                     {
-
                         <a href="/Account/Register" class="profile-link">
-                            <span class="profile-icon">👤</span> Register
+                            SignUp
+                        </a>
+
+                        <a href="/Account/Login" class="profile-link">
+                             SignIn
                         </a>
                     }
                 </div>
@@ -271,7 +298,7 @@
                     <div class="line"></div>
                     <ul>
                         <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "Uttarakhand" })" style="text-decoration:none; color:black;">Uttarakhand</a></li>
-                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "Nagaland" })" style="text-decoration:none; color:black;">Nagaland</a></li>
+                        <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "Telangana" })" style="text-decoration:none; color:black;">Telangana</a></li>
                         <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "Manipur" })" style="text-decoration:none; color:black;">Manipur</a></li>
                         <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "Sikkim" })" style="text-decoration:none; color:black;">Sikkim</a></li>
                         <li><a href="@Url.Action("FilterByCategory", "Category", new { categoryType = "Region", filterValue = "TamilNadu" })" style="text-decoration:none; color:black;">TamilNadu</a></li>
@@ -280,8 +307,8 @@
                 </div>
             </div>
 
-            <div class="footer-links">
-                <div>
+            <div class="footer-links" style="margin-left:20px;">
+                <div style="padding-right:230px;">
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="/Trek/UpcomingTreks">Upcoming Treks</a></li>
@@ -290,7 +317,7 @@
                         <li><a href="/Home/AboutUs">About Us</a></li>
                     </ul>
                 </div>
-                <div>
+                <div style="padding-right:170px;">
                     <h3>Follow us on</h3>
                     <ul class="social-links">
                         <li>
@@ -315,7 +342,7 @@
                         </li>
                     </ul>
                 </div>
-                <div>
+                <div style="padding-left:50px;">
                     <h3>Contact us</h3>
                     <ul>
                         <li><span>📞</span> 9876543210</li>

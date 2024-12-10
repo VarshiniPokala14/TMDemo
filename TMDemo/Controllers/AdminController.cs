@@ -83,11 +83,9 @@ namespace TMDemo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddAvailability(Availability availability)
         {
-            // Remove unnecessary validations if already handled
             ModelState.Remove("Month");
             ModelState.Remove("EndDate");
 
-            // Validate Trek existence
             var trek = await _adminService.GetTrekByIdAsync(availability.TrekId);
             if (trek == null)
             {
@@ -96,7 +94,6 @@ namespace TMDemo.Controllers
                 return View(availability);
             }
 
-            // Validate StartDate
             if (availability.StartDate == default)
             {
                 ModelState.AddModelError("StartDate", "Start date is required.");
@@ -104,15 +101,15 @@ namespace TMDemo.Controllers
                 return View(availability);
             }
 
-            // Set derived properties
             availability.Month = availability.StartDate.ToString("MMMM");
             availability.EndDate = availability.StartDate.AddDays(trek.DurationDays - 1);
 
-            // Save availability if model is valid
             if (ModelState.IsValid)
             {
-                await _adminService.AddAvailabilityAsync(availability);
+               
+                await _adminService.AddAvailabilityAsync(availability.TrekId, availability.StartDate, availability.EndDate,availability.Month,availability.MaxGroupSize);
                 return RedirectToAction("Index", "Admin");
+                
             }
 
             // Reload Treks for the View
@@ -150,7 +147,6 @@ namespace TMDemo.Controllers
             string trekName = availability.Trek.Name;
             DateTime trekStartDate = availability.StartDate;
 
-            // Pass the data to the View via ViewBag
             ViewBag.TrekName = trekName;
             ViewBag.TrekStartDate = trekStartDate.ToString("yyyy-MM-dd");
             return View(users);

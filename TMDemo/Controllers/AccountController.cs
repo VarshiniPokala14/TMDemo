@@ -1,4 +1,7 @@
-﻿namespace TMDemo.Controllers
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+
+namespace TMDemo.Controllers
 {
     public class AccountController : Controller
     {
@@ -265,13 +268,18 @@
             }
             return View(model);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+
+        
+        [HttpGet]
+        public async Task<IActionResult> Logout(string returnUrl = "/")
         {
-            await _signInManager.SignOutAsync(); 
-            return RedirectToAction("Index", "Home"); 
+            
+            await _signInManager.SignOutAsync();
+
+            
+            return Redirect(returnUrl);
         }
+
 
         private string GenerateOtp()
         {

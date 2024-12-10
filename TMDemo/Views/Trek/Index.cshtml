@@ -1,29 +1,25 @@
 ﻿@model IEnumerable<Trek>
 
 <div class="container">
-    <div class="row">
+    <div class="row" style="margin-top:20px;">
         @if (Model == null || !Model.Any())
         {
-            <div class="col-12">
-                <p>No treks available. Loading all treks...</p>
-                @{
-                    var allTreks = ViewContext.HttpContext.RequestServices
-                    .GetService(typeof(TMDemo.Data.AppDbContext)) as TMDemo.Data.AppDbContext;
-                    var allTrekList = allTreks.Treks.ToList();
-                     
-                        foreach (var trek in allTrekList)
-                        {
-                            @await Html.PartialAsync("_TrekCard", trek)
-                        }
-                }
-            </div>
+            <p style="font-size:40px;font-weight:bold;color:darkred;"><strong>No treks available for your search. Loading all treks...</strong></p>
+            var allTreks = ViewContext.HttpContext.RequestServices
+            .GetService(typeof(TMDemo.Data.AppDbContext)) as TMDemo.Data.AppDbContext;
+            var allTrekList = allTreks.Treks.ToList();
+
+            foreach (var trek in allTrekList)
+            {
+                @await Html.PartialAsync("_TrekCard", trek)
+            }
         }
         else
         {
             foreach (var trek in Model)
             {
                 @await Html.PartialAsync("_TrekCard", trek)
-            }
+            }                         
         }
     </div>
 </div>

@@ -9,6 +9,7 @@
         Task<byte[]> GetTrekImageAsync(int trekId);
         Task<string> AddReviewAsync( int trekId, string reviewText);
         Task<List<Trek>> SearchTreksAsync(string searchString);
-
+        Task AddNotificationRequestAsync(int trekId, string email);
+        Task<NotificationRequest> GetNotificationRequestAsync(int trekId, string email);
     }
 }

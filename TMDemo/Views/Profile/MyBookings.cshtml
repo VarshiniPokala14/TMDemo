@@ -1,20 +1,55 @@
-﻿@model IEnumerable<Booking>
+﻿@model MyBookingsViewModel
 
-<h2>My Bookings</h2>
+<h2 style="font-family:'Times New Roman', Times, serif; padding:10px; font:10px; color:black; padding:20px;text-align:center;">My Bookings</h2>
+
 <div class="container">
-    @if (!Model.Any())
+    @if (!Model.CompletedBookings.Any() && !Model.IncompleteBookings.Any())
     {
         <p style="background-color:lightgray;padding:20px;margin:20px;">You don't have any bookings yet.</p>
     }
     else
     {
-        <div class="row">
-            @foreach (var booking in Model)
-            {
-                @await Html.PartialAsync("_BookingCard", booking)
+        <!-- Tabs for navigation -->
+        <div class="tabs">
+            <button class="tab-link active" onclick="openTab(event, 'incomplete-treks')">Incomplete Treks</button>
+            <button class="tab-link" onclick="openTab(event, 'completed-treks')">Completed Treks</button>
+        </div>
 
-            }
+        <!-- Tab content -->
+        <div class="tab-content">
+            <!-- Incomplete Treks -->
+            <div id="incomplete-treks" class="tab-pane active">
+                <div class="card-grid">
+                    @if (Model.IncompleteBookings.Any())
+                    {
+                        @foreach (var booking in Model.IncompleteBookings)
+                        {
+                            @await Html.PartialAsync("_BookingCard", booking)
+                        }
+                    }
+                    else
+                    {
+                        <p>No upcoming treks.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Completed Treks -->
+            <div id="completed-treks" class="tab-pane">
+                <div class="card-grid">
+                    @if (Model.CompletedBookings.Any())
+                    {
+                        @foreach (var booking in Model.CompletedBookings)
+                        {
+                            @await Html.PartialAsync("_BookingCard", booking)
+                        }
+                    }
+                    else
+                    {
+                        <p>No completed treks.</p>
+                    }
+                </div>
+            </div>
         </div>
     }
 </div>
-

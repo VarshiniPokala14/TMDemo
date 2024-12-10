@@ -75,8 +75,7 @@ namespace TMDemo.Service
             var cacheKey = $"EmergencyContact_{userId}";
             _cache.Set(cacheKey, emergencyContact, TimeSpan.FromMinutes(30));
         }
-
-        public async Task<List<Booking>> GetBookingsByUserIdAsync(string userId)
+        public async Task<MyBookingsViewModel> GetBookingsByUserIdAsync(string userId)
         {
             var cacheKey = $"Bookings_{userId}";
 
@@ -86,7 +85,19 @@ namespace TMDemo.Service
                 _cache.Set(cacheKey, bookings, TimeSpan.FromMinutes(30));
             }
 
-            return bookings;
+            var completedBookings = bookings
+                .Where(b => b.TrekStartDate.AddDays(b.Trek.DurationDays - 1) <= DateTime.Now && (b.IsCancelled == false || b.IsCancelled == null))
+                .ToList();
+
+            var incompleteBookings = bookings
+                .Where(b => b.TrekStartDate.AddDays(b.Trek.DurationDays - 1) > DateTime.Now && (b.IsCancelled == false || b.IsCancelled == null))
+                .ToList();
+
+            return new MyBookingsViewModel
+            {
+                CompletedBookings = completedBookings,
+                IncompleteBookings = incompleteBookings
+            };
         }
     }
 }

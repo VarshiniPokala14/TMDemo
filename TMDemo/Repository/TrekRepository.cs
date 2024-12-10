@@ -85,6 +85,18 @@
             _context.TrekReviews.Add(review);
             await _context.SaveChangesAsync();
         }
+        public async Task AddNotificationRequest(NotificationRequest notificationRequest)
+        {
+             _context.NotificationRequests.AddAsync(notificationRequest);
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task<NotificationRequest> GetNotificationRequestAsync(int trekId, string email)
+        {
+            return await _context.NotificationRequests
+                                  .FirstOrDefaultAsync(nr => nr.TrekId == trekId && nr.Email == email);
+        }
         public async Task<List<Trek>> SearchTreksAsync(string searchString)
         {
             var query = _context.Treks.AsQueryable();

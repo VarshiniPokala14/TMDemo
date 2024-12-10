@@ -5,7 +5,7 @@
      
 }
 <link href="~/css/adduserbooking.css" rel="stylesheet" />
-<div class="form-container">
+<div class="form-container" style="height:auto;">
 	<div class="form-wrapper d-flex flex-column justify-content-center" style="height:auto;">
         <h2>Add TrekMates</h2>
         <form asp-action="AddUsers" method="post" style=" justify-content:center; align-content:center;">
@@ -31,8 +31,17 @@
                 <button type="submit" name="action" value="AddMember" class="btn btn-secondary">+ Member to join Trek</button>
 			</div>
             <button type="submit" name="action" value="Book" class="btn btn-primary">Proceed With the Registration</button>
-			
-			
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+
 		</form>
 	</div>
 </div>

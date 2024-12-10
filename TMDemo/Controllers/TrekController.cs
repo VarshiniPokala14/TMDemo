@@ -1,4 +1,5 @@
-﻿using TMDemo.Service;
+﻿using Microsoft.EntityFrameworkCore;
+using TMDemo.Service;
 
 public class TrekController : Controller
 {
@@ -59,4 +60,31 @@ public class TrekController : Controller
 
         return View(treks);
     }
+    [Authorize]
+    [HttpPost]
+    
+    public async Task<IActionResult> NotifyMe(int trekId)
+    {
+        string userEmail = User.FindFirstValue(ClaimTypes.Email);
+
+        // Check if the user has already requested notifications for this trek
+        var existingRequest = await _trekService.GetNotificationRequestAsync(trekId, userEmail);
+
+        if (existingRequest == null)
+        {
+            // Add a new notification request
+            await _trekService.AddNotificationRequestAsync(trekId, userEmail);
+            TempData["NotificationMessage"] = "You will be notified when availability is added for this trek.";
+        }
+        else
+        {
+            TempData["NotificationMessage"] = "You are already subscribed for notifications for this trek.";
+        }
+
+        return RedirectToAction("Details", new { trekId = trekId });
+    }
+
+
+
+
 }

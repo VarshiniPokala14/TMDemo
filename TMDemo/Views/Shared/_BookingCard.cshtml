@@ -1,4 +1,4 @@
-﻿<div class="card col-md-4">
+﻿<div class="card">
     <img src="@Url.Action("GetImage", "Trek", new { trekId = Model.TrekId })" class="card-img-top img-fluid" alt="@Model.Trek.Name">
 
     <div class="card-body">
@@ -6,24 +6,27 @@
             <h5 class="card-title fw-bold">@Model.Trek.Name</h5>
 
             <div class="dropdown">
-                @if(Model.TrekStartDate.AddDays(Model.Trek.DurationDays)>=DateTime.Now){
-                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                    &#8226;&#8226;&#8226;
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                    <li>
-                        <a class="dropdown-item text-danger" href="@Url.Action("CancelBooking", "Booking", new { bookingId = Model.BookingId })">
-                            Cancel
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="@Url.Action("RescheduleBooking", "Booking", new { bookingId = Model.BookingId })">
-                            Reschedule
-                        </a>
-                    </li>
-                </ul>
+                @if (Model.TrekStartDate.AddDays(Model.Trek.DurationDays) >= DateTime.Now)
+                {
+                    <button class="btn btn-secondary btn-sm dropdown-toggle vertical-dots" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>&#8226;</span>
+                        <span>&#8226;</span>
+                        <span>&#8226;</span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="dropdown-item text-danger" href="@Url.Action("CancelBooking", "Booking", new { bookingId = Model.BookingId })">
+                                Cancel
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="@Url.Action("RescheduleBooking", "Booking", new { bookingId = Model.BookingId })">
+                                Reschedule
+                            </a>
+                        </li>
+                    </ul>
                 }
-                
             </div>
         </div>
 
@@ -42,3 +45,25 @@
         </div>
     </div>
 </div>
+
+<link href="~/css/bookingcard.css" rel="stylesheet" />
+<script>
+    /* JavaScript to handle tab switching */
+    function openTab(event, tabId) {
+        // Hide all tab panes
+        var tabPanes = document.getElementsByClassName("tab-pane");
+        for (var i = 0; i < tabPanes.length; i++) {
+            tabPanes[i].classList.remove("active");
+        }
+
+        // Remove active class from all tab links
+        var tabLinks = document.getElementsByClassName("tab-link");
+        for (var i = 0; i < tabLinks.length; i++) {
+            tabLinks[i].classList.remove("active");
+        }
+
+        // Show the selected tab and make the link active
+        document.getElementById(tabId).classList.add("active");
+        event.currentTarget.classList.add("active");
+    }
+</script>

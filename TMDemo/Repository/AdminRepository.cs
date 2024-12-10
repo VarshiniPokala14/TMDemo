@@ -30,7 +30,7 @@
 
         public async Task AddAvailabilityAsync(Availability availability)
         {
-            await _context.Availabilities.AddAsync(availability);
+             _context.Availabilities.AddAsync(availability);
             await _context.SaveChangesAsync();
         }
 
@@ -77,6 +77,26 @@
             return _context.Availabilities.Include(t=>t.Trek)
                 .FirstOrDefault(a=>a.AvailabilityId == availability);
         }
+        public async Task<bool> AvailabilityExistsAsync(int trekId)
+        {
+            return await _context.Availabilities
+                .AnyAsync(a => a.TrekId == trekId); // Use AnyAsync for condition-based checks
+        }
+
+
+        public async Task<List<NotificationRequest>> GetNotificationRequestsAsync(int trekId)
+        {
+            return await _context.NotificationRequests
+                .Where(nr => nr.TrekId == trekId)
+                .ToListAsync();
+        }
+
+        public async Task RemoveNotificationRequests(List<NotificationRequest> notificationRequests)
+        {
+            _context.NotificationRequests.RemoveRange(notificationRequests);
+            await _context.SaveChangesAsync();
+        }
+
     }
 
 }

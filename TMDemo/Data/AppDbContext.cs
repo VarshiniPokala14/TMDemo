@@ -16,6 +16,7 @@ namespace TMDemo.Data
         public DbSet<TrekReview> TrekReviews { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<TrekPlan> TrekPlans { get; set; }
+        public DbSet<NotificationRequest> NotificationRequests { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -76,6 +77,9 @@ namespace TMDemo.Data
                 .WithOne(tp => tp.Trek)
                 .HasForeignKey(tp => tp.TrekId)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<NotificationRequest>()
+                .ToTable("NotificationRequests")
+                .HasKey(nr => nr.NotificationRequestId);
 
         }
     }

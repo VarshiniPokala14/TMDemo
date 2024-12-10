@@ -5,7 +5,7 @@
         AddUsersViewModel GetAddUsersViewModel(int trekId, string startDate, string userEmail);
         void AddMember(AddUsersViewModel model, string email);
         void RemoveMember(AddUsersViewModel model, int index);
-        Booking CreateBooking(AddUsersViewModel model, string userId);
+        Task<Booking> CreateBookingAsync(AddUsersViewModel model, string userId);
         Task<bool> ProcessPayment(int bookingId, string paymentMethod);
 
         CancellationViewModel GetCancellationViewModel(int bookingId);

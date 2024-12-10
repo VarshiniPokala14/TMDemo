@@ -1,97 +1,113 @@
 ﻿using TMDemo.Service;
-
-public class ProfileController : Controller
+namespace TMDemo.Controllers
 {
-    private readonly IProfileService _profileService;
 
-    public ProfileController(IProfileService profileService)
+    public class ProfileController : Controller
     {
-        _profileService = profileService;
-    }
+        private readonly IProfileService _profileService;
 
-    public async Task<IActionResult> Index()
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId == null)
+        public ProfileController(IProfileService profileService)
         {
-            return RedirectToAction("Login", "Account");
+            _profileService = profileService;
         }
 
-        var user = await _profileService.GetUserAsync(userId);
-        if (user == null)
+        public async Task<IActionResult> Index()
         {
-            return RedirectToAction("Login", "Account");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _profileService.GetUserAsync(userId);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View(user);
         }
 
-        return View(user);
-    }
-
-    public async Task<IActionResult> Edit()
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId == null)
+        public async Task<IActionResult> Edit()
         {
-            return RedirectToAction("Login", "Account");
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _profileService.GetUserAsync(userId);
+            var emergencyContact = await _profileService.GetEmergencyContactAsync(userId);
+
+            return View(new ProfileViewModel { UserDetail = user, EmergencyContact = emergencyContact ?? new EmergencyContact() });
         }
 
-        var user = await _profileService.GetUserAsync(userId);
-        var emergencyContact = await _profileService.GetEmergencyContactAsync(userId);
-
-        return View(new ProfileViewModel { UserDetail = user, EmergencyContact = emergencyContact ?? new EmergencyContact() });
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Edit(ProfileViewModel model)
-    {
-        if (!ModelState.IsValid)
+        [HttpPost]
+        public async Task<IActionResult> Edit(ProfileViewModel model)
         {
-            return View(model);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _profileService.GetUserAsync(userId);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            user.FirstName = model.UserDetail.FirstName;
+            user.LastName = model.UserDetail.LastName;
+            user.PhoneNumber = model.UserDetail.PhoneNumber;
+            user.DOB = model.UserDetail.DOB;
+            user.Gender = model.UserDetail.Gender;
+            user.Country = model.UserDetail.Country;
+            user.City = model.UserDetail.City;
+            user.State = model.UserDetail.State;
+
+            var updateResult = await _profileService.UpdateUserAsync(user);
+            if (!updateResult)
+            {
+                ModelState.AddModelError(string.Empty, "Error updating user details.");
+                return View(model);
+            }
+
+            await _profileService.AddOrUpdateEmergencyContactAsync(userId, model.EmergencyContact);
+
+            return RedirectToAction("Index");
         }
 
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId == null)
-        {
-            return RedirectToAction("Login", "Account");
-        }
+		//public async Task<IActionResult> MyBookings()
+		//{
+		//    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+		//    if (userId == null)
+		//    {
+		//        return RedirectToAction("Login", "Account");
+		//    }
 
-        var user = await _profileService.GetUserAsync(userId);
-        if (user == null)
-        {
-            return RedirectToAction("Login", "Account");
-        }
+		//    var bookings = await _profileService.GetBookingsByUserIdAsync(userId);
 
-        user.FirstName = model.UserDetail.FirstName;
-        user.LastName = model.UserDetail.LastName;
-        user.PhoneNumber = model.UserDetail.PhoneNumber;
-        user.DOB = model.UserDetail.DOB;
-        user.Gender = model.UserDetail.Gender;
-        user.Country = model.UserDetail.Country;
-        user.City = model.UserDetail.City;
-        user.State = model.UserDetail.State;
+		//    return View(bookings);
+		//}
+		public async Task<IActionResult> MyBookings()
+		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			if (userId == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
 
-        var updateResult = await _profileService.UpdateUserAsync(user);
-        if (!updateResult)
-        {
-            ModelState.AddModelError(string.Empty, "Error updating user details.");
-            return View(model);
-        }
+			var viewModel = await _profileService.GetBookingsByUserIdAsync(userId);
+			return View(viewModel);
+		}
 
-        await _profileService.AddOrUpdateEmergencyContactAsync(userId, model.EmergencyContact);
+	}
 
-        return RedirectToAction("Index");
-    }
 
-    public async Task<IActionResult> MyBookings()
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId == null)
-        {
-            return RedirectToAction("Login", "Account");
-        }
-
-        var bookings = await _profileService.GetBookingsByUserIdAsync(userId);
-
-        return View(bookings);
-    }
 }
-

@@ -1,0 +1,75 @@
+﻿
+/* Container */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Ensures exactly 3 columns per row */
+    gap: 20px; /* Space between cards */
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+    .card img {
+        width: 100%; /* Makes the image span the full width of the card */
+        height: 200px; /* Sets a consistent height for the image */
+        object-fit: cover; /* Ensures the image is cropped proportionally without distortion */
+    }
+
+.card-body {
+    padding: 15px;
+    font-family: Arial, sans-serif;
+}
+
+.trek-card-actions a {
+    margin-top: 10px;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #28a745;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab-link {
+    flex: 1;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+}
+
+    .tab-link.active {
+        background-color: #007bff;
+        color: white;
+        border-bottom: none;
+    }
+
+/* Tab Content */
+.tab-content {
+    border: 1px solid #ccc;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.tab-pane {
+    display: none;
+}
+
+    .tab-pane.active {
+        display: block;
+    }

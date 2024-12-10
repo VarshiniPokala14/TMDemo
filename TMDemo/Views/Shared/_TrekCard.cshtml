@@ -57,7 +57,20 @@
                 }
                 else
                 {
+                    
+                    var notificationMessage = TempData["NotificationMessage"] as string;
+                    
+
+                    @if (!string.IsNullOrEmpty(notificationMessage))
+                    {
+                        <div class="alert alert-success mt-3" role="alert">
+                        @notificationMessage
+                    </div>
+                     }
                     <p>No availability dates found for this trek.</p>
+                    <form method="post" action="@Url.Action("NotifyMe", "Trek", new { trekId = Model.TrekId })">
+                        <button class="btn btn-warning" type="submit">Notify Me</button>
+                    </form>
                 }
             </div>
             
