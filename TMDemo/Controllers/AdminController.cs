@@ -1,6 +1,4 @@
 ﻿
-using TrekMasters.Models;
-using TrekMasters.Service;
 
 namespace TrekMasters.Controllers
 {
@@ -103,16 +101,22 @@ namespace TrekMasters.Controllers
 
             availability.Month = availability.StartDate.ToString("MMMM");
             availability.EndDate = availability.StartDate.AddDays(trek.DurationDays - 1);
-
+            var existingAvailability = await _adminService.CheckAvailabilityConflictAsync(availability.TrekId, availability.StartDate, availability.EndDate);
+            if (existingAvailability)
+            {
+                TempData["Message"] = $"Can't add Availability for {trek.Name} at that date {availability.StartDate.ToShortDateString} to {availability.EndDate.ToShortDateString} because it is overlapping with exsisting Availabilities.";
+                return RedirectToAction("Index","Admin");
+           
+            }
             if (ModelState.IsValid)
             {
                
                 await _adminService.AddAvailabilityAsync(availability.TrekId, availability.StartDate, availability.EndDate,availability.Month,availability.MaxGroupSize);
+                TempData["Message"] = "Availability added Successfully.";
                 return RedirectToAction("Index", "Admin");
                 
             }
 
-            // Reload Treks for the View
             ViewBag.Treks = await _adminService.GetAllTreksAsync();
             return View(availability);
         }

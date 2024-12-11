@@ -1,5 +1,4 @@
-﻿using TrekMasters.Service;
-
+﻿
 namespace TrekMasters.Controllers
 {
     public class CategoryController : Controller

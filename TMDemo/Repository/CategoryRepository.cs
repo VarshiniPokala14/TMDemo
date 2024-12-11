@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-
+﻿
 namespace TrekMasters.Repository
 {
     public class CategoryRepository : ICategoryRepository

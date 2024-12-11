@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using TrekMasters.Repository;
+﻿
 
 namespace TrekMasters.Service
 {
@@ -41,13 +40,19 @@ namespace TrekMasters.Service
                 Emails = emails
             };
         }
-
+        
         public void AddMember(AddUsersViewModel model, string email)
         {
+            
             if (model != null && !string.IsNullOrEmpty(email))
             {
                 model.Emails.Add(email);
             }
+            //for (int i = 0; i < model.Emails.Count; i++)
+            //{
+            //    Console.Write(i+"\t");
+            //    Console.Write(model.Emails[i]);
+            //}
         }
         public void RemoveMember(AddUsersViewModel model, int index)
         {
@@ -55,6 +60,11 @@ namespace TrekMasters.Service
             {
                 model.Emails.RemoveAt(index);
             }
+            //for (int i = 0; i < model.Emails.Count; i++)
+            //{
+            //    Console.Write(i + "\t");
+            //    Console.Write(model.Emails[i]);
+            //}
         }
 
         public async Task<Booking> CreateBookingAsync(AddUsersViewModel model, string userId)

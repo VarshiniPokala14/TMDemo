@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using TrekMasters.Repository;
-
+﻿
 namespace TrekMasters.Service
 {
     public class ProfileService : IProfileService

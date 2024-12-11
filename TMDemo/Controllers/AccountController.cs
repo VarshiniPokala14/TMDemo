@@ -1,6 +1,21 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-
+﻿global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Mvc;
+global using TrekMasters.Models;
+global using Microsoft.AspNetCore.Identity.UI.Services;
+global using TrekMasters.ViewModel;
+global using TrekMasters.Data;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.AspNetCore.Authorization;
+global using System.Security.Claims;
+global using System.ComponentModel.DataAnnotations;
+global using TrekMasters.Validation;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using System.Net.Mail;
+global using System.Net;
+global using TrekMasters.Service;
+global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.Extensions.Caching.Memory;
+global using TrekMasters.Repository;
 namespace TrekMasters.Controllers
 {
     public class AccountController : Controller
@@ -64,18 +79,21 @@ namespace TrekMasters.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
+            
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
                 UserDetail user = await _userManager.FindByEmailAsync(model.Email);
@@ -94,7 +112,10 @@ namespace TrekMasters.Controllers
                     var result = await _signInManager.PasswordSignInAsync(user, model.Password,model.RememberMe, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
-
+                        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                        {
+                            return Redirect(returnUrl);
+                        }
                         var roles = await _userManager.GetRolesAsync(user);
                         if (roles.Contains("Admin"))
                         {
@@ -115,7 +136,7 @@ namespace TrekMasters.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError("", "Invalid login attempt.");
                 }
                 ViewData["ErrorMessage"] = "Invalid Email or Password";
 
@@ -140,8 +161,8 @@ namespace TrekMasters.Controllers
             {
                 return RedirectToAction("Login");
             }
-            
-            return RedirectToAction("Login");
+
+            return BadRequest();
         }
         [HttpGet]
         public IActionResult ForgotPassword()

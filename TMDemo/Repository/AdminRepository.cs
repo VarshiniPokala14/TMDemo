@@ -96,6 +96,13 @@
             _context.NotificationRequests.RemoveRange(notificationRequests);
             await _context.SaveChangesAsync();
         }
+        public async Task<Availability> GetConflictingAvailabilityAsync(int trekId, DateTime startDate, DateTime endDate)
+        {
+            return await _context.Availabilities
+                .FirstOrDefaultAsync(a => a.TrekId == trekId &&
+                                          a.StartDate <= endDate &&
+                                          a.EndDate >= startDate);
+        }
 
     }
 

@@ -1,5 +1,4 @@
-﻿using TrekMasters.Service;
-namespace TrekMasters.Controllers
+﻿namespace TrekMasters.Controllers
 {
 
     public class ProfileController : Controller

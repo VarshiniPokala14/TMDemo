@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.IO;
-
+﻿
 namespace TrekMasters.Validation
 {
     public class AllowedFileTypesAttribute : ValidationAttribute

@@ -1,5 +1,4 @@
-﻿using TrekMasters.Service;
-
+﻿
 namespace TrekMasters.Controllers
 {
     [Authorize(Roles ="User")]
@@ -22,54 +21,43 @@ namespace TrekMasters.Controllers
 
             return View(viewModel);
         }
-
-
-        //[HttpPost]
-        //public IActionResult AddUsers(AddUsersViewModel model, string action, string? email)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (action == "AddMember")
-        //        {
-        //            _bookingService.AddMember(model, email);
-        //            return View(model);
-        //        }
-        //        else if (action.StartsWith("RemoveMember-"))
-        //        {
-        //            int indexToRemove;
-        //            if (int.TryParse(action.Replace("RemoveMember-", ""), out indexToRemove))
-        //            {
-        //                _bookingService.RemoveMember(model, indexToRemove);
-        //            }
-        //            return View(model);
-        //        }
-        //        else if (action == "Book")
-        //        {
-        //            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //            var booking = _bookingService.CreateBooking(model, userId);
-
-        //            return View("PaymentPage", booking);
-        //        }
-        //    }
-        //    return Ok(ModelState);
-        //}
         [HttpPost]
         public async Task<IActionResult> AddUsers(AddUsersViewModel model, string action, string? email)
         {
+
+            if (model.Emails == null && action== "AddMember")
+            {
+                ModelState.Remove("Emails");
+                model.Emails = new List<string>();
+            }
+                
+
             if (ModelState.IsValid)
             {
                 if (action == "AddMember")
                 {
+                   
                     _bookingService.AddMember(model, email);
                     return View(model);
                 }
                 else if (action.StartsWith("RemoveMember-"))
                 {
+                    for(int i = 0; i < model.Emails.Count; i++)
+                    {
+                        Console.WriteLine( i +"->"+model.Emails[i]);
+                    }
                     int indexToRemove;
                     if (int.TryParse(action.Replace("RemoveMember-", ""), out indexToRemove))
                     {
-                        _bookingService.RemoveMember(model, indexToRemove);
+                        Console.WriteLine(model.Emails[indexToRemove]);
+                        model.Emails.RemoveAt(indexToRemove);
                     }
+                     for(int i = 0; i < model.Emails.Count; i++)
+                    {
+                        Console.WriteLine( i +"->"+model.Emails[i]);
+                    }
+                    ModelState.Clear(); // Clear ModelState to reflect updated indices
+
                     return View(model);
                 }
                 else if (action == "Book")

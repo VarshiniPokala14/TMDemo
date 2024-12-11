@@ -7,8 +7,8 @@
 
 
 
-<div class="form-container">
-	<div class="form-wrapper " style="height:80%;">
+<div class="form-container" style="height:auto;">
+	<div class="form-wrapper " style="height:auto;">
         <h2>Cancel Booking</h2>
         <form asp-action="ProcessCancellation" method="post">
             <input type="hidden" name="BookingId" value="@Model.Booking.BookingId" />
@@ -22,7 +22,10 @@
                 <label><strong>Booking Date:</strong></label>
                 <p>@Model.Booking.BookingDate.ToShortDateString()</p>
             </div>
-
+            <div class="form-group">
+                <label><strong>TrekStart Date:</strong></label>
+                <p>@Model.Booking.TrekStartDate.ToShortDateString()</p>
+            </div>
             <div class="form-group">
                 <label><strong>Price:</strong></label>
                 <p>@Model.Booking.TotalAmount</p>
@@ -37,7 +40,7 @@
                 <label><strong>Refund Amount:</strong></label>
                 <p>@Model.RefundAmount</p>
             </div>
-
+            <p>Refer to <a href="/Home/Cancellation">Cancel policy</a> if you want to know how much percentage it got deducted</p>
             <div class="form-group">
                 <label for="Reason">Cancellation Reason *</label>
                 <textarea id="Reason" name="Reason" required class="form-control" placeholder="Provide cancellation reason"></textarea>

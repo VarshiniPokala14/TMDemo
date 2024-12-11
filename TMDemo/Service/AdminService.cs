@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using TrekMasters.Repository;
-using TrekMasters.Service;
+﻿
+
 
 namespace TrekMasters.Service
 {
@@ -139,6 +137,12 @@ namespace TrekMasters.Service
             
             await _adminRepository.RemoveNotificationRequests(notificationRequests);
         }
+        public async Task<bool> CheckAvailabilityConflictAsync(int trekId, DateTime startDate, DateTime endDate)
+        {
+            var conflictingAvailability = await _adminRepository.GetConflictingAvailabilityAsync(trekId, startDate, endDate);
+            return conflictingAvailability != null;
+        }
+
     }
 
 }

@@ -3,9 +3,15 @@
     ViewData["Title"] = "Manage Availability";
 }
 
-<h2>Manage Availability</h2>
+<h2 style="font-family:'Times New Roman', Times, serif; padding:10px; font:10px; color:black; padding:20px;text-align:center;">Manage Availability</h2>
 
-<a asp-action="AddAvailability" class="btn btn-success">Add New Availability</a>
+<a asp-action="AddAvailability" class="btn btn-success" style="margin-left:20px; margin-top:10px; margin-bottom:10px;">Add New Availability</a>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Message"]
+    </div>
+}
 
 <table class="table">
     <thead>
@@ -31,3 +37,4 @@
         }
     </tbody>
 </table>
+

@@ -14,6 +14,7 @@
         Task<bool> AvailabilityExistsAsync(int trekId);
         Task<List<NotificationRequest>> GetNotificationRequestsAsync(int trekId);
         Task RemoveNotificationRequests(List<NotificationRequest> notificationRequests);
+        Task<Availability> GetConflictingAvailabilityAsync(int trekId, DateTime startDate, DateTime endDate);
     }
 
 }

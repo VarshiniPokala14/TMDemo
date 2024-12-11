@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using TrekMasters.Repository;
-
+﻿
 namespace TrekMasters.Service
 {
     public class TrekService : ITrekService
@@ -96,6 +93,7 @@ namespace TrekMasters.Service
         {
             return await _trekRepository.GetTrekImageAsync(trekId);
         }
+        [Authorize]
         public async Task<string> AddReviewAsync( int trekId, string reviewText)
         {
             var userId = _userRepository.GetCurrentUserId();
@@ -131,6 +129,7 @@ namespace TrekMasters.Service
             await _trekRepository.AddReviewAsync(review);
             return null;
         }
+        
         public async Task AddNotificationRequestAsync(int trekId, string email)
         {
             var notificationRequest = new NotificationRequest
