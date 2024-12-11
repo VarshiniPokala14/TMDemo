@@ -1,8 +1,8 @@
 ﻿
-using TMDemo.Models;
-using TMDemo.Service;
+using TrekMasters.Models;
+using TrekMasters.Service;
 
-namespace TMDemo.Controllers
+namespace TrekMasters.Controllers
 {
     [Authorize(Roles ="Admin")]
     public class AdminController : Controller

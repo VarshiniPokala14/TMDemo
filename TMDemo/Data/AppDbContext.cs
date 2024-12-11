@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TMDemo.Models;
+using TrekMasters.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 
-namespace TMDemo.Data
+namespace TrekMasters.Data
 {
     public class AppDbContext : IdentityDbContext<UserDetail> 
     {

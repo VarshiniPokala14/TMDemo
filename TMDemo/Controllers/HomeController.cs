@@ -1,5 +1,5 @@
 
-namespace TMDemo.Controllers
+namespace TrekMasters.Controllers
 {
     public class HomeController : Controller
     {

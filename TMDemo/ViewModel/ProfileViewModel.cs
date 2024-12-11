@@ -1,5 +1,5 @@
 ﻿
-namespace TMDemo.ViewModel
+namespace TrekMasters.ViewModel
 {
     public class ProfileViewModel
     {

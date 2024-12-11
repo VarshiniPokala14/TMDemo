@@ -1,5 +1,5 @@
-﻿using TMDemo.Service;
-namespace TMDemo.Controllers
+﻿using TrekMasters.Service;
+namespace TrekMasters.Controllers
 {
 
     public class ProfileController : Controller

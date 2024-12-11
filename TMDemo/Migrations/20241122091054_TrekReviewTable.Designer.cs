@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TMDemo.Data;
+using TrekMasters.Data;
 
 #nullable disable
 
-namespace TMDemo.Migrations
+namespace TrekMasters.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20241122091054_TrekReviewTable")]
@@ -158,7 +158,7 @@ namespace TMDemo.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TMDemo.Models.Availability", b =>
+            modelBuilder.Entity("TrekMasters.Models.Availability", b =>
                 {
                     b.Property<int>("AvailabilityId")
                         .ValueGeneratedOnAdd()
@@ -189,7 +189,7 @@ namespace TMDemo.Migrations
                     b.ToTable("Availabilities", (string)null);
                 });
 
-            modelBuilder.Entity("TMDemo.Models.EmergencyContact", b =>
+            modelBuilder.Entity("TrekMasters.Models.EmergencyContact", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -229,7 +229,7 @@ namespace TMDemo.Migrations
                     b.ToTable("EmergencyContacts", (string)null);
                 });
 
-            modelBuilder.Entity("TMDemo.Models.Trek", b =>
+            modelBuilder.Entity("TrekMasters.Models.Trek", b =>
                 {
                     b.Property<int>("TrekId")
                         .ValueGeneratedOnAdd()
@@ -276,7 +276,7 @@ namespace TMDemo.Migrations
                     b.ToTable("Treks", (string)null);
                 });
 
-            modelBuilder.Entity("TMDemo.Models.TrekReview", b =>
+            modelBuilder.Entity("TrekMasters.Models.TrekReview", b =>
                 {
                     b.Property<int>("ReviewId")
                         .ValueGeneratedOnAdd()
@@ -307,7 +307,7 @@ namespace TMDemo.Migrations
                     b.ToTable("TrekReviews", (string)null);
                 });
 
-            modelBuilder.Entity("TMDemo.Models.UserDetail", b =>
+            modelBuilder.Entity("TrekMasters.Models.UserDetail", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -410,7 +410,7 @@ namespace TMDemo.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("TMDemo.Models.UserDetail", null)
+                    b.HasOne("TrekMasters.Models.UserDetail", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -419,7 +419,7 @@ namespace TMDemo.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("TMDemo.Models.UserDetail", null)
+                    b.HasOne("TrekMasters.Models.UserDetail", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -434,7 +434,7 @@ namespace TMDemo.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TMDemo.Models.UserDetail", null)
+                    b.HasOne("TrekMasters.Models.UserDetail", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -443,16 +443,16 @@ namespace TMDemo.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("TMDemo.Models.UserDetail", null)
+                    b.HasOne("TrekMasters.Models.UserDetail", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TMDemo.Models.Availability", b =>
+            modelBuilder.Entity("TrekMasters.Models.Availability", b =>
                 {
-                    b.HasOne("TMDemo.Models.Trek", "Trek")
+                    b.HasOne("TrekMasters.Models.Trek", "Trek")
                         .WithMany("Availabilities")
                         .HasForeignKey("TrekId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -461,26 +461,26 @@ namespace TMDemo.Migrations
                     b.Navigation("Trek");
                 });
 
-            modelBuilder.Entity("TMDemo.Models.EmergencyContact", b =>
+            modelBuilder.Entity("TrekMasters.Models.EmergencyContact", b =>
                 {
-                    b.HasOne("TMDemo.Models.UserDetail", "UserDetail")
+                    b.HasOne("TrekMasters.Models.UserDetail", "UserDetail")
                         .WithOne("EmergencyContact")
-                        .HasForeignKey("TMDemo.Models.EmergencyContact", "UserId")
+                        .HasForeignKey("TrekMasters.Models.EmergencyContact", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("UserDetail");
                 });
 
-            modelBuilder.Entity("TMDemo.Models.TrekReview", b =>
+            modelBuilder.Entity("TrekMasters.Models.TrekReview", b =>
                 {
-                    b.HasOne("TMDemo.Models.Trek", "Trek")
+                    b.HasOne("TrekMasters.Models.Trek", "Trek")
                         .WithMany("TrekReviews")
                         .HasForeignKey("TrekId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TMDemo.Models.UserDetail", "User")
+                    b.HasOne("TrekMasters.Models.UserDetail", "User")
                         .WithMany("TrekReviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -491,14 +491,14 @@ namespace TMDemo.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TMDemo.Models.Trek", b =>
+            modelBuilder.Entity("TrekMasters.Models.Trek", b =>
                 {
                     b.Navigation("Availabilities");
 
                     b.Navigation("TrekReviews");
                 });
 
-            modelBuilder.Entity("TMDemo.Models.UserDetail", b =>
+            modelBuilder.Entity("TrekMasters.Models.UserDetail", b =>
                 {
                     b.Navigation("EmergencyContact");
 

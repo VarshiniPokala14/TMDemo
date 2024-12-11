@@ -1,26 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.IO;
 
-public class AllowedFileTypesAttribute : ValidationAttribute
+namespace TrekMasters.Validation
 {
-    private readonly string[] _allowedFileExtensions;
-
-    public AllowedFileTypesAttribute(string[] allowedFileExtensions)
+    public class AllowedFileTypesAttribute : ValidationAttribute
     {
-        _allowedFileExtensions = allowedFileExtensions;
-    }
+        private readonly string[] _allowedFileExtensions;
 
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-    {
-        if (value is IFormFile file)
+        public AllowedFileTypesAttribute(string[] allowedFileExtensions)
         {
-            var extension = Path.GetExtension(file.FileName)?.ToLower();
-            if (!_allowedFileExtensions.Contains(extension))
-            {
-                return new ValidationResult($"File type not allowed. Allowed types: {string.Join(", ", _allowedFileExtensions)}");
-            }
+            _allowedFileExtensions = allowedFileExtensions;
         }
 
-        return ValidationResult.Success;
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if (value is IFormFile file)
+            {
+                var extension = Path.GetExtension(file.FileName)?.ToLower();
+                if (!_allowedFileExtensions.Contains(extension))
+                {
+                    return new ValidationResult($"File type not allowed. Allowed types: {string.Join(", ", _allowedFileExtensions)}");
+                }
+            }
+
+            return ValidationResult.Success;
+        }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using TMDemo.Repository;
-using TMDemo.Service;
+using TrekMasters.Repository;
+using TrekMasters.Service;
 
-namespace TMDemo.Service
+namespace TrekMasters.Service
 {
     public class AdminService : IAdminService
     {
@@ -130,12 +130,13 @@ namespace TMDemo.Service
         private async Task NotifyUsersAboutAvailabilityAsync(int trekId)
         {
             var trek = _bookingRepository.GetTrekById(trekId);
+            
             var notificationRequests = await _adminRepository.GetNotificationRequestsAsync(trekId);
             foreach (var request in notificationRequests)
             {
-                await _emailSender.SendEmailAsync(request.Email, "New Trek Availability", $"Good News! The Trek you have been looking for to enjoy {trek.Name} is added.");
+                await _emailSender.SendEmailAsync(request.Email, "New Trek Availability", $"Good News! New availability added for trek {trek.Name}");
             }
-
+            
             await _adminRepository.RemoveNotificationRequests(notificationRequests);
         }
     }

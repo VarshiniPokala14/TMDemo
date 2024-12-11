@@ -1,6 +1,6 @@
-﻿using TMDemo.Service;
+﻿using TrekMasters.Service;
 
-namespace TMDemo.Controllers
+namespace TrekMasters.Controllers
 {
     [Authorize(Roles ="User")]
     public class BookingController : Controller

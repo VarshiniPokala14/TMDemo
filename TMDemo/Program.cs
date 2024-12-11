@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using TMDemo.Repository;
-using TMDemo.Service;
+using TrekMasters.Repository;
+using TrekMasters.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.

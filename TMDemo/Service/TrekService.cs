@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using TMDemo.Repository;
+using TrekMasters.Repository;
 
-namespace TMDemo.Service
+namespace TrekMasters.Service
 {
     public class TrekService : ITrekService
     {

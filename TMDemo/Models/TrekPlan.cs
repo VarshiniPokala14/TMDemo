@@ -1,4 +1,4 @@
-﻿namespace TMDemo.Models
+﻿namespace TrekMasters.Models
 {
     public class TrekPlan
     {

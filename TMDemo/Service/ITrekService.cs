@@ -1,4 +1,4 @@
-﻿namespace TMDemo.Service
+﻿namespace TrekMasters.Service
 {
     public interface ITrekService
     {

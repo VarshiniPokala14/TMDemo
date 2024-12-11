@@ -1,4 +1,4 @@
-﻿namespace TMDemo.Repository
+﻿namespace TrekMasters.Repository
 {
     public class TrekRepository : ITrekRepository
     {

@@ -6,7 +6,7 @@
         {
             <p style="font-size:40px;font-weight:bold;color:darkred;"><strong>No treks available for your search. Loading all treks...</strong></p>
             var allTreks = ViewContext.HttpContext.RequestServices
-            .GetService(typeof(TMDemo.Data.AppDbContext)) as TMDemo.Data.AppDbContext;
+            .GetService(typeof(TrekMasters.Data.AppDbContext)) as TrekMasters.Data.AppDbContext;
             var allTrekList = allTreks.Treks.ToList();
 
             foreach (var trek in allTrekList)

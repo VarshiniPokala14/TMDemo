@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace TMDemo.Migrations
+namespace TrekMasters.Migrations
 {
     /// <inheritdoc />
     public partial class BookingChanges : Migration

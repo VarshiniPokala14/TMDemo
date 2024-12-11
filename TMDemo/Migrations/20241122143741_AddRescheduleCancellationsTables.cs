@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TMDemo.Migrations
+namespace TrekMasters.Migrations
 {
     /// <inheritdoc />
     public partial class AddRescheduleCancellationsTables : Migration

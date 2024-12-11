@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TMDemo.Data;
+using TrekMasters.Data;
 
 #nullable disable
 
-namespace TMDemo.Migrations
+namespace TrekMasters.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20241114120603_IdentityTables")]
@@ -158,7 +158,7 @@ namespace TMDemo.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TMDemo.Models.UserDetail", b =>
+            modelBuilder.Entity("TrekMasters.Models.UserDetail", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -261,7 +261,7 @@ namespace TMDemo.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("TMDemo.Models.UserDetail", null)
+                    b.HasOne("TrekMasters.Models.UserDetail", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -270,7 +270,7 @@ namespace TMDemo.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("TMDemo.Models.UserDetail", null)
+                    b.HasOne("TrekMasters.Models.UserDetail", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -285,7 +285,7 @@ namespace TMDemo.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TMDemo.Models.UserDetail", null)
+                    b.HasOne("TrekMasters.Models.UserDetail", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -294,7 +294,7 @@ namespace TMDemo.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("TMDemo.Models.UserDetail", null)
+                    b.HasOne("TrekMasters.Models.UserDetail", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

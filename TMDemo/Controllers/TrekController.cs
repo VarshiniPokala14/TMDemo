@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TMDemo.Service;
+using TrekMasters.Service;
 
 public class TrekController : Controller
 {
