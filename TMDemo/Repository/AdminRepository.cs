@@ -65,9 +65,11 @@
                 .Where(b => b.TrekStartDate == startDate && (b.IsCancelled == false || b.IsCancelled == null))
                 .Select(b => new UserViewModel
                 {
+                    UserId=b.UserId,
                     UserName = b.User.FirstName,
                     Email = b.User.Email,
                     NumberOfPeople = b.NumberOfPeople,
+                    BookingId = b.BookingId,
                     BookingDate = b.BookingDate
                 })
                 .ToListAsync();
@@ -80,7 +82,7 @@
         public async Task<bool> AvailabilityExistsAsync(int trekId)
         {
             return await _context.Availabilities
-                .AnyAsync(a => a.TrekId == trekId); // Use AnyAsync for condition-based checks
+                .AnyAsync(a => a.TrekId == trekId); 
         }
 
 
@@ -103,6 +105,31 @@
                                           a.StartDate <= endDate &&
                                           a.EndDate >= startDate);
         }
+        public async Task<List<int>> GetBookingIdsByUserIdAsync(string userId)
+        {
+            return await _context.Bookings
+                .Where(b => b.UserId == userId)
+                .Select(b => b.BookingId)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<TrekParticipant>> GetParticipantsByBookingIdAsync(int bookingId)
+        {
+            return await _context.TrekParticipants
+                .Where(tp => tp.BookingId == bookingId)
+                .ToListAsync();
+        }
+        public async Task<Booking> GetBookingByIdAsync(int bookingId)
+        {
+            if (bookingId <= 0)
+            {
+                throw new ArgumentException("Invalid booking ID", nameof(bookingId));
+            }
+
+            return await _context.Bookings
+                .Include(b => b.User) 
+                .FirstOrDefaultAsync(b => b.BookingId == bookingId);
+        }
+
 
     }
 

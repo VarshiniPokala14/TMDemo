@@ -34,7 +34,6 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<ITrekService, TrekService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

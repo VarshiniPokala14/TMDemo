@@ -1,6 +1,4 @@
-﻿
-
-namespace TrekMasters.Service
+﻿namespace TrekMasters.Service
 {
     public class BookingService : IBookingService
     {
@@ -15,58 +13,6 @@ namespace TrekMasters.Service
             _userRepository = userRepository;
             _trekRepository = trekRepository;
         }
-
-        public AddUsersViewModel GetAddUsersViewModel(int trekId, string startDate, string userEmail)
-        {
-            DateTime parsedDate;
-            if (!DateTime.TryParse(startDate, out parsedDate))
-            {
-                throw new ArgumentException("Invalid date format.");
-            }
-
-            Trek trek = _bookingRepository.GetTrekById(trekId);
-            if (trek == null)
-            {
-                throw new KeyNotFoundException("Trek not found.");
-            }
-
-            List<string> emails = new List<string> { userEmail };
-
-            return new AddUsersViewModel
-            {
-                TrekId = trekId,
-                TrekName = trek.Name,
-                StartDate = parsedDate,
-                Emails = emails
-            };
-        }
-        
-        public void AddMember(AddUsersViewModel model, string email)
-        {
-            
-            if (model != null && !string.IsNullOrEmpty(email))
-            {
-                model.Emails.Add(email);
-            }
-            //for (int i = 0; i < model.Emails.Count; i++)
-            //{
-            //    Console.Write(i+"\t");
-            //    Console.Write(model.Emails[i]);
-            //}
-        }
-        public void RemoveMember(AddUsersViewModel model, int index)
-        {
-            if (model != null && index >= 0 && index < model.Emails.Count)
-            {
-                model.Emails.RemoveAt(index);
-            }
-            //for (int i = 0; i < model.Emails.Count; i++)
-            //{
-            //    Console.Write(i + "\t");
-            //    Console.Write(model.Emails[i]);
-            //}
-        }
-
         public async Task<Booking> CreateBookingAsync(AddUsersViewModel model, string userId)
         {
             Trek trek = _bookingRepository.GetTrekById(model.TrekId);
@@ -76,11 +22,11 @@ namespace TrekMasters.Service
             }
             int remainingSlots = await _trekRepository.GetRemainingSlotsAsync(model.TrekId, model.StartDate);
 
-            if (model.Emails.Count > remainingSlots)
+            if (model.Participants.Count > remainingSlots)
             {
                 throw new InvalidOperationException($"Only {remainingSlots} slots are available for this trek.");
             }
-            decimal amount = trek.Price * model.Emails.Count;
+            decimal amount = trek.Price * model.Participants.Count;
             decimal tax = amount * 0.05M;
             decimal totalAmount = amount + tax + 10;
 
@@ -89,7 +35,7 @@ namespace TrekMasters.Service
                 TrekId = model.TrekId,
                 UserId = userId,
                 BookingDate = DateTime.Now,
-                NumberOfPeople = model.Emails.Count,
+                NumberOfPeople = model.Participants.Count,
                 TotalAmount = totalAmount,
                 TrekStartDate = model.StartDate,
                 CancellationDate = DateTime.MinValue
@@ -223,8 +169,39 @@ namespace TrekMasters.Service
                 string cacheKey = $"Bookings_{userId}";
                 _cache.Remove(cacheKey);
             }
+
+        }
+        public AddUsersViewModel GetAddUsersViewModel(int trekId,string startDate, string userEmail)
+        {
+            // Fetch trek and other data to initialize the view model
+            Trek trek = _bookingRepository.GetTrekById(trekId);
+            if (trek == null)
+            {
+                throw new KeyNotFoundException("Trek not found.");
+            }
+
+            return new AddUsersViewModel
+            {
+                TrekId = trekId,
+                TrekName = trek.Name,
+                StartDate = DateTime.Parse(startDate),
+                Participants = new List<ParticipantViewModel>()
+            };
             
         }
+        public void AddParticipant(int bookingId, ParticipantViewModel participant)
+        {
+            var trekParticipant = new TrekParticipant
+            {
+                BookingId = bookingId,
+                Email = participant.Email,
+                Name = participant.Name,
+                ContactNumber = participant.ContactNumber
+            };
+
+            _bookingRepository.AddParticipant(trekParticipant);
+        }
+
     }
 
 }

@@ -2,36 +2,41 @@
 
 @{
     ViewData["Title"] = "Add Trek Mate";
-     
 }
+
 <link href="~/css/adduserbooking.css" rel="stylesheet" />
 <div class="form-container" style="height:auto;">
-	<div class="form-wrapper d-flex flex-column justify-content-center" style="height:auto;">
+    <div class="form-wrapper d-flex flex-column justify-content-center" style="height:auto;">
         <h2>Add TrekMates</h2>
-        <form asp-action="AddUsers" method="post" style=" justify-content:center; align-content:center;">
+        <form asp-action="AddUsers" method="post">
             <input type="hidden" asp-for="TrekId" />
             <input type="hidden" asp-for="TrekName" />
             <input type="hidden" asp-for="StartDate" />
-			<div class="form-group">
+
+            <div class="form-group">
                 <div id="user-list">
-                    @for (int i = 0; i < Model.Emails.Count; i++)
+                    @for (int i = 0; i < Model.Participants.Count; i++)
                     {
-                        <div class="email-field">
-                            <input asp-for="@Model.Emails[i]" class="form-control email-input" placeholder="Email Id" style="color:white;"/>
-                            <button type="submit" name="action" value="RemoveMember-@i" class="btn btn-danger btn-sm remove-btn info">-</button>
-                            <span asp-validation-for="@Model.Emails[i]" class="text-danger"></span>
+                        <div class="email-field d-flex">
+                            <input type="hidden" name="Participants[@i].Email" value="@Model.Participants[i].Email" />
+                            <input type="hidden" name="Participants[@i].Name" value="@Model.Participants[i].Name" />
+                            <input type="hidden" name="Participants[@i].ContactNumber" value="@Model.Participants[i].ContactNumber" />
+
+                            <a href="javascript:void(0);" onclick="openParticipantDetails(@i)" style="background-color:blue;width:90%;text-decoration:none;color:white;text-align:center;padding:10px;">
+                                <span>@Model.Participants[i].Email</span>
+                            </a>
+                            <button type="submit" name="action" value="RemoveMember-@i" class="btn btn-danger btn-sm remove-btn info" style="width:50px;">-</button>
                         </div>
-
-                        
-
                     }
                 </div>
-			</div>
-			<div class="form-group">
+            </div>
+
+            <div class="form-group">
                 <label for="Emails">Email:</label>
                 <input type="text" id="Emails" name="email" class="form-control" />
-                <button type="submit" name="action" value="AddMember" class="btn btn-secondary">+ Member to join Trek</button>
-			</div>
+                <button type="submit" name="action" value="AddMember" class="btn btn-secondary">+ Add Member</button>
+            </div>
+
             <button type="submit" name="action" value="Book" class="btn btn-primary">Proceed With the Registration</button>
 
             @if (!ViewData.ModelState.IsValid)
@@ -43,52 +48,126 @@
                     }
                 </div>
             }
-
-		</form>
-	</div>
+        </form>
+    </div>
 </div>
 
+<div id="participantPopup" style="display:none;" class="modal" >
+    <div class="modal-content" style="width:50%;">
+        <span class="close" onclick="closePopup()">&times;</span>
 
+        <h3>Edit Participant Details</h3>
+
+        <label for="participantName">Name:</label>
+        <input type="text" id="participantName" class="form-control" />
+
+        <label for="participantContact">Contact Number:</label>
+        <input type="text" id="participantContact" class="form-control" />
+
+        <button type="button" onclick="saveParticipantDetails()">Save</button>
+    </div>
+</div>
+
+<script>
+    let participants = @Html.Raw(Json.Serialize(Model.Participants));
+
+    function closePopup() {
+        document.getElementById("participantPopup").style.display = "none";
+    }
+
+    function openParticipantDetails(index) {
+        console.log(participants);
+
+        document.getElementById("participantName").value = participants[index].Name || '';
+        document.getElementById("participantContact").value = participants[index].ContactNumber || '';
+        document.getElementById("participantPopup").style.display = "block"; 
+
+        sessionStorage.setItem("participantIndex", index);
+    }
+
+    function saveParticipantDetails() {
+        const index = sessionStorage.getItem("participantIndex");
+        const name = document.getElementById("participantName").value;
+        const contact = document.getElementById("participantContact").value;
+
+        participants[index].Name = name;
+        participants[index].ContactNumber = contact;
+
+        document.querySelector(`[name="Participants[${index}].Name"]`).value = name;
+        document.querySelector(`[name="Participants[${index}].ContactNumber"]`).value = contact;
+
+        closePopup();
+    }
+</script>
 
 <style>
-    .email-field {
-        display: flex; 
-        align-items: center; 
-        width: 100%; 
-        gap: 0; 
-        margin-bottom: 1rem; 
+    .modal {
+        display: none; 
+        position: fixed;
+        z-index: 1000; 
+        left: 50%;
+        top: 50%;
+        width: 50%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); 
+        padding-top: 100px; 
+        overflow: auto; 
     }
 
-    .email-input {
-        width:90%;
-        margin-right:5px;
-        flex: 1; 
-        padding: 0.5rem; 
-        border: 1px solid #6B3738; 
-        border-radius: 5px; 
-        background-color: #6B3738; 
-        color: white; 
-        font-size: 1rem; 
+    .modal-content {
+        background-color: white;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        width: 50%; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        position: relative;
     }
 
-        .email-input:focus {
-            border-color: #6B3738; 
-            outline: none; 
+    
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+        color: #aaa;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
 
-    .info {
-        width: 5%; 
-        height: 100%; 
-        padding: 0; 
-        font-size: 1.2rem; 
-        background-color: #dc3545; 
-        color: white; 
-        border-radius: 5px; 
-        cursor: pointer; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        border: none; 
+    
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 15px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
     }
 
+  
+    button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
 </style>
+
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

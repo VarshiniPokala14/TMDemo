@@ -47,7 +47,9 @@ namespace TrekMasters.Models
         public decimal? ExtraAmount { get; set; } 
         public UserDetail? User { get; set; }
         public Trek? Trek { get; set; }
-       
+        public ICollection<TrekParticipant> TrekParticipants { get; set; }
+
+
 
     }
 }

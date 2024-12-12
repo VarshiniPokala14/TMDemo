@@ -78,22 +78,10 @@
             }
 
             await _profileService.AddOrUpdateEmergencyContactAsync(userId, model.EmergencyContact);
-
+            
             return RedirectToAction("Index");
         }
 
-		//public async Task<IActionResult> MyBookings()
-		//{
-		//    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-		//    if (userId == null)
-		//    {
-		//        return RedirectToAction("Login", "Account");
-		//    }
-
-		//    var bookings = await _profileService.GetBookingsByUserIdAsync(userId);
-
-		//    return View(bookings);
-		//}
 		public async Task<IActionResult> MyBookings()
 		{
 			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

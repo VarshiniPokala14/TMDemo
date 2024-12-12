@@ -7,8 +7,9 @@
         void AddBooking(Booking booking);
         void UpdateBooking(Booking booking);
         List<DateTime> GetAvailableDates(int trekId);
-        
 
+        void AddParticipant(TrekParticipant participant);
+        
     }
 
 }

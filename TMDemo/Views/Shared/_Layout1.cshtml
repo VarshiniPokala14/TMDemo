@@ -13,7 +13,8 @@
             color: black;  
             padding: 10px;
             
-        }
+        
+           
     </style>
 </head>
 <body>
@@ -22,7 +23,7 @@
     <nav class="navbar-light bg-light" style="margin-top:0px;position: fixed; width: 100%; z-index:100;">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="/Home/Index">
-                <img src="~/images/Logo1.png" alt="TrekMasters Logo" class="d-inline-block align-text-top">
+                <img src="~/images/Logo1.png" alt="TrekMasters Logo" class="d-inline-block align-text-top ">
             </a>
         </div>
     </nav>
@@ -34,15 +35,6 @@
                 <h2 class="text-center">Trekker Dashboard</h2>
             </div>
             
-            @* <div class="SideProfile"  >
-                    <a href="/Profile/Index">Profile</a>
-                
-                    <a href="/Profile/MyBookings">My Bookings</a>
-
-                
-                    <a href="@Url.Action("Logout", "Account", new { returnUrl = Url.Action("Index", "Home") })" class="dropdown-item" style="text-decoration: none; color: #000;">Logout</a>
-                
-            </div> *@
             <div class="SideProfile">
                 <a href="/Profile/Index" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">Profile</a>
 

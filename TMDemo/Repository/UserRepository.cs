@@ -11,6 +11,10 @@
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
         }
+        public async Task<UserDetail> GetUserByIdAsync(string userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        }
         public string GetCurrentUserId()
         {
             var user = _httpContextAccessor.HttpContext?.User;

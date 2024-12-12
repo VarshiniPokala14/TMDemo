@@ -1,15 +1,15 @@
-﻿
-
-namespace TrekMasters.Controllers
+﻿namespace TrekMasters.Controllers
 {
     [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
+        private readonly IProfileService _profileService;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IAdminService adminService, IProfileService profileService)
         {
             _adminService = adminService;
+            _profileService = profileService;
         }
 
         [HttpGet]
@@ -155,6 +155,42 @@ namespace TrekMasters.Controllers
             ViewBag.TrekStartDate = trekStartDate.ToString("yyyy-MM-dd");
             return View(users);
         }
+        public async Task<IActionResult> UserDetails(int bookingId)
+        {
+            if (bookingId == 0)
+            {
+                return BadRequest("Booking ID is required.");
+            }
+
+            var booking = await _adminService.GetBookingByIdAsync(bookingId);  
+            if (booking == null)
+            {
+                return NotFound("Booking not found.");
+            }
+
+            var participants = await _adminService.GetParticipantsForBookingAsync(bookingId);
+
+            var user = await _profileService.GetUserAsync(booking.UserId);  
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            ViewBag.UserName = user.UserName;
+            ViewBag.UserEmail = user.Email;
+            ViewBag.BookingDate = booking.BookingDate.ToString("yyyy-MM-dd");
+
+            var participantViewModels = participants.Select(p => new TrekParticipantViewModel
+            {
+                Name = p.Name,
+                Email = p.Email,
+                ContactNumber = p.ContactNumber
+            }).ToList();
+
+            return View(participantViewModels);
+        }
+
+
     }
 
 }

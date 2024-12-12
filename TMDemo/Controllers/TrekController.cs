@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TrekMasters.Service;
-
+﻿
 public class TrekController : Controller
 {
     private readonly ITrekService _trekService;

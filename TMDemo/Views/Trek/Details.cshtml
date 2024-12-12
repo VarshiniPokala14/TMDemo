@@ -59,6 +59,7 @@
                         <label class="block text-black font-bold mt-3 fs-5 fst-normal" for="dates">Available Dates</label>
                         <form method="get" action="/Booking/AddUsers">
                             <input type="hidden" name="trekId" value="@Model.Trek.TrekId" />
+                            <input type="hidden" name="trekName" value="@Model.Trek.Name"/>
                             <label for="dates">Select Start Date:</label>
                             <select name="startDate" class="w-full mt-2 p-2 border border-gray-300 rounded">
                                 @foreach (var monthGroup in Model.AvailabilityDates)

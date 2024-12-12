@@ -9,5 +9,6 @@
         Task UpdateEmergencyContactAsync(EmergencyContact emergencyContact);
         Task<List<Booking>> GetBookingsByUserIdAsync(string userId);
         string GetCurrentUserId();
+        Task<UserDetail> GetUserByIdAsync(string userId);
     }
 }

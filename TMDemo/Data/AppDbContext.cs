@@ -17,6 +17,7 @@ namespace TrekMasters.Data
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<TrekPlan> TrekPlans { get; set; }
         public DbSet<NotificationRequest> NotificationRequests { get; set; }
+        public DbSet<TrekParticipant> TrekParticipants { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -80,6 +81,12 @@ namespace TrekMasters.Data
             modelBuilder.Entity<NotificationRequest>()
                 .ToTable("NotificationRequests")
                 .HasKey(nr => nr.NotificationRequestId);
+            modelBuilder.Entity<TrekParticipant>()
+                .ToTable("TrekParticipants")
+                .HasOne(t => t.Booking)
+                .WithMany(b => b.TrekParticipants)
+                .HasForeignKey(t => t.BookingId)
+                .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

@@ -13,6 +13,8 @@
         
         Task AddAvailabilityAsync(int trekId, DateTime startDate, DateTime endDate,string month,int maxGroup);
         Task<bool> CheckAvailabilityConflictAsync(int trekId, DateTime startDate, DateTime endDate);
+        Task<IEnumerable<TrekParticipant>> GetParticipantsForBookingAsync(int bookingId);
+        Task<Booking> GetBookingByIdAsync(int bookingId);
     }
 
 }

@@ -39,6 +39,11 @@
                            .OrderBy(d => d)
                            .ToList();
         }
+        public void AddParticipant(TrekParticipant participant)
+        {
+            _context.TrekParticipants.Add(participant);
+            _context.SaveChanges();
+        }
 
 
     }

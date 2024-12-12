@@ -21,51 +21,70 @@ namespace TrekMasters.Controllers
 
             return View(viewModel);
         }
+
+
         [HttpPost]
         public async Task<IActionResult> AddUsers(AddUsersViewModel model, string action, string? email)
         {
-
-            if (model.Emails == null && action== "AddMember")
+            if (model.Participants == null && action == "AddMember")
             {
-                ModelState.Remove("Emails");
-                model.Emails = new List<string>();
+                ModelState.Remove("Participants");
+                model.Participants = new List<ParticipantViewModel>();
             }
-                
 
             if (ModelState.IsValid)
             {
-                if (action == "AddMember")
+
+                if (action == "AddMember" && !string.IsNullOrEmpty(email))
                 {
-                   
-                    _bookingService.AddMember(model, email);
+                    if (!model.Participants.Any(p => p.Email.Equals(email, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        model.Participants.Add(new ParticipantViewModel { Email = email });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "This email is already added.");
+                    }
+
+                    ModelState.Clear();
                     return View(model);
                 }
                 else if (action.StartsWith("RemoveMember-"))
                 {
-                    for(int i = 0; i < model.Emails.Count; i++)
+                    if (int.TryParse(action.Replace("RemoveMember-", ""), out int indexToRemove))
                     {
-                        Console.WriteLine( i +"->"+model.Emails[i]);
+                        if (indexToRemove >= 0 && indexToRemove < model.Participants.Count)
+                        {
+                            model.Participants.RemoveAt(indexToRemove);
+                            ModelState.Clear();
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Invalid participant index.");
+                        }
                     }
-                    int indexToRemove;
-                    if (int.TryParse(action.Replace("RemoveMember-", ""), out indexToRemove))
-                    {
-                        Console.WriteLine(model.Emails[indexToRemove]);
-                        model.Emails.RemoveAt(indexToRemove);
-                    }
-                     for(int i = 0; i < model.Emails.Count; i++)
-                    {
-                        Console.WriteLine( i +"->"+model.Emails[i]);
-                    }
-                    ModelState.Clear(); // Clear ModelState to reflect updated indices
 
                     return View(model);
                 }
                 else if (action == "Book")
                 {
+                    if (!model.Participants.Any())
+                    {
+                        ModelState.AddModelError("", "Please add at least one participant before proceeding.");
+                        return View(model);
+                    }
+
                     try
                     {
                         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
                         var booking = await _bookingService.CreateBookingAsync(model, userId);
+
+                        foreach (var participant in model.Participants)
+                        {
+                            _bookingService.AddParticipant(booking.BookingId, participant);
+                        }
+
                         return View("PaymentPage", booking);
                     }
                     catch (InvalidOperationException ex)
@@ -76,7 +95,6 @@ namespace TrekMasters.Controllers
             }
             return View(model);
         }
-
         [HttpPost]
         public async Task<IActionResult> ProcessPayment(int bookingId, string paymentMethod)
         {
@@ -114,8 +132,6 @@ namespace TrekMasters.Controllers
             var model = _bookingService.GetRescheduleViewModel(bookingId);
             return View(model);
         }
-
-       
         [HttpPost]
         public IActionResult ProcessReschedule(RescheduleViewModel model)
         {
@@ -131,6 +147,7 @@ namespace TrekMasters.Controllers
             }
             return View("RescheduleBooking", model);
         }
+     
     }
 
 }

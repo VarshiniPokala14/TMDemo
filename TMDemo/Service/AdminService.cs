@@ -1,6 +1,8 @@
 ﻿
 
 
+using Microsoft.EntityFrameworkCore;
+
 namespace TrekMasters.Service
 {
     public class AdminService : IAdminService
@@ -64,11 +66,7 @@ namespace TrekMasters.Service
             }
         }
 
-        //public async Task AddAvailabilityAsync(Availability availability)
-        //{
-        //    await   _adminRepository.AddAvailabilityAsync(availability);
-        //}
-
+        
         public async Task<List<Trek>> GetAllTreksAsync()
         {
             
@@ -142,7 +140,24 @@ namespace TrekMasters.Service
             var conflictingAvailability = await _adminRepository.GetConflictingAvailabilityAsync(trekId, startDate, endDate);
             return conflictingAvailability != null;
         }
+        public async Task<IEnumerable<TrekParticipant>> GetParticipantsForBookingAsync(int bookingId)
+        {
+            if (bookingId <= 0)
+            {
+                throw new ArgumentException("Invalid booking ID.", nameof(bookingId));
+            }
 
+            return await _adminRepository.GetParticipantsByBookingIdAsync(bookingId);
+        }
+        public async Task<Booking> GetBookingByIdAsync(int bookingId)
+        {
+            if (bookingId <= 0)
+            {
+                throw new ArgumentException("Invalid booking ID", nameof(bookingId));
+            }
+
+            return await _adminRepository.GetBookingByIdAsync(bookingId);
+        }
     }
 
 }

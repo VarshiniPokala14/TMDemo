@@ -289,8 +289,6 @@ namespace TrekMasters.Controllers
             }
             return View(model);
         }
-
-        
         [HttpGet]
         public async Task<IActionResult> Logout(string returnUrl = "/")
         {
@@ -300,8 +298,6 @@ namespace TrekMasters.Controllers
             
             return Redirect(returnUrl);
         }
-
-
         private string GenerateOtp()
         {
             Random random = new Random();

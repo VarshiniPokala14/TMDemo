@@ -15,6 +15,10 @@
         Task<List<NotificationRequest>> GetNotificationRequestsAsync(int trekId);
         Task RemoveNotificationRequests(List<NotificationRequest> notificationRequests);
         Task<Availability> GetConflictingAvailabilityAsync(int trekId, DateTime startDate, DateTime endDate);
+        Task<List<int>> GetBookingIdsByUserIdAsync(string userId);
+        Task<IEnumerable<TrekParticipant>> GetParticipantsByBookingIdAsync(int bookingId);
+        Task<Booking> GetBookingByIdAsync(int bookingId);
     }
-
 }
+
+

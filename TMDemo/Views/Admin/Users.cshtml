@@ -28,6 +28,11 @@
                         <strong>Booking Date:</strong><br/>
                         @user.BookingDate.ToString("yyyy-MM-dd")
                     </div>
+                    <div class="col-md-3 pl-2">
+                        <a asp-action="UserDetails" asp-route-BookingId="@user.BookingId" class="btn btn-primary">
+                            View Participants
+                        </a>
+                    </div>
                 </div>
                 
             </div>

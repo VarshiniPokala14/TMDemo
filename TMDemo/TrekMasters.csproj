@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Admin\UserDetails.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Category\FilteredView.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Home\404.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\_AdminLayout.cshtml" />
@@ -56,6 +57,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Home\404.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Admin\UserDetails.cshtml" />
   </ItemGroup>
 
 </Project>
