@@ -13,7 +13,7 @@
             _userRepository = userRepository;
             _trekRepository = trekRepository;
         }
-        public async Task<Booking> CreateBookingAsync(AddUsersViewModel model, string userId)
+        public async Task<(Booking,List<string>)> CreateBookingAsync(AddUsersViewModel model, string userId)
         {
             Trek trek = _bookingRepository.GetTrekById(model.TrekId);
             if (trek == null)
@@ -25,6 +25,17 @@
             if (model.Participants.Count > remainingSlots)
             {
                 throw new InvalidOperationException($"Only {remainingSlots} slots are available for this trek.");
+            }
+            List<string> conflictWarnings = new List<string>();
+            foreach (var participant in model.Participants)
+            {
+                var overlappingBookings = await _bookingRepository.GetOverlappingBookingsAsync(participant.Email, model.StartDate, model.StartDate.AddDays(trek.DurationDays));
+
+                if (overlappingBookings.Any())
+                {
+                    string conflicts = string.Join(", ", overlappingBookings.Select(b => $"Booking ID: {b.BookingId}, Trek: {b.Trek.Name}"));
+                    conflictWarnings.Add($"Participant {participant.Name} ({participant.Email}) has overlapping bookings: {conflicts}.");
+                }
             }
             decimal amount = trek.Price * model.Participants.Count;
             decimal tax = amount * 0.05M;
@@ -41,10 +52,10 @@
                 CancellationDate = DateTime.MinValue
             };
 
-            _bookingRepository.AddBooking(booking);
+            await _bookingRepository.AddAsync<Booking>(booking);
             string cacheKey = $"Bookings_{userId}";
             _cache.Remove(cacheKey);
-            return booking;
+            return (booking, conflictWarnings);
         }
         public async Task<bool> ProcessPayment(int bookingId, string paymentMethod)
         {
@@ -57,7 +68,7 @@
             booking.PaymentSuccess = true;
 
             
-            _bookingRepository.UpdateBooking(booking);
+            await _bookingRepository.UpdateAsync<Booking>(booking);
 
             return true; 
         }
@@ -101,7 +112,7 @@
             };
         }
 
-        public void ProcessCancellation(CancellationViewModel model)
+        public async Task ProcessCancellation(CancellationViewModel model)
         {
             var userId = _userRepository.GetCurrentUserId();
             Booking booking = _bookingRepository.GetBookingById(model.BookingId);
@@ -115,9 +126,10 @@
             booking.RefundAmount = model.RefundAmount;
             booking.CancellationDate = DateTime.Now;
 
-            _bookingRepository.UpdateBooking(booking);
+           var result =   await _bookingRepository.UpdateAsync<Booking>(booking);
             string cacheKey = $"Bookings_{userId}";
             _cache.Remove(cacheKey);
+            
         }
 
         public RescheduleViewModel GetRescheduleViewModel(int bookingId)
@@ -150,7 +162,7 @@
             };
         }
 
-        public void ProcessReschedule(RescheduleViewModel model)
+        public async Task ProcessReschedule(RescheduleViewModel model)
         {
             var userId = _userRepository.GetCurrentUserId();
             Booking booking = _bookingRepository.GetBookingById(model.BookingId);
@@ -165,7 +177,7 @@
             booking.TotalAmount += model.ExtraAmount;
             if (model.OldStartDate != model.NewStartDate)
             {
-                _bookingRepository.UpdateBooking(booking);
+                await _bookingRepository.UpdateAsync<Booking>(booking);
                 string cacheKey = $"Bookings_{userId}";
                 _cache.Remove(cacheKey);
             }
@@ -173,7 +185,6 @@
         }
         public AddUsersViewModel GetAddUsersViewModel(int trekId,string startDate, string userEmail)
         {
-            // Fetch trek and other data to initialize the view model
             Trek trek = _bookingRepository.GetTrekById(trekId);
             if (trek == null)
             {
@@ -189,7 +200,7 @@
             };
             
         }
-        public void AddParticipant(int bookingId, ParticipantViewModel participant)
+        public async Task AddParticipant(int bookingId, ParticipantViewModel participant)
         {
             var trekParticipant = new TrekParticipant
             {
@@ -199,7 +210,7 @@
                 ContactNumber = participant.ContactNumber
             };
 
-            _bookingRepository.AddParticipant(trekParticipant);
+             await _bookingRepository.AddAsync<TrekParticipant>(trekParticipant);
         }
 
     }

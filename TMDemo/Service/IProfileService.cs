@@ -7,7 +7,8 @@
         Task<EmergencyContact> GetEmergencyContactAsync(string userId);
         Task AddOrUpdateEmergencyContactAsync(string userId, EmergencyContact emergencyContact);
         Task<MyBookingsViewModel> GetBookingsByUserIdAsync(string userId);
-        
+        string GetCurrentUserId();
+
 
     }
 }

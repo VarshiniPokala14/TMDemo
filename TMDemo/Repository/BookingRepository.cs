@@ -1,10 +1,10 @@
 ﻿namespace TrekMasters.Repository
 {
-    public class BookingRepository : IBookingRepository
+    public class BookingRepository :Repository, IBookingRepository
     {
         private readonly AppDbContext _context;
 
-        public BookingRepository(AppDbContext context)
+        public BookingRepository(AppDbContext context):base(context) 
         {
             _context = context;
         }
@@ -18,18 +18,6 @@
         {
             return _context.Bookings.Include(b => b.Trek).FirstOrDefault(b => b.BookingId == bookingId);
         }
-
-        public void AddBooking(Booking booking)
-        {
-            _context.Bookings.Add(booking);
-            _context.SaveChanges();
-        }
-
-        public void UpdateBooking(Booking booking)
-        {
-            _context.Bookings.Update(booking);
-            _context.SaveChanges();
-        }
         public List<DateTime> GetAvailableDates(int trekId)
         {
             return _context.Availabilities
@@ -39,11 +27,17 @@
                            .OrderBy(d => d)
                            .ToList();
         }
-        public void AddParticipant(TrekParticipant participant)
+        public async Task<List<Booking>> GetOverlappingBookingsAsync(string email, DateTime startDate, DateTime endDate)
         {
-            _context.TrekParticipants.Add(participant);
-            _context.SaveChanges();
+            return await _context.Bookings
+                .Include(b => b.Trek)
+                .Where(b => b.TrekParticipants.Any(p => p.Email == email)
+                            && b.TrekStartDate < endDate
+                            && b.TrekStartDate.AddDays(b.Trek.DurationDays) > startDate)
+                .ToListAsync();
         }
+
+        
 
 
     }

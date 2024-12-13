@@ -28,7 +28,16 @@ namespace TrekMasters.Service
 
         public async Task<bool> UpdateUserAsync(UserDetail user)
         {
-            var result = await _userRepository.UpdateUserAsync(user);
+            bool result;
+            try
+            {
+                await _userRepository.UpdateAsync<UserDetail>(user);
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
 
             if (result)
             {
@@ -59,7 +68,7 @@ namespace TrekMasters.Service
             if (existingContact == null)
             {
                 emergencyContact.UserId = userId;
-                await _userRepository.AddEmergencyContactAsync(emergencyContact);
+                await _userRepository.AddAsync<EmergencyContact>(emergencyContact);
             }
             else
             {
@@ -67,7 +76,7 @@ namespace TrekMasters.Service
                 existingContact.ContactNumber = emergencyContact.ContactNumber;
                 existingContact.Email = emergencyContact.Email;
                 existingContact.Relation = emergencyContact.Relation;
-                await _userRepository.UpdateEmergencyContactAsync(existingContact);
+                await _userRepository.UpdateAsync<EmergencyContact>(existingContact);
             }
 
             var cacheKey = $"EmergencyContact_{userId}";
@@ -96,6 +105,10 @@ namespace TrekMasters.Service
                 CompletedBookings = completedBookings,
                 IncompleteBookings = incompleteBookings
             };
+        }
+        public string GetCurrentUserId()
+        {
+            return _userRepository.GetCurrentUserId();
         }
     }
 }

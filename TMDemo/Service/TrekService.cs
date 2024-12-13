@@ -7,15 +7,15 @@ namespace TrekMasters.Service
         private readonly IUserRepository _userRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMemoryCache _cache;
-       // private readonly IBookingRepository _bookingRepository;
+        private readonly IAvailabilityRepository _availabilityRepository;
 
-        public TrekService(ITrekRepository trekRepository, IUserRepository userRepository, ICategoryRepository categoryRepository,IMemoryCache cache)
+        public TrekService(ITrekRepository trekRepository, IUserRepository userRepository, ICategoryRepository categoryRepository,IMemoryCache cache,IAvailabilityRepository availabilityRepository)
         {
             _trekRepository = trekRepository;
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
             _cache = cache;
-            // _bookingRepository = bookingRepository;
+            _availabilityRepository = availabilityRepository;
         }
 
         public async Task<List<Trek>> GetAllTreksAsync()
@@ -83,10 +83,14 @@ namespace TrekMasters.Service
         }
         public async Task CleanupPastAvailabilitiesAsync()
         {
-            var pastAvailabilities = await _trekRepository.GetPastAvailabilitiesAsync();
+            var pastAvailabilities = await _availabilityRepository.GetPastAvailabilitiesAsync();
             if (pastAvailabilities.Any())
             {
-                await _trekRepository.RemovePastAvailabilitiesAsync(pastAvailabilities);
+                //await _trekRepository.RemovePastAvailabilitiesAsync(pastAvailabilities);
+                foreach (var availability in pastAvailabilities)
+                {
+                    await _availabilityRepository.DeleteAsync<Availability>(availability);
+                }
             }
         }
         public async Task<byte[]> GetTrekImageAsync(int trekId)
@@ -126,7 +130,9 @@ namespace TrekMasters.Service
                 CreatedAt = DateTime.Now
             };
 
-            await _trekRepository.AddReviewAsync(review);
+            //await _trekRepository.AddReviewAsync(review);
+            await _trekRepository.AddAsync<TrekReview>(review);
+
             return null;
         }
         
@@ -140,7 +146,7 @@ namespace TrekMasters.Service
             };
 
             // Save the request to the database
-            _trekRepository.AddNotificationRequest(notificationRequest);
+            _trekRepository.AddAsync<NotificationRequest>(notificationRequest);
             
         }
 

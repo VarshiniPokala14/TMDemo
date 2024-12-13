@@ -1,4 +1,6 @@
 ﻿
+using TrekMasters.Service;
+
 namespace TrekMasters.Controllers
 {
     [Authorize(Roles ="User")]
@@ -6,15 +8,19 @@ namespace TrekMasters.Controllers
     {
         private readonly IBookingService _bookingService;
         private readonly UserManager<UserDetail> _userManager;
-
-        public BookingController(IBookingService bookingService, UserManager<UserDetail> userManager)
+        private readonly IProfileService _profileService;
+        private readonly IValidationService _validationService;
+        public BookingController(IBookingService bookingService, UserManager<UserDetail> userManager, IProfileService profileService,
+        IValidationService validationService)
         {
             _bookingService = bookingService;
             _userManager = userManager;
+            _profileService = profileService;
+            _validationService = validationService;
         }
 
         
-        public IActionResult AddUsers(int trekId, string startDate)
+        public async Task<IActionResult> AddUsers(int trekId, string startDate)
         {
             string userEmail = User.FindFirstValue(ClaimTypes.Email);
             var viewModel = _bookingService.GetAddUsersViewModel(trekId, startDate, userEmail);
@@ -22,78 +28,110 @@ namespace TrekMasters.Controllers
             return View(viewModel);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> AddUsers(AddUsersViewModel model, string action, string? email)
-        {
+            {
+            // Ensure Participants is initialized
             if (model.Participants == null && action == "AddMember")
             {
                 ModelState.Remove("Participants");
                 model.Participants = new List<ParticipantViewModel>();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                return View(model);
+            }
 
-                if (action == "AddMember" && !string.IsNullOrEmpty(email))
+            switch (action)
+            {
+                case "AddMember":
+                    return await HandleAddMember(model, email);
+
+                case var removeAction when removeAction.StartsWith("RemoveMember-"):
+                    return await HandleRemoveMember(model, removeAction);
+
+                case "Book":
+                    return await HandleBookingAsync(model);
+
+                default:
+                    ModelState.AddModelError("", "Invalid action.");
+                    return View(model);
+            }
+        }
+
+        private async Task<IActionResult> HandleAddMember(AddUsersViewModel model, string? email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                ModelState.AddModelError("", "Email is required.");
+                return View(model);
+            }
+
+            if (_validationService.IsEmailAlreadyAdded(model.Participants, email))
+            {
+                ModelState.AddModelError("", "This email is already added.");
+            }
+            else
+            {
+                model.Participants.Add(new ParticipantViewModel { Email = email });
+            }
+
+            ModelState.Clear();
+            return View(model);
+        }
+
+        private async Task<IActionResult> HandleRemoveMember(AddUsersViewModel model, string action)
+        {
+            if (int.TryParse(action.Replace("RemoveMember-", ""), out int indexToRemove))
+            {
+                if (_validationService.IsParticipantIndexValid(indexToRemove, model.Participants.Count))
                 {
-                    if (!model.Participants.Any(p => p.Email.Equals(email, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        model.Participants.Add(new ParticipantViewModel { Email = email });
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "This email is already added.");
-                    }
-
+                    model.Participants.RemoveAt(indexToRemove);
                     ModelState.Clear();
-                    return View(model);
                 }
-                else if (action.StartsWith("RemoveMember-"))
+                else
                 {
-                    if (int.TryParse(action.Replace("RemoveMember-", ""), out int indexToRemove))
-                    {
-                        if (indexToRemove >= 0 && indexToRemove < model.Participants.Count)
-                        {
-                            model.Participants.RemoveAt(indexToRemove);
-                            ModelState.Clear();
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "Invalid participant index.");
-                        }
-                    }
-
-                    return View(model);
-                }
-                else if (action == "Book")
-                {
-                    if (!model.Participants.Any())
-                    {
-                        ModelState.AddModelError("", "Please add at least one participant before proceeding.");
-                        return View(model);
-                    }
-
-                    try
-                    {
-                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                        var booking = await _bookingService.CreateBookingAsync(model, userId);
-
-                        foreach (var participant in model.Participants)
-                        {
-                            _bookingService.AddParticipant(booking.BookingId, participant);
-                        }
-
-                        return View("PaymentPage", booking);
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        ModelState.AddModelError("", ex.Message);
-                    }
+                    ModelState.AddModelError("", "Invalid participant index.");
                 }
             }
+            else
+            {
+                ModelState.AddModelError("", "Invalid index format.");
+            }
+
             return View(model);
+        }
+
+        private async Task<IActionResult> HandleBookingAsync(AddUsersViewModel model)
+        {
+            if (!model.Participants.Any())
+            {
+                ModelState.AddModelError("", "Please add at least one participant before proceeding.");
+                return View(model);
+            }
+
+            try
+            {
+                string userId = _profileService.GetCurrentUserId();
+                //Booking booking = await _bookingService.CreateBookingAsync(model, userId);
+                var (booking, conflictWarnings) = await _bookingService.CreateBookingAsync(model, userId);
+
+                foreach (var participant in model.Participants)
+                {
+                    _bookingService.AddParticipant(booking.BookingId, participant);
+                }
+                if (conflictWarnings.Any())
+                {
+                    TempData["ConflictWarnings"] = conflictWarnings;
+                }
+                return View("PaymentPage", booking);
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
         }
         [HttpPost]
         public async Task<IActionResult> ProcessPayment(int bookingId, string paymentMethod)
@@ -108,18 +146,18 @@ namespace TrekMasters.Controllers
             return View("BookingSuccess");
         }
         
-        public IActionResult CancelBooking(int bookingId)
+        public async Task<IActionResult> CancelBooking(int bookingId)
         {
             var model = _bookingService.GetCancellationViewModel(bookingId);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult ProcessCancellation(CancellationViewModel model)
+        public async Task<IActionResult> ProcessCancellation(CancellationViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _bookingService.ProcessCancellation(model);
+                await _bookingService.ProcessCancellation(model);
                 return RedirectToAction("MyBookings", "Profile");
             }
             return View("CancelBooking", model);
@@ -127,13 +165,13 @@ namespace TrekMasters.Controllers
 
        
         [HttpGet]
-        public IActionResult RescheduleBooking(int bookingId)
+        public async Task<IActionResult> RescheduleBooking(int bookingId)
         {
-            var model = _bookingService.GetRescheduleViewModel(bookingId);
+            var model =  _bookingService.GetRescheduleViewModel(bookingId);
             return View(model);
         }
         [HttpPost]
-        public IActionResult ProcessReschedule(RescheduleViewModel model)
+        public async Task<IActionResult> ProcessReschedule(RescheduleViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -151,3 +189,14 @@ namespace TrekMasters.Controllers
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+

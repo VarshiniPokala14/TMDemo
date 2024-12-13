@@ -11,6 +11,17 @@
 <div class="form-container">
 	<div class="form-wrapper " style="height:auto;">
         <h2>Payment</h2>
+        @if (TempData["ConflictWarnings"] != null)
+        {
+            <div class="alert alert-warning">
+                <ul>
+                    @foreach (var warning in (List<string>)TempData["ConflictWarnings"])
+                    {
+                        <li>@warning</li><br />
+                    }
+                </ul>
+            </div>
+        }
         <form asp-action="ProcessPayment" method="post">
             <input type="hidden" name="BookingId" value="@Model.BookingId" />
              

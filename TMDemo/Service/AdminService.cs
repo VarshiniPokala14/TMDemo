@@ -1,8 +1,4 @@
 ﻿
-
-
-using Microsoft.EntityFrameworkCore;
-
 namespace TrekMasters.Service
 {
     public class AdminService : IAdminService
@@ -44,7 +40,7 @@ namespace TrekMasters.Service
                     trek.TrekImg = memoryStream.ToArray();
                 }
             }
-            await _adminRepository.AddTrekAsync(trek);
+            await _adminRepository.AddAsync<Trek>(trek);
             
 
            
@@ -62,7 +58,7 @@ namespace TrekMasters.Service
                     ActivityDescription = activity.ActivityDescription
                 };
 
-                await _adminRepository.AddTrekPlanAsync(trekPlan);
+                await _adminRepository.AddAsync<TrekPlan>(trekPlan);
             }
         }
 
@@ -70,7 +66,7 @@ namespace TrekMasters.Service
         public async Task<List<Trek>> GetAllTreksAsync()
         {
             
-            return await _adminRepository.GetAllTreksAsync();
+            return await _adminRepository.GetAllAsync<Trek>();
         }
 
         public async Task<List<Availability>> GetAllAvailabilitiesAsync()
@@ -90,7 +86,7 @@ namespace TrekMasters.Service
 
         public async Task<Trek> GetTrekByIdAsync(int trekId)
         {
-            return _bookingRepository.GetTrekById(trekId);
+            return   _bookingRepository.GetTrekById(trekId);
         }
         public Availability GetAvailabilityById(int availabilityId)
         {
@@ -98,7 +94,7 @@ namespace TrekMasters.Service
         }
         public async Task AddAvailabilityAsync(int trekId, DateTime startDate, DateTime endDate,string month,int maxGroup)
         {
-            var trek = _bookingRepository.GetTrekById(trekId);
+            var trek =_bookingRepository.GetTrekById(trekId);   
             if (trek == null)
                 throw new ArgumentException("Trek not found");
 
@@ -110,12 +106,8 @@ namespace TrekMasters.Service
                 Month = month,
                 MaxGroupSize=maxGroup
             };
-
-            
-            
-
             bool isFirstAvailability = !await _adminRepository.AvailabilityExistsAsync(trekId);
-            await _adminRepository.AddAvailabilityAsync(availability);
+            await _adminRepository.AddAsync<Availability>(availability);
             _cache.Remove("Availabilities:All");
             if (isFirstAvailability)
             {
@@ -125,15 +117,16 @@ namespace TrekMasters.Service
 
         private async Task NotifyUsersAboutAvailabilityAsync(int trekId)
         {
-            var trek = _bookingRepository.GetTrekById(trekId);
-            
+            var trek=_bookingRepository.GetTrekById(trekId);
             var notificationRequests = await _adminRepository.GetNotificationRequestsAsync(trekId);
             foreach (var request in notificationRequests)
             {
                 await _emailSender.SendEmailAsync(request.Email, "New Trek Availability", $"Good News! New availability added for trek {trek.Name}");
             }
-            
-            await _adminRepository.RemoveNotificationRequests(notificationRequests);
+            foreach (var request in notificationRequests)
+            {
+                await _adminRepository.DeleteAsync<NotificationRequest>(request);
+            }
         }
         public async Task<bool> CheckAvailabilityConflictAsync(int trekId, DateTime startDate, DateTime endDate)
         {

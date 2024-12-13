@@ -6,12 +6,12 @@
         Task<bool> ProcessPayment(int bookingId, string paymentMethod);
 
         CancellationViewModel GetCancellationViewModel(int bookingId);
-        void ProcessCancellation(CancellationViewModel model);
+        Task ProcessCancellation(CancellationViewModel model);
         RescheduleViewModel GetRescheduleViewModel(int bookingId);
-        void ProcessReschedule(RescheduleViewModel model);
+        Task ProcessReschedule(RescheduleViewModel model);
 
-        Task<Booking> CreateBookingAsync(AddUsersViewModel model, string userId);
-        void AddParticipant(int bookingId, ParticipantViewModel participant);
+        Task<(Booking, List<string>)> CreateBookingAsync(AddUsersViewModel model, string userId);
+        Task AddParticipant(int bookingId, ParticipantViewModel participant);
         AddUsersViewModel GetAddUsersViewModel(int trekId ,string startDate, string userEmail);
     }
 

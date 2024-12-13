@@ -1,15 +1,12 @@
 ﻿namespace TrekMasters.Repository
 {
-    public interface IBookingRepository
+    public interface IBookingRepository:IRepository
     {
         Trek GetTrekById(int trekId);
         Booking GetBookingById(int bookingId);
-        void AddBooking(Booking booking);
-        void UpdateBooking(Booking booking);
         List<DateTime> GetAvailableDates(int trekId);
+        Task<List<Booking>> GetOverlappingBookingsAsync(string email, DateTime startDate, DateTime endDate);
 
-        void AddParticipant(TrekParticipant participant);
-        
     }
 
 }

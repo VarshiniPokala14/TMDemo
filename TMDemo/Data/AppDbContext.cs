@@ -72,7 +72,7 @@ namespace TrekMasters.Data
                 .HasOne(b => b.Trek)
                 .WithMany()
                 .HasForeignKey(b => b.TrekId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Trek>()
                 .HasMany(t => t.TrekPlans)
                 .WithOne(tp => tp.Trek)

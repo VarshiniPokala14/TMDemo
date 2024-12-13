@@ -1,41 +1,14 @@
 ﻿namespace TrekMasters.Repository
 {
-    public class AdminRepository : IAdminRepository
+    public class AdminRepository : Repository, IAdminRepository 
     {
         private readonly AppDbContext _context;
 
-        public AdminRepository(AppDbContext context)
+        public AdminRepository(AppDbContext context):base(context)
         {
             _context = context;
         }
-
-        public async Task<List<Trek>> GetAllTreksAsync()
-        {
-            return await _context.Treks.ToListAsync();
-        }
-
-       
-
-        public async Task AddTrekAsync(Trek trek)
-        {
-            await _context.Treks.AddAsync(trek);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AddTrekPlanAsync(TrekPlan trekPlan)
-        {
-            await _context.TrekPlans.AddAsync(trekPlan);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AddAvailabilityAsync(Availability availability)
-        {
-             _context.Availabilities.AddAsync(availability);
-            await _context.SaveChangesAsync();
-        }
-
-        
-
+     
         public async Task<List<TrekAvailabilityViewModel>> GetTrekBookingsAsync(int trekId)
         {
             return await _context.Availabilities
@@ -46,9 +19,9 @@
                     StartDate = a.StartDate,
                     MaxGroupSize = a.MaxGroupSize,
                     RemainingSlots = a.MaxGroupSize - (_context.Bookings
-                        .Where(b => b.TrekId == trekId && b.TrekStartDate == a.StartDate)
+                        .Where(b => b.TrekId == trekId && b.TrekStartDate == a.StartDate && b.PaymentSuccess == true)
                         .Sum(b => b.NumberOfPeople) - _context.Bookings
-                        .Where(b => b.TrekId == trekId && b.TrekStartDate == a.StartDate && (b.IsCancelled == true))
+                        .Where(b => b.TrekId == trekId && b.TrekStartDate == a.StartDate && (b.IsCancelled == true) && b.PaymentSuccess==true)
                         .Sum(b => b.NumberOfPeople))
                 })
                 .ToListAsync();
@@ -62,7 +35,7 @@
                 .FirstOrDefaultAsync();
 
             return await _context.Bookings
-                .Where(b => b.TrekStartDate == startDate && (b.IsCancelled == false || b.IsCancelled == null))
+                .Where(b => b.TrekStartDate == startDate && (b.IsCancelled == false || b.IsCancelled == null) && b.PaymentSuccess==true)
                 .Select(b => new UserViewModel
                 {
                     UserId=b.UserId,
@@ -93,11 +66,7 @@
                 .ToListAsync();
         }
 
-        public async Task RemoveNotificationRequests(List<NotificationRequest> notificationRequests)
-        {
-            _context.NotificationRequests.RemoveRange(notificationRequests);
-            await _context.SaveChangesAsync();
-        }
+        
         public async Task<Availability> GetConflictingAvailabilityAsync(int trekId, DateTime startDate, DateTime endDate)
         {
             return await _context.Availabilities

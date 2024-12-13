@@ -104,7 +104,7 @@
             var existingAvailability = await _adminService.CheckAvailabilityConflictAsync(availability.TrekId, availability.StartDate, availability.EndDate);
             if (existingAvailability)
             {
-                TempData["Message"] = $"Can't add Availability for {trek.Name} at that date {availability.StartDate.ToShortDateString} to {availability.EndDate.ToShortDateString} because it is overlapping with exsisting Availabilities.";
+                TempData["Message"] = $"Can't add Availability for {trek.Name} at that date {availability.StartDate.ToShortDateString()} to {availability.EndDate.ToShortDateString()} because it is overlapping with exsisting Availabilities.";
                 return RedirectToAction("Index","Admin");
            
             }
