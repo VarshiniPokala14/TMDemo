@@ -135,7 +135,7 @@ namespace TrekMasters.Service
 
             return null;
         }
-        
+
         public async Task AddNotificationRequestAsync(int trekId, string email)
         {
             var notificationRequest = new NotificationRequest
@@ -147,7 +147,7 @@ namespace TrekMasters.Service
 
             // Save the request to the database
             _trekRepository.AddAsync<NotificationRequest>(notificationRequest);
-            
+
         }
 
         public async Task<NotificationRequest> GetNotificationRequestAsync(int trekId, string email)

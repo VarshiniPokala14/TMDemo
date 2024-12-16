@@ -9,7 +9,11 @@
 <link href="~/css/payment.css" rel="stylesheet" />
 
 <div class="form-container">
-	<div class="form-wrapper " style="height:auto;">
+	<div class="form-wrapper " style="height:auto;position:relative;">
+        <a href="/Home/Index" class="close-button" title="Back to Home"
+           style="text-decoration:none; font-size:30px; color:black; position:absolute; top:20px; right:20px; font-weight:bold; cursor:pointer;">
+            &times;
+        </a>  
         <h2>Payment</h2>
         @if (TempData["ConflictWarnings"] != null)
         {
@@ -22,6 +26,7 @@
                 </ul>
             </div>
         }
+        
         <form asp-action="ProcessPayment" method="post">
             <input type="hidden" name="BookingId" value="@Model.BookingId" />
              
@@ -40,8 +45,27 @@
                 </select>
 			</div>
             <button class="btn btn-primary">Pay @((Model.NumberOfPeople * Model.Trek.Price) + (Model.NumberOfPeople * Model.Trek.Price * 0.05M)+10)</button>
-		</form>
+@*             <a href="/Home/Index" style="background-color:deepskyblue;text-decoration:none;">Back to Home</a>
+
+ *@
+            
+        </form>
 	</div>
 </div>
+@* <style>
+    .close-button {
+        font-size: 24px;
+        color: red;
+        text-decoration: none;
+        position: absolute;
+        top: 10px; /* Adjust to match your layout */
+        right: 10px; /* Adjust to match your layout */
+        font-weight: bold;
+        cursor: pointer;
+    }
 
+        .close-button:hover {
+            color: darkred;
+        }
+</style> *@
 

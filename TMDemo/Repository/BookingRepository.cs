@@ -31,9 +31,10 @@
         {
             return await _context.Bookings
                 .Include(b => b.Trek)
+              
                 .Where(b => b.TrekParticipants.Any(p => p.Email == email)
                             && b.TrekStartDate < endDate
-                            && b.TrekStartDate.AddDays(b.Trek.DurationDays) > startDate)
+                            && b.TrekStartDate.AddDays(b.Trek.DurationDays) > startDate && b.PaymentSuccess==true)
                 .ToListAsync();
         }
 

@@ -33,7 +33,7 @@
 
                 if (overlappingBookings.Any())
                 {
-                    string conflicts = string.Join(", ", overlappingBookings.Select(b => $"Booking ID: {b.BookingId}, Trek: {b.Trek.Name}"));
+                    string conflicts = string.Join(", ", overlappingBookings.Select(b => $"Booking ID: {b.BookingId}, Trek: {b.Trek.Name} from {b.TrekStartDate} to {b.TrekStartDate.AddDays(b.Trek.DurationDays-1)}"));
                     conflictWarnings.Add($"Participant {participant.Name} ({participant.Email}) has overlapping bookings: {conflicts}.");
                 }
             }
