@@ -1,0 +1,29 @@
+﻿@* @model NotificationViewModel
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="/Notifications/Index" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Notifications
+        <span class="badge bg-danger">@Model.UnreadCount</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
+        @if (Model.Notifications.Any())
+        {
+            @foreach (var notification in Model.Notifications.Take(5))
+            {
+                <li class="dropdown-item @(notification.IsRead ? "" : "font-weight-bold")">
+                    <a href="@Url.Action("MarkAsRead", "Notifications", new { notificationId = notification.NotificationId })">
+                        <span>@notification.Message</span>
+                        <small class="text-muted d-block">@notification.CreatedAt.ToShortTimeString()</small>
+                    </a>
+                </li>
+            }
+            <li><hr class="dropdown-divider"></li>
+        }
+        else
+        {
+            <li class="dropdown-item">No new notifications</li>
+        }
+        <li><a class="dropdown-item" href="/Notification/Index">View All</a></li>
+    </ul>
+</li>
+ *@

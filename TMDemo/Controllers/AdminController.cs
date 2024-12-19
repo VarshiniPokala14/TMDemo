@@ -189,7 +189,45 @@
 
             return View(participantViewModels);
         }
+        //[HttpPost]
+        //public IActionResult Cancel(int availabilityId)
+        //{
+        //    try
+        //    {
+        //        bool isCancelled = _adminService.CancelTrek(availabilityId);
 
+        //        if (isCancelled)
+        //        {
+        //            TempData["SuccessMessage"] = "Trek cancelled successfully, and refunds were processed.";
+        //        }
+        //        else
+        //        {
+        //            TempData["ErrorMessage"] = "Failed to cancel the trek. Please try again.";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData["ErrorMessage"] = $"Error: {ex.Message}";
+        //    }
+
+        //    return RedirectToAction("Bookings", new { availabilityId });
+        //}
+        public async Task<IActionResult> CancelTrek(int availabilityId)
+        {
+            var model = await _adminService.GetTrekCancellationViewModelAsync(availabilityId);
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ProcessTrekCancellation(TrekCancellationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _adminService.ProcessTrekCancellationAsync(model);
+                TempData["SuccessMessage"] = "Trek cancelled successfully, and refunds have been processed and users will be informed through Mail.";
+                return RedirectToAction("Index", "Admin");
+            }
+            return View("CancelTrek", model);
+        }
 
     }
 

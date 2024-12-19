@@ -2,10 +2,22 @@
 {
     public class Notification
     {
-        public int Id { get; set; } 
-        public string Message { get; set; } 
-        public int TrekId { get; set; } 
-        public string Email {  get; set; }
-        public List<NotificationRequest> NotificationRequests { get; set; } 
+        [Key]
+        public int NotificationId { get; set; }
+
+        [Required]
+        public string SenderId { get; set; } // The user who sends the notification
+
+        [Required]
+        public string RecipientId { get; set; } // The user who receives the notification
+
+        [Required]
+        public string Message { get; set; } // Notification message
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public bool IsRead { get; set; } = false; // Track if the notification is read
     }
+
 }

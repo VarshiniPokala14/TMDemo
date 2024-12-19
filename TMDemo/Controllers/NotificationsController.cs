@@ -1,40 +1,32 @@
-﻿//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.SignalR;
+﻿namespace TrekMasters.Controllers
+{
+    public class NotificationController : Controller
+    {
+        private readonly INotificationService _notificationService;
+        private readonly UserManager<UserDetail> _userManager;
 
-//namespace TrekMasters.Controllers
-//{
+        public NotificationController(INotificationService notificationService, UserManager<UserDetail> userManager)
+        {
+            _notificationService = notificationService;
+            _userManager = userManager;
+        }
 
-//    [Route("Notifications")]
-//    public class NotificationsController : ControllerBase
-//    {
-//        private INotificationRepository _notificationRepository;
-//        private UserManager<UserDetail> _userManager;
+        public async Task<IActionResult> Index()
+        {
+            var userId = _userManager.GetUserId(User);
+            var notifications = await _notificationService.GetNotificationsForUserAsync(userId);
+            return View(notifications);
+        }
 
-//        public NotificationsController(INotificationRepository notificationRepository, UserManager<UserDetail> userManager)
-//        {
-//            _notificationRepository = notificationRepository;
-//            _userManager = userManager;
-//        }
-//        public IActionResult GetNotification()
-//        {
-//            var userId = _userManager.GetUserId(HttpContext.User);
-//            var notification = _notificationRepository.GetUserNotifications(userId);
-//            return Ok(new { UserNotification = notification, Count = notification.Count });
-//        }
+        [HttpGet]
+        public async Task<IActionResult> MarkAsRead(int notificationId)
+        {
+            if (notificationId > 0)
+            {
+                await _notificationService.MarkAsReadAsync(notificationId);
 
-//        public IActionResult ReadNotification(int notificationId)
-//        {
-
-//            _notificationRepository.ReadNotification(notificationId, _userManager.GetUserId(HttpContext.User));
-
-//            return Ok();
-//        }
-
-
-
-
-
-//    }
-
-//}
+            }
+            return Ok();
+        }
+    }
+}

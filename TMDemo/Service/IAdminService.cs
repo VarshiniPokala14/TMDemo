@@ -15,6 +15,9 @@
         Task<bool> CheckAvailabilityConflictAsync(int trekId, DateTime startDate, DateTime endDate);
         Task<IEnumerable<TrekParticipant>> GetParticipantsForBookingAsync(int bookingId);
         Task<Booking> GetBookingByIdAsync(int bookingId);
+        //bool CancelTrek(int availabilityId);
+        Task ProcessTrekCancellationAsync(TrekCancellationViewModel model);
+        Task<TrekCancellationViewModel> GetTrekCancellationViewModelAsync(int availabilityId);
     }
 
 }

@@ -1,0 +1,42 @@
+﻿@model TrekCancellationViewModel
+
+@{
+    ViewData["Title"] = "Cancel Trek";
+}
+
+<div class="form-container">
+    <div class="form-wrapper">
+        <h2>Cancel Trek</h2>
+        <form asp-action="ProcessTrekCancellation" method="post">
+            <input type="hidden" name="AvailabilityId" value="@Model.AvailabilityId" />
+            <input type="hidden" name="TotalRefundAmount" value="@Model.TotalRefundAmount" />
+            <input type="hidden" name="TrekName" value="@Model.TrekName"/>
+            <div class="form-group">
+                <label><strong>Trek Name:</strong></label>
+                <p>@Model.TrekName</p>
+            </div>
+
+            <div class="form-group">
+                <label><strong>Start Date:</strong></label>
+                <p>@Model.StartDate.ToShortDateString()</p>
+            </div>
+
+            <div class="form-group">
+                <label><strong>Total Users:</strong></label>
+                <p>@Model.TotalUsers</p>
+            </div>
+
+            <div class="form-group">
+                <label><strong>Total Refund Amount:</strong></label>
+                <p>@Model.TotalRefundAmount:C</p>
+            </div>
+
+            <div class="form-group">
+                <label for="Reason">Cancellation Reason *</label>
+                <textarea id="Reason" name="Reason" required class="form-control" placeholder="Provide cancellation reason"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-danger mt-3">Confirm Cancellation</button>
+        </form>
+    </div>
+</div>

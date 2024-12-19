@@ -3,6 +3,16 @@ namespace TrekMasters.Controllers
 {
     public class HomeController : Controller
     {
+
+        private readonly UserManager<UserDetail> _userManager;
+        private readonly INotificationService _notificationService;
+
+        public HomeController(UserManager<UserDetail> userManager, INotificationService notificationService)
+        {
+            _userManager = userManager;
+            _notificationService = notificationService;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -35,7 +45,24 @@ namespace TrekMasters.Controllers
                     return View("GenericError");
             }
         }
-        
+        public async Task<IActionResult> Route()
+        {
+            UserDetail user = await _userManager.GetUserAsync(User);
+            List<String> Roles = User.FindAll(ClaimTypes.Role).Select(r =>r.Value).ToList();
+            if (Roles.Contains("Admin"))
+            {
+                return RedirectToAction("Treks", "Admin");
+            }
+            return View("Index");
+        }
+        public async Task<IActionResult> Notification()
+        {
+            var userId = _userManager.GetUserId(User);
+            var notifications = await _notificationService.GetNotificationsForUserAsync(userId);
+            ViewData["Notifications"] = notifications;
+
+            return View();
+        }
 
     }
 }

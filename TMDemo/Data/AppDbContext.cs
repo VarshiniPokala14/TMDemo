@@ -18,6 +18,8 @@ namespace TrekMasters.Data
         public DbSet<TrekPlan> TrekPlans { get; set; }
         public DbSet<NotificationRequest> NotificationRequests { get; set; }
         public DbSet<TrekParticipant> TrekParticipants { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -8,12 +8,12 @@
 ////        Task DeleteNotificationAsync(int notificationId);
 ////    }
 ////}
-//namespace TrekMasters.Repository
-//{
-//    public interface INotificationRepository
-//    {
-//        List<NotificationRequest> GetUserNotifications(string userId);
-//        void Create(Notification notification);
-//        void ReadNotification(int id);
-//    }
-//}
+namespace TrekMasters.Repository
+{
+    public interface INotificationRepository:IRepository
+    {
+        Task<List<Notification>> GetNotificationsForUserAsync(string userId);
+        Notification GetNotificationById(int Id);
+        Task<List<Notification>> GetUnreadNotificationsForUserAsync( string userId);
+    }
+}

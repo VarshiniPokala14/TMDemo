@@ -86,6 +86,33 @@ namespace TrekMasters.Repository
             return await _context.TrekReviews
                 .AnyAsync(r => r.UserId == userId && r.TrekId == trekId);
         }
+        public async Task<string> GetAdminUserIdAsync()
+        {
+            // Retrieve the Role ID for the Admin role
+            var adminRoleId = await _context.Roles
+                .Where(r => r.Name == "Admin")
+                .Select(r => r.Id)
+                .FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(adminRoleId))
+            {
+                throw new Exception("Admin role not found.");
+            }
+
+            // Retrieve the User ID of a user with the Admin role
+            var adminUserId = await _context.UserRoles
+                .Where(ur => ur.RoleId == adminRoleId)
+                .Select(ur => ur.UserId)
+                .FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(adminUserId))
+            {
+                throw new Exception("No user with Admin role found.");
+            }
+
+            return adminUserId;
+        }
+
     }
 
 }

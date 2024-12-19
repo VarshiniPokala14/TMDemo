@@ -6,16 +6,20 @@ namespace TrekMasters.Service
         private readonly ITrekRepository _trekRepository;
         private readonly IUserRepository _userRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IBookingRepository _bookingRepository;
+        private readonly INotificationService _notificationService;
         private readonly IMemoryCache _cache;
         private readonly IAvailabilityRepository _availabilityRepository;
 
-        public TrekService(ITrekRepository trekRepository, IUserRepository userRepository, ICategoryRepository categoryRepository,IMemoryCache cache,IAvailabilityRepository availabilityRepository)
+        public TrekService(ITrekRepository trekRepository, IUserRepository userRepository, ICategoryRepository categoryRepository,IMemoryCache cache,IAvailabilityRepository availabilityRepository,INotificationService notificationService,IBookingRepository bookingRepository)
         {
             _trekRepository = trekRepository;
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
             _cache = cache;
             _availabilityRepository = availabilityRepository;
+            _notificationService = notificationService;
+            _bookingRepository = bookingRepository;
         }
 
         public async Task<List<Trek>> GetAllTreksAsync()
@@ -136,7 +140,7 @@ namespace TrekMasters.Service
             return null;
         }
 
-        public async Task AddNotificationRequestAsync(int trekId, string email)
+        public async Task AddNotificationRequestAsync(int trekId, string email,string userId)
         {
             var notificationRequest = new NotificationRequest
             {
@@ -144,9 +148,13 @@ namespace TrekMasters.Service
                 Email = email,
                 RequestedOn = DateTime.Now
             };
-
+            var user= await _userRepository.GetUserAsync(userId);
+            var trek=_bookingRepository.GetTrekById(trekId);
             // Save the request to the database
-            _trekRepository.AddAsync<NotificationRequest>(notificationRequest);
+            await _trekRepository.AddAsync<NotificationRequest>(notificationRequest);
+            string adminUserId=await _trekRepository.GetAdminUserIdAsync();
+            string Message= $"{user.FirstName} {user.LastName} is requesting for the availability of {trek.Name}";
+            _notificationService.CreateNotificationAsync(userId, adminUserId, Message);
 
         }
 

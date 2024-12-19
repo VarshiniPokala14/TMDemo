@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Notification>
+@{
+    Layout = User.IsInRole("Admin") ? "~/Views/Shared/_LayoutAdmin.cshtml" : "~/Views/Shared/_Layout.cshtml";
+}
+<div style="height:700px;">
+
+
+<h2>Your Notifications</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Message</th>
+            <th>Created At</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var notification in Model)
+        {
+            <tr class="@(notification.IsRead ? "" : "font-weight-bold")">
+                <td>@notification.Message</td>
+                <td>@notification.CreatedAt</td>
+                <td>
+                    @if (!notification.IsRead)
+                    {
+                            <button class="btn btn-sm btn-primary" onclick="markAsRead(@notification.NotificationId)">
+                                Mark as Read
+                            </button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+<script>
+    // async function markAsRead(notificationId) {
+    //     const response = await fetch('/Notification/MarkAsRead', {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+    //         },
+    //         body: JSON.stringify({ notificationId })
+    //     });
+
+    //     if (response.ok) {
+    //         location.reload();
+    //     }
+    // }
+    // async function markAsRead(notificationId) {
+    //     try {
+    //         // Construct the URL with the notificationId as a query parameter
+    //         const url = `/Notification/MarkAsRead?notificationId=${notificationId}`;
+
+    //         // Send the GET request
+    //         const response = await fetch(url, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'RequestVerificationToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    //             }
+    //         });
+
+    //         if (response.ok) {
+    //             // Reload the page or update the UI dynamically
+    //             location.reload();
+    //         } else {
+    //             console.error("Failed to mark notification as read.");
+    //         }
+    //     } catch (error) {
+    //         console.error("An error occurred:", error);
+    //     }
+    // }
+    async function markAsRead(notificationId) {
+        console.log("markAsRead called with ID:", notificationId);
+
+        try {
+            const url = `/Notification/MarkAsRead?notificationId=${notificationId}`;
+            const response = await fetch(url, { method: 'GET' });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                console.error("Failed to mark notification as read.");
+            }
+        } catch (error) {
+            console.error("An error occurred:", error);
+        }
+    }
+
+</script>
+

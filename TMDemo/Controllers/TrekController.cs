@@ -1,11 +1,11 @@
-﻿
-public class TrekController : Controller
+﻿public class TrekController : Controller
 {
     private readonly ITrekService _trekService;
-    
-    public TrekController(ITrekService trekService)
+    private readonly UserManager<UserDetail> _userManager;
+    public TrekController(ITrekService trekService, UserManager<UserDetail> userManager)
     {
         _trekService = trekService;
+        _userManager = userManager;
     }
 
     public async Task<IActionResult> AllTreks()
@@ -63,14 +63,14 @@ public class TrekController : Controller
     public async Task<IActionResult> NotifyMe(int trekId)
     {
         string userEmail = User.FindFirstValue(ClaimTypes.Email);
-
+        var user = await _userManager.FindByEmailAsync(userEmail);
         // Check if the user has already requested notifications for this trek
         var existingRequest = await _trekService.GetNotificationRequestAsync(trekId, userEmail);
 
         if (existingRequest == null)
         {
             // Add a new notification request
-            await _trekService.AddNotificationRequestAsync(trekId, userEmail);
+            await _trekService.AddNotificationRequestAsync(trekId, userEmail,user.Id);
             TempData["NotificationMessage"] = "You will be notified through email when availability is added for this trek.";
         }
         else

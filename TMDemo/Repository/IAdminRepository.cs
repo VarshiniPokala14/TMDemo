@@ -13,6 +13,8 @@
         Task<List<int>> GetBookingIdsByUserIdAsync(string userId);
         Task<IEnumerable<TrekParticipant>> GetParticipantsByBookingIdAsync(int bookingId);
         Task<Booking> GetBookingByIdAsync(int bookingId);
+        Task<Availability> GetAvailabilityByIdAsync(int availabilityId);
+        Task<List<Booking>> GetBookingsByAvailabilityIdAsync(int availabilityId);
     }
 }
 

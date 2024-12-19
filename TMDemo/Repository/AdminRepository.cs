@@ -98,6 +98,37 @@
                 .Include(b => b.User) 
                 .FirstOrDefaultAsync(b => b.BookingId == bookingId);
         }
+        public async Task<Availability> GetAvailabilityByIdAsync(int availabilityId)
+        {
+            return await _context.Availabilities
+                .Include(a => a.Trek)
+                .FirstOrDefaultAsync(a => a.AvailabilityId == availabilityId);
+        }
+
+        public async Task<List<Booking>> GetBookingsByAvailabilityIdAsync(int availabilityId)
+        {
+            var startDate = await _context.Availabilities
+                .Where(a => a.AvailabilityId == availabilityId)
+                .Select(a => a.StartDate)
+                .FirstOrDefaultAsync();
+
+            return await _context.Bookings
+                
+                .Where(b => b.TrekStartDate == startDate && (b.IsCancelled == false || b.IsCancelled == null) && b.PaymentSuccess==true)
+                .Include(u=>u.User)
+                .Include(tp=>tp.TrekParticipants)
+                .ToListAsync();
+        }
+
+        //public void UpdateBooking(Booking booking)
+        //{
+        //    _context.Bookings.Update(booking);
+        //}
+
+        //public async Task SaveChangesAsync()
+        //{
+        //    await _context.SaveChangesAsync();
+        //}
 
 
     }
