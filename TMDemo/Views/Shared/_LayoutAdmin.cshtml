@@ -36,6 +36,9 @@
                 </a>
             </div>
             <ul class="nav-links" style="margin-top:10px;">
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Analytics" && ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
+                    <a class="nav-link" href="@Url.Action("Dashboard", "Analytics")">Dashboard</a>
+                </li>
                 <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Treks" ? "active" : "")">
                     <a class="nav-link" href="@Url.Action("Treks", "Admin")">All Treks</a>
                 </li>

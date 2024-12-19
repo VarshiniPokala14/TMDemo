@@ -1,0 +1,143 @@
+﻿<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@model DashboardAnalyticsViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="container mt-5">
+    <h1 class="mb-4">Analytics Dashboard</h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Bookings</h5>
+                    <p class="card-text">@Model.TotalBookings</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text">@Model.TotalUsers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Completed Treks</h5>
+                    <p class="card-text">@Model.CompletedTreks</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Cancellations</h5>
+                    <p class="card-text">@Model.Cancellations</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">OnGoing Treks</h5>
+                    <p class="card-text">@Model.OngoingTreks</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Treks</h5>
+                    <p class="card-text">@Model.TotalTreks</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Revenue</h5>
+                    <p class="card-text" id="totalRevenue" data-value="@Model.TotalRevenue">₹0.00</p>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">UpComing Treks</h5>
+                    <p class="card-text">@Model.UpcomingTreks</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6" style="width:500px;height:500px;">
+            <h3>Bookings by Region</h3>
+            <canvas id="bookingsByRegionChart"></canvas>
+        </div>
+        <div class="col-md-6" style="margin-left:30px;">
+            <h3>Top Treks</h3>
+            <canvas id="topTreksChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Bookings by Region Chart
+    var bookingsByRegionCtx = document.getElementById('bookingsByRegionChart').getContext('2d');
+    var bookingsByRegionChart = new Chart(bookingsByRegionCtx, {
+        type: 'pie',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.BookingsByRegion.Keys)),
+            datasets: [{
+                label: 'Bookings',
+                data: @Html.Raw(Json.Serialize(Model.BookingsByRegion.Values)),
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+            }]
+        }
+        
+    });
+
+    // Top Treks Chart
+    var topTreksCtx = document.getElementById('topTreksChart').getContext('2d');
+    var topTreksChart = new Chart(topTreksCtx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.TopTreks.Select(t => t.TrekName))),
+            datasets: [{
+                label: 'Bookings',
+                data: @Html.Raw(Json.Serialize(Model.TopTreks.Select(t => t.BookingCount))),
+                backgroundColor: '#36A2EB',
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+   
+        function formatToIndianCurrency(amount) {
+            // Convert the number to a string with Indian currency format
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR'
+            }).format(amount);
+        }
+
+    // Example: Format and display the total revenue
+    document.addEventListener('DOMContentLoaded', function () {
+        const revenueElement = document.getElementById('totalRevenue');
+        const revenueValue = parseFloat(revenueElement.dataset.value); // Get the value from a data attribute
+        revenueElement.textContent = formatToIndianCurrency(revenueValue);
+    });
+
+</script>
