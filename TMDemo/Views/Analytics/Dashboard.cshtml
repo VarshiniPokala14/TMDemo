@@ -7,22 +7,40 @@
     <h1 class="mb-4">Analytics Dashboard</h1>
 
     <div class="row">
+        @* <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3" id="totalBookingsCard" style="cursor: pointer;">
+                <div class="card-body">
+                    <h5 class="card-title">Total Bookings</h5>
+                    <p class="card-text">@Model.TotalBookings</p>
+                </div>
+            </div>
+        </div> *@
         <div class="col-md-3">
-            <div class="card text-white bg-primary mb-3">
+            <div class="card text-white bg-primary mb-3" data-bs-toggle="modal" data-bs-target="#totalBookingsModal" style="cursor: pointer;">
                 <div class="card-body">
                     <h5 class="card-title">Total Bookings</h5>
                     <p class="card-text">@Model.TotalBookings</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+
+        @* <div class="col-md-3">
             <div class="card text-white bg-success mb-3">
                 <div class="card-body">
                     <h5 class="card-title">Total Users</h5>
                     <p class="card-text">@Model.TotalUsers</p>
                 </div>
             </div>
+        </div> *@
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3" data-bs-toggle="modal" data-bs-target="#totalUsersModal" style="cursor: pointer;">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text">@Model.TotalUsers</p>
+                </div>
+            </div>
         </div>
+
         <div class="col-md-3">
             <div class="card text-white bg-warning mb-3">
                 <div class="card-body">
@@ -42,16 +60,33 @@
     </div>
 
     <div class="row">
-        <div class="col-md-3">
+        @* <div class="col-md-3">
             <div class="card text-white bg-primary mb-3">
                 <div class="card-body">
                     <h5 class="card-title">OnGoing Treks</h5>
                     <p class="card-text">@Model.OngoingTreks</p>
                 </div>
             </div>
-        </div>
+        </div> *@
         <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3" data-bs-toggle="modal" data-bs-target="#ongoingTreksModal" style="cursor: pointer;">
+                <div class="card-body">
+                    <h5 class="card-title">OnGoing Treks</h5>
+                    <p class="card-text">@Model.OngoingTreks</p>
+                </div>
+            </div>
+        </div>
+
+        @* <div class="col-md-3">
             <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Treks</h5>
+                    <p class="card-text">@Model.TotalTreks</p>
+                </div>
+            </div>
+        </div> *@
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3" data-bs-toggle="modal" data-bs-target="#totalTreksModal" style="cursor: pointer;">
                 <div class="card-body">
                     <h5 class="card-title">Total Treks</h5>
                     <p class="card-text">@Model.TotalTreks</p>
@@ -87,6 +122,111 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="totalBookingsModal" tabindex="-1" aria-labelledby="totalBookingsModalLabel" aria-hidden="true" style="margin-top:150px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="totalBookingsModalLabel">Trek Bookings</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    @foreach (var trek in Model.AllTreks)
+                    {
+                        <li class="list-group-item">
+                            @trek.TrekName: @trek.BookingCount bookings
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- User Details Modal -->
+<div class="modal fade" id="totalUsersModal" tabindex="-1" aria-labelledby="totalUsersModalLabel" aria-hidden="true" style="margin-top:100px;">
+    <div class="modal-dialog" >
+        <div class="modal-content" style="width:100vh;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="totalUsersModalLabel">User Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    @foreach (var user in Model.UserDetails)
+                    {
+                        <li class="list-group-item">
+                            <strong>Name:</strong> @user.Name 
+                            <strong>Contact:</strong> @user.Contact 
+                            <strong>Email:</strong> @user.Email
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade w-100" id="totalTreksModal" tabindex="-1" aria-labelledby="totalTreksModalLabel" aria-hidden="true" style="margin-top:100px;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:100vh;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="totalTreksModalLabel">Trek Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    @foreach (var trek in Model.Treks)
+                    {
+                        <li class="list-group-item">
+                            <strong>TrekName:</strong> @trek.Name 
+                            <strong>Location:</strong> @trek.Region 
+                            <strong>Duration:</strong> @trek.DurationDays
+                            <strong>Difficult Level:</strong> @trek.DifficultyLevel
+
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ongoingTreksModal" tabindex="-1" aria-labelledby="ongoingTreksModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ongoingTreksModalLabel">Ongoing Treks Bookings</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (Model.OngoingTrekDetails != null && Model.OngoingTrekDetails.Any())
+                {
+                    foreach (var trek in Model.OngoingTrekDetails)
+                    {
+                        <h5>@trek.TrekName (@trek.TrekRegion) - Duration: @trek.TrekDurationDays days</h5>
+                        <div class="list-group">
+                            @foreach (var user in trek.BookedUsers)
+                            {
+                                <div class="list-group-item">
+                                    <h6>@user.UserName</h6>
+                                    <p><strong>Email:</strong> @user.Email</p>
+                                    <p><strong>Number of People:</strong> @user.NumberOfPeople</p>
+                                    <p><strong>Total Amount:</strong> @user.TotalAmount</p>
+                                    <p><strong>Booking Date:</strong> @user.BookingDate.ToShortDateString()</p>
+                                </div>
+                            }
+                        </div>
+                        <hr />
+                    }
+                }
+                else
+                {
+                    <p>No ongoing trek bookings available.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     // Bookings by Region Chart
@@ -126,12 +266,12 @@
     });
    
         function formatToIndianCurrency(amount) {
-            // Convert the number to a string with Indian currency format
             return new Intl.NumberFormat('en-IN', {
                 style: 'currency',
                 currency: 'INR'
             }).format(amount);
         }
+
 
     // Example: Format and display the total revenue
     document.addEventListener('DOMContentLoaded', function () {
@@ -139,5 +279,12 @@
         const revenueValue = parseFloat(revenueElement.dataset.value); // Get the value from a data attribute
         revenueElement.textContent = formatToIndianCurrency(revenueValue);
     });
-
 </script>
+<style>
+    #totalBookingsCard {
+        cursor: pointer;
+    }
+</style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+

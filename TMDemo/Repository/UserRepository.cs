@@ -37,7 +37,10 @@
                 .Where(b => b.UserId == userId && (b.IsCancelled == false || b.IsCancelled == null) && b.PaymentSuccess==true)
                 .ToListAsync();
         }
-
+        public async Task<List<UserDetail>> GetUserDetailsAsync()
+        {
+            return await _context.Users.ToListAsync();
+        }
     }
 }
 

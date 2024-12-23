@@ -120,15 +120,7 @@
                 .ToListAsync();
         }
 
-        //public void UpdateBooking(Booking booking)
-        //{
-        //    _context.Bookings.Update(booking);
-        //}
-
-        //public async Task SaveChangesAsync()
-        //{
-        //    await _context.SaveChangesAsync();
-        //}
+        
 
 
     }

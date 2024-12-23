@@ -1,4 +1,6 @@
-﻿namespace TrekMasters.Repository
+﻿using TrekMasters.Models;
+
+namespace TrekMasters.Repository
 {
     public class BookingRepository :Repository, IBookingRepository
     {
@@ -37,7 +39,10 @@
                             && b.TrekStartDate.AddDays(b.Trek.DurationDays) > startDate && b.PaymentSuccess==true)
                 .ToListAsync();
         }
-
+        public async Task<List<Booking>> GetTotalBookingsAsync()
+        {
+            return await _context.Bookings.Include(t => t.Trek).Where(b => b.PaymentSuccess == true).ToListAsync();
+        }
         
 
 
