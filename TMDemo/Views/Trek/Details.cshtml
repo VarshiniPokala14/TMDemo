@@ -1,5 +1,11 @@
-﻿@model TrekDetailsViewModel
+﻿@using Newtonsoft.Json
+@model TrekDetailsViewModel
+@{
+    var weatherData = ViewBag.WeatherData as List<WeatherForecast>;
+
+}
 <link href="~/css/details.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <div class="relative">
     <img src="@Url.Action("GetImage", "Trek", new { trekId = Model.Trek.TrekId })" alt="@Model.Trek.Name">
@@ -98,6 +104,154 @@
         </div>
     </div>
 
+ @*    <h2>Weather Forecast for @Model.Trek.Region</h2>
+        @if (weatherData != null && weatherData.Count > 0)
+        {
+            <ul class="list-group">
+                @foreach (var weather in weatherData)
+                {
+                    <li class="list-group-item">
+                        <strong>@weather.Date</strong><br />
+                        <strong>Temperature:</strong> @weather.Temperature °C<br />
+                        <strong>Description:</strong> @weather.Description<br />
+                        <strong>Wind Speed:</strong> @weather.WindSpeed m/s<br />
+                        <strong>Humidity:</strong> @weather.Humidity%
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No weather data available.</p>
+        }
+ *@
+
+
+
+
+<h2>Weather Forecast for @Model.Trek.Region</h2>
+
+@if (weatherData != null && weatherData.Count > 0)
+{
+    @* <ul class="list-group">
+        @foreach (var weather in weatherData)
+        {
+            <li class="list-group-item">
+                <strong>@weather.Date</strong><br />
+                <strong>Temperature:</strong> @weather.Temperature °C<br />
+                <strong>Description:</strong> @weather.Description<br />
+                <strong>Wind Speed:</strong> @weather.WindSpeed m/s<br />
+                <strong>Humidity:</strong> @weather.Humidity%
+            </li>
+        }
+    </ul> *@
+
+    <!-- Chart Container -->
+    <canvas id="weatherChart" width="150" height="50"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Pass the weather data from the server to JavaScript
+        var weatherData = @Html.Raw(Json.Serialize(weatherData));
+
+
+            var dayWiseData = weatherData.reduce(function (result, item) {
+                // Get the date portion (yyyy-mm-dd) by splitting the date string at the space
+                var date = item.date.split(' ')[0];  // Extract just the date (ignoring the time)
+
+                // If the date is not already in the result object, initialize it
+                if (!result[date]) {
+                    result[date] = {
+                        date: date,
+                        temperatures: [],
+                        humidities: [],
+                        windSpeeds: []
+                    };
+                }
+
+                // Push the values to the corresponding day's arrays
+                result[date].temperatures.push(item.temperature);
+                result[date].humidities.push(item.humidity);
+                result[date].windSpeeds.push(item.windSpeed);
+
+                return result;
+            }, {});
+
+            // Step 2: Convert the grouped data object into an array for use in the chart
+            var groupedData = Object.values(dayWiseData);
+
+            // Step 3: Prepare data for the chart
+            var dates = groupedData.map(function (item) {
+                return item.date;
+            });
+
+            var temperatures = groupedData.map(function (item) {
+                // You can take the average temperature of the day, for example
+                return (item.temperatures.reduce((sum, temp) => sum + temp, 0) / item.temperatures.length).toFixed(2);
+            });
+
+            var humidities = groupedData.map(function (item) {
+                // Average humidity
+                return (item.humidities.reduce((sum, humidity) => sum + humidity, 0) / item.humidities.length).toFixed(2);
+            });
+
+            var windSpeeds = groupedData.map(function (item) {
+                // Average wind speed
+                return (item.windSpeeds.reduce((sum, windSpeed) => sum + windSpeed, 0) / item.windSpeeds.length).toFixed(2);
+            });
+
+        // Create the chart
+        var ctx = document.getElementById('weatherChart').getContext('2d');
+        var weatherChart = new Chart(ctx, {
+            type: 'bar', // Line chart
+            data: {
+                labels: dates, // X-axis labels (dates)
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: temperatures,
+                    borderColor: 'rgba(255, 99, 132, 1)', // Line color for temperature
+                    borderWidth: 2,
+                    fill: false // No fill for the line
+                },
+                {
+                    label: 'Humidity (%)',
+                    data: humidities,
+                    borderColor: 'rgba(54, 162, 235, 1)', // Line color for humidity
+                    borderWidth: 2,
+                    fill: false // No fill for the line
+                },
+                {
+                    label: 'Wind Speed (m/s)',
+                    data: windSpeeds,
+                    borderColor: 'rgba(75, 192, 192, 1)', // Line color for wind speed
+                    borderWidth: 2,
+                    fill: false // No fill for the line
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top', // Position the legend at the top
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false // Let the y-axis start from the lowest value of the data
+                    }
+                }
+            }
+        });
+    </script>
+}
+else
+{
+    <p>No weather data available.</p>
+}
+
+
+
     <a href="javascript:void(0);" class="text-xl text-blue-600 font-bold mt-4 inline-block" id="trekPlanBtn">Get your Trek Plan</a>
     <div class="mt-8">
         <h2 class="text-2xl font-bold">Trek Reviews</h2>
@@ -185,6 +339,52 @@
         </div>
     </div>
 </div>
+@* <div class="weather-section">
+    <h2 class="text-2xl font-bold">Weather Forecast</h2>
+    <label for="selectedDate">Select Date:</label>
+    <input type="date" id="selectedDate" class="mt-2 p-2 border border-gray-300 rounded" />
+    <button id="fetchWeatherBtn" class="mt-2 p-2 bg-blue-600 text-white rounded">Get Weather</button>
+
+    <div id="weatherDetails" class="mt-4">
+        <p class="text-gray-700">Select a date to see the weather forecast.</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('fetchWeatherBtn').addEventListener('click', function () {
+        var selectedDate = document.getElementById('selectedDate').value;
+        var location = '@Model.Trek.Region'; // Assuming Region is available in the model
+
+        if (!selectedDate) {
+            alert('Please select a date.');
+            return;
+        }
+
+        // Make AJAX call to fetch weather data
+        fetch(`/Trek/GetWeatherForDate?location=${location}&date=${selectedDate}`)
+            .then(response => response.json())
+            .then(data => {
+                var weatherDetails = document.getElementById('weatherDetails');
+                if (data.success === false) {
+                    weatherDetails.innerHTML = `<p class="text-red-500">${data.message}</p>`;
+                } else {
+                    weatherDetails.innerHTML = `
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p><strong>Date:</strong> ${selectedDate}</p>
+                                <p><strong>Temperature:</strong> ${data.temperature} °C</p>
+                                <p><strong>Description:</strong> ${data.description}</p>
+                                <p><strong>Wind Speed:</strong> ${data.windSpeed} m/s</p>
+                                <p><strong>Humidity:</strong> ${data.humidity} %</p>
+                            </div>
+                        `;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching weather data:', error);
+                alert('An error occurred while fetching weather data.');
+            });
+    });
+</script> *@
 
 
 <script>
@@ -211,3 +411,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,14 +1,19 @@
-﻿namespace TrekMasters.Controllers
+﻿using TrekMasters.Models;
+
+namespace TrekMasters.Controllers
 {
 
     public class TrekController : Controller
     {
         private readonly ITrekService _trekService;
         private readonly UserManager<UserDetail> _userManager;
-        public TrekController(ITrekService trekService, UserManager<UserDetail> userManager)
+        private readonly WeatherService _weatherService;
+
+        public TrekController(ITrekService trekService, UserManager<UserDetail> userManager, WeatherService weatherService)
         {
             _trekService = trekService;
             _userManager = userManager;
+            _weatherService = weatherService;
         }
 
         public async Task<IActionResult> AllTreks()
@@ -36,9 +41,14 @@
             var viewModel = await _trekService.GetTrekDetailsAsync(trekId, userId);
 
             if (viewModel == null) return NotFound();
-            //ViewBag.WeatherData = TempData["WeatherData"] as List<dynamic>;
+            var location = viewModel.Trek.Region;
+            var weatherData = await _weatherService.GetWeatherForecastAsync(location);
+
+            
+            ViewBag.WeatherData = weatherData;
             return View(viewModel);
         }
+
         [HttpPost]
         public async Task<IActionResult> AddReview(int trekId, string reviewText)
         {

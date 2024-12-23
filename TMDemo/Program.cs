@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using TrekMasters.Controllers;
 using TrekMasters.Hubs;
 using TrekMasters.Repository;
 using TrekMasters.Service;
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<AnalyticsService>();
+builder.Services.AddScoped<WeatherService>();
 builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
